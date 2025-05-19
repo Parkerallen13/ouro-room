@@ -1,12 +1,15 @@
 import { Text } from '@mantine/core'
-import PageButtons from '../components/PageButtons';
+import HomeAppShell from '../components/HomeAppShell';
+import '../App.css';
 
 export default function Artists()
 {
   return (
     <>
-      <Text>Artists Page</Text>
-      <PageButtons />
+    <HomeAppShell>
+      <Text className='header'>Artists Page</Text>
+      </HomeAppShell>
+      
     </>
   );
 }

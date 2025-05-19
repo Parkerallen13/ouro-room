@@ -1,12 +1,15 @@
 import { Text } from '@mantine/core'
-import PageButtons from '../components/PageButtons';
+import HomeAppShell from '../components/HomeAppShell';
+import '../App.css';
 
 export default function Events()
 {
   return (
     <>
-      <Text>Events Page</Text>
-      <PageButtons />
+    <HomeAppShell>
+      <Text className='header'>Events Page</Text>
+      </HomeAppShell>
+      
     </>
   );
 }
