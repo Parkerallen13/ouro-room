@@ -1,15 +1,16 @@
-import { Text } from '@mantine/core'
-import HomeAppShell from '../components/HomeAppShell';
-import '../App.css';
+import { Text } from "@mantine/core";
+import Header from "../components/Header";
+import "../App.css";
 
-export default function Home()
-{
+export default function Home() {
   return (
     <>
-    <HomeAppShell>
-      <Text className='header'>Home Page</Text>
-      </HomeAppShell>
-      
+      <div style={{ position: "relative", zIndex: 2 }}>
+        <Header />
+        <div style={{ position: "relative", zIndex: 1 }}>
+        <Text>Test</Text>
+      </div>
+      </div>
     </>
   );
 }

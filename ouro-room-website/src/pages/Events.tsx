@@ -1,15 +1,16 @@
-import { Text } from '@mantine/core'
-import HomeAppShell from '../components/HomeAppShell';
-import '../App.css';
+import { Text } from "@mantine/core";
+import Header from "../components/Header";
+import "../App.css";
 
-export default function Events()
-{
+export default function Events() {
   return (
     <>
-    <HomeAppShell>
-      <Text className='header'>Events Page</Text>
-      </HomeAppShell>
-      
+      <div style={{ position: "relative", zIndex: 2 }}>
+        <Header />
+        <div style={{ position: "relative", zIndex: 1 }}>
+        <Text>Test</Text>
+      </div>
+      </div>
     </>
   );
 }
