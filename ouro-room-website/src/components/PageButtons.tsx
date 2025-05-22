@@ -10,16 +10,6 @@ export default function PageButtons() {
 
   const isActive = (path: string) => location.pathname === path;
 
-  const navButtonStyle = {
-    backgroundColor: 'transparent',
-    border: 'none',
-    margin: "10px",
-    paddingBottom: 0,
-    height: 'auto',
-    lineHeight: 1,
-    color: 'white',
-  };
-
   const underlineStyle = (path: string) => ({
     borderBottom: isActive(path) ? '2px solid white' : 'none',
     paddingBottom: '10px',
@@ -29,21 +19,26 @@ export default function PageButtons() {
     <>
     
         <Image className="logo" src={Logo} onClick={() => navigate("/")}></Image>
-
-      <Button style={navButtonStyle} onClick={() => navigate("/events")}>
-        <span style={underlineStyle("/events")}>Events</span>
+<Button className="button" onClick={() => navigate("/home")}>
+        <span style={underlineStyle("/home")}>HOME</span>
       </Button>
-       <Button style={navButtonStyle} onClick={() => navigate("/djs")}>
+      <Button className="button" onClick={() => navigate("/events")}>
+        <span style={underlineStyle("/events")}>EVENTS</span>
+      </Button>
+       <Button className="button" onClick={() => navigate("/djs")}>
         <span style={underlineStyle("/djs")}>DJs</span>
       </Button>
-      <Button style={navButtonStyle} onClick={() => navigate("/mission")}>
-        <span style={underlineStyle("/mission")}>About</span>
+      <Button className="button" onClick={() => navigate("/about")}>
+        <span style={underlineStyle("/about")}>ABOUT</span>
       </Button>
-         <Button style={navButtonStyle} onClick={() => navigate("/gallery")}>
-        <span style={underlineStyle("/gallery")}>Gallery</span>
+         <Button className="button" onClick={() => navigate("/gallery")}>
+        <span style={underlineStyle("/gallery")}>GALLERY</span>
       </Button>
-         <Button style={navButtonStyle} onClick={() => navigate("/contact")}>
-        <span style={underlineStyle("/contact")}>Contact</span>
+         <Button className="button" onClick={() => navigate("/contact")}>
+        <span style={underlineStyle("/contact")}>CONTACT</span>
+      </Button>
+      <Button className="adminhome" onClick={() => navigate("/adminhome")}>
+        <span style={underlineStyle("/adminhome")}>ADMIN</span>
       </Button>
     </>
   );

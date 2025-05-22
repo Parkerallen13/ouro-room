@@ -6,20 +6,25 @@ import { Routes, Route } from "react-router-dom";
 // Pages
 import OpeningPage from "./pages/OpeningPage";
 import Home from "./pages/Home";
-import Mission from "./pages/Mission";
+import About from "./pages/About";
 import Events from "./pages/Events";
 import DJs from "./pages/DJs";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
+import SongForm from "./components/SongForm";
+import EventForm from "./components/EventForm";
+import DJForm from "./components/DJForm";
+import GalleryForm from "./components/GalleryForm";
+import AdminHome from "./pages/AdminHome";
 // import djs from "./pages/DJs";
 
 // Styling
 import "./App.css";
 
 const theme: MantineThemeOverride = {
-  fontFamily: 'Jura, sans-serif',
+  fontFamily: "Orbitron, sans-serif",
   headings: {
-    fontFamily: 'Jura, sans-serif',
+    fontFamily: "Orbitron, sans-serif",
     sizes: {
       h1: { fontSize: '3rem' },
       h2: { fontSize: '2.5rem' },
@@ -59,14 +64,21 @@ const theme: MantineThemeOverride = {
 function App() {
   return (
     <MantineProvider theme={theme}>
+      <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet"></link>
         <Routes>
           <Route path="/" element={<OpeningPage />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/mission" element={<Mission />} />
+          <Route path="/about" element={<About />} />
           <Route path="/events" element={<Events />} />
           <Route path="/djs" element={<DJs />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/adminhome" element={<AdminHome />} />
+          <Route path="/songform" element={<SongForm />} />
+          <Route path="/eventform" element={<EventForm />} />
+          <Route path="/djform" element={<DJForm />} />
+          <Route path="/gallery" element={<GalleryForm />} />
+
 
           {/* <Route path="/djs" element={<DJs />} /> */}
         </Routes>

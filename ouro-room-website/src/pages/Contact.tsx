@@ -8,7 +8,7 @@ export default function Contact() {
       <div style={{ position: "relative", zIndex: 2 }}>
         <Header />
         <div style={{ position: "relative", zIndex: 1 }}>
-        <Text>Test</Text>
+        <Text className="page-intro-text">Contact Us</Text>
       </div>
       </div>
     </>
