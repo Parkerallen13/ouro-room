@@ -1,20 +1,18 @@
-# Use Node.js as the base image
-FROM node:18
+# Use an official lightweight Node image
+FROM node:18-alpine
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Install deps first (better cache usage)
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy all project files
+# Copy the rest of the app
 COPY . .
 
-# Expose the development server port (change if you're not using 5173 for Vite or 3000 for CRA)
-EXPOSE 3000
+# Expose the port Vite uses
+EXPOSE 5173
 
-# Start the development server
+# Run the dev server
 CMD ["npm", "run", "dev"]
