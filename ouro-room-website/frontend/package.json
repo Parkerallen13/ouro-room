@@ -4,21 +4,26 @@
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "eslint.config.js",
   "scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "preview": "vite preview",
-  "lint": "eslint . --ext .ts,.tsx"
-},
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.tsx"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mantine/core": "^8.0.1",
+    "@mantine/dates": "^8.0.1",
+    "@mantine/hooks": "^8.0.1",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.5.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
