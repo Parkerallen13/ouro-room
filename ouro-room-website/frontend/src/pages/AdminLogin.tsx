@@ -1,36 +1,62 @@
-// import React, { useState } from 'react';
+import { Text } from "@mantine/core";
+import Header from "../components/Header";
+import "../App.css";
+import Footer from "../components/Footer";
+import {
+  IconBrandInstagram,
+  IconBrandLinkedin,
+  IconMail,
+} from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 
-// export default function AdminLogin({ onSuccess }: { onSuccess: () => void }) {
-//   const [email, setEmail] = useState("");
-//   const [error, setError] = useState("");
+export default function AdminLogin() {
+  const navigate = useNavigate();
+  return (
+    <>
+      <div style={{ position: "relative", zIndex: 2 }}>
+        <Header />
+        <div
+          className="admin-login-container"
+          style={{ position: "relative", zIndex: 1 }}
+        >
+          <div>
+            <h1 className=" contact-item header-text">Login</h1>
+            <form
+              className="contact-item"
+              onSubmit={(e) => {
+                e.preventDefault();
+                navigate("/admin");
+              }}
+            >
+              <label className="contact-item">
+               Username
+                <input
+                  className="login-box"
+                  type="email"
+                  name="email"
+                  required
+                />
+              </label>
 
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
+              <label className="contact-item">
+                Password
+                <input
+                  className="login-box"
+                  type="email"
+                  name="email"
+                  required
+                />
+              </label>
 
-//     const res = await fetch("/api/verify-email", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ email }),
-//     });
-
-//     if (res.ok) {
-//       onSuccess();
-//     } else {
-//       setError("Access denied. You are not authorized.");
-//     }
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <input
-//         type="email"
-//         placeholder="Enter email"
-//         value={email}
-//         onChange={(e) => setEmail(e.target.value)}
-//         required
-//       />
-//       <button type="submit" className="glow-button">Login</button>
-//       {error && <p style={{ color: "red" }}>{error}</p>}
-//     </form>
-//   );
-// }
+              <button className="contact-item button" type="submit">
+                Login
+              </button>
+            </form>
+            <div></div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    </>
+  );
+}

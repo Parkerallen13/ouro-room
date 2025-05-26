@@ -17,6 +17,7 @@ import DJForm from "./components/DJForm";
 import GalleryForm from "./components/GalleryForm";
 import Admin from "./pages/Admin";
 import Mixes from "./pages/Mixes";
+import AdminLogin from "./pages/AdminLogin";
 // import djs from "./pages/DJs";
 
 // Styling
@@ -76,6 +77,7 @@ function App() {
           <Route path="/djs" element={<DJs />} />
           <Route path="/mixes" element={<Mixes />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/Admin" element={<Admin />} />
           <Route path="/songform" element={<SongForm />} />

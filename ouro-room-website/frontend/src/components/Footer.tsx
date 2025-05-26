@@ -16,11 +16,16 @@ export default function Footer() {
             onClick={() => navigate("/")}
           ></Image>
         </div>
-        <div style={{ position: "relative" }} className="footer-item">
-          <FooterButtons />
-          <footer class="site-footer">
-  <p>© 2025 Your Site — All rights reserved.</p>
-</footer>
+        <div style={{ position: "relative" }}>
+          <div className="footer-item-container">
+            <div className="footer-item">
+              <FooterButtons />
+            </div>
+
+            <footer className="site-footer footer-item">
+              <p>© 2025 Ouro Room — All rights reserved.</p>
+            </footer>
+          </div>
         </div>
       </div>
     </>

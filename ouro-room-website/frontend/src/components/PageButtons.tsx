@@ -40,10 +40,10 @@ export default function PageButtons() {
       </Button>
       <Button
         style={{ fontWeight: "900" }}
-        className="header-button  header-text"
-        onClick={() => navigate("/Admin")}
+        className="header-button "
+        onClick={() => navigate("/admin-login")}
       >
-        <span style={underlineStyle("/Admin")}>ADMIN</span>
+        <span style={underlineStyle("/admin-login")}>ADMIN</span>
       </Button>
     </>
   );
