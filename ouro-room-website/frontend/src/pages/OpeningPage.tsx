@@ -13,7 +13,7 @@ export default function OpeningPage() {
     <>
       <StarField />
       <div className="opening-container">
-        <img src={Record} alt="record" className="record" />
+        <img src={Record} alt="record" className="opening-record" />
         
         {/* New wrapper for logo and text */}
         <div className="logo-wrapper">

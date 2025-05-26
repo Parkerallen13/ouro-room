@@ -26,8 +26,7 @@ export default function DJs() {
         <DJCard />
         <DJCard />
       </div>
-        <Footer/>
-
+      <Footer />
     </>
   );
 }

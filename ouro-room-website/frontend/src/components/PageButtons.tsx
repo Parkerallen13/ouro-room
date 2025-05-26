@@ -17,30 +17,30 @@ export default function PageButtons() {
   return (
     <>
       <Image className="logo" src={Logo} onClick={() => navigate("/")}></Image>
-      <Button className="header-button" onClick={() => navigate("/home")}>
+      <Button className="header-button header-text" onClick={() => navigate("/home")}>
         <span style={underlineStyle("/home")}>HOME</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/events")}>
+      <Button className="header-button  header-text" onClick={() => navigate("/events")}>
         <span style={underlineStyle("/events")}>EVENTS</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/djs")}>
+      <Button className="header-button  header-text" onClick={() => navigate("/djs")}>
         <span style={underlineStyle("/djs")}>DJs</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/mixes")}>
+      <Button className="header-button  header-text" onClick={() => navigate("/mixes")}>
         <span style={underlineStyle("/mixes")}>MIXES</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/about")}>
+      <Button className="header-button  header-text" onClick={() => navigate("/about")}>
         <span style={underlineStyle("/about")}>ABOUT</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/gallery")}>
+      <Button className="header-button  header-text" onClick={() => navigate("/gallery")}>
         <span style={underlineStyle("/gallery")}>GALLERY</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/contact")}>
+      <Button className="header-button  header-text" onClick={() => navigate("/contact")}>
         <span style={underlineStyle("/contact")}>CONTACT</span>
       </Button>
       <Button
         style={{ fontWeight: "900" }}
-        className="header-button"
+        className="header-button  header-text"
         onClick={() => navigate("/Admin")}
       >
         <span style={underlineStyle("/Admin")}>ADMIN</span>

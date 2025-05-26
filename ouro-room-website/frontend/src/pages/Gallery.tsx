@@ -1,6 +1,7 @@
 import record from "../assets/record.png";
 import "../App.css";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const images = Array(6).fill(record); // 6 visible per row
 
@@ -30,6 +31,7 @@ export default function Gallery() {
           <img className="gallery-img" src={record} />
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

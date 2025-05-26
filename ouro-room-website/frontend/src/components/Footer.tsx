@@ -18,6 +18,9 @@ export default function Footer() {
         </div>
         <div style={{ position: "relative" }} className="footer-item">
           <FooterButtons />
+          <footer class="site-footer">
+  <p>© 2025 Your Site — All rights reserved.</p>
+</footer>
         </div>
       </div>
     </>
