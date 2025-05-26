@@ -2,9 +2,9 @@
 import { useNavigate } from "react-router-dom";
 import { Image } from "@mantine/core";
 import StarField from "../components/StarBackground";
-import Logo from "../assets/ouro-logo.png";
+import Logo from "../assets/ouro-logo.png"
 import Record from "../assets/ouro-record.png"; // <-- You need a record image
-import "../App.css";
+import '../App.css';
 
 export default function OpeningPage() {
   const navigate = useNavigate();

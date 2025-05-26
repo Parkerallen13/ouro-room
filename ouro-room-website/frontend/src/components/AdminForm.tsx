@@ -70,7 +70,7 @@ export default function AdminForm() {
       />
 
       <Group mt="xl">
-        <Button onClick={handleSubmit}>Submit All</Button>
+        <Button className="button" onClick={handleSubmit}>Submit All</Button>
       </Group>
     </div>
   );

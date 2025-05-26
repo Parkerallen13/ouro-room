@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import "../App.css";
 import Header from "./Header";
-import AdminHomeButtons from "./AdminButtons";
+import AdminButtons from "./AdminButtons";
 
 export default function EventForm() {
   // States for each section
@@ -47,7 +47,7 @@ export default function EventForm() {
           {" "}
           Add Event
         </Title>
-        <AdminHomeButtons />
+        <AdminButtons />
       </div>
 
       <div
@@ -81,7 +81,7 @@ export default function EventForm() {
         <FileInput label="Event Image" onChange={setEventImage} />
 
         <Group  mt="xl">
-          <Button className="general-button glow-button" onClick={handleSubmit}>Submit</Button>
+          <Button className="button" onClick={handleSubmit}>Submit</Button>
         </Group>
       </div>
     </>

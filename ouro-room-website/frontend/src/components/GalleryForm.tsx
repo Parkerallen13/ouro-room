@@ -8,7 +8,7 @@ import {
 } from "@mantine/core";
 import '../App.css'
 import Header from "./Header";
-import AdminHomeButtons from "./AdminButtons";
+import AdminButtons from "./AdminButtons";
 
 
 export default function GalleryForm() {
@@ -40,7 +40,7 @@ export default function GalleryForm() {
               {" "}
               Add Images
             </Title>
-            <AdminHomeButtons />
+            <AdminButtons />
           </div>
 
       {/* Gallery Upload */}
@@ -61,7 +61,7 @@ export default function GalleryForm() {
       />
 
       <Group mt="xl">
-        <Button className="general-button glow-button" onClick={handleSubmit}>Submit</Button>
+        <Button className="button" onClick={handleSubmit}>Submit</Button>
       </Group>
       </div>
       </>

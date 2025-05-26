@@ -3,7 +3,7 @@ import Record from '../assets/ouro-record.png'
 
 import "../App.css";
 
-export default function LatestMixcard() {
+export default function Mixcard() {
   return (
     <Container
       className="page-section"

@@ -1,28 +1,33 @@
-import { Container, Text } from "@mantine/core";
+import { Text, Image } from "@mantine/core";
 import Header from "../components/Header";
-import "../App.css";
-import LatestMixCard from "../components/LatestMix";
+import { useNavigate } from "react-router-dom";
 
+import "../App.css";
+import DJCard from "../components/DJSpotlightCard";
+import Footer from "../components/Footer";
 
 export default function DJs() {
   return (
     <>
-      <div style={{ position: "relative", zIndex: 2 }}>
-        <Header />
-        <div style={{ position: "relative", zIndex: 1 }}>
-          {/* <Text className="page-intro-text">OURO DJs</Text> */}
-           <Container className="page-section">
-                     <Text className="page-section-header">DJs</Text>
-                     <div className="latest-mix-container">
-                       <LatestMixCard/>
-                       <LatestMixCard/>
-                       <LatestMixCard/>
-                       <LatestMixCard/>
-         
-                     </div>
-                   </Container>
-        </div>
+      <Header />
+
+      <div className="page-section">
+        <Text
+          className="page-section-header"
+          style={{ position: "relative", zIndex: 3 }}
+        >
+          DJs
+        </Text>
+
+        <DJCard />
+        <DJCard />
+        <DJCard />
+        <DJCard />
+        <DJCard />
+        <DJCard />
       </div>
+        <Footer/>
+
     </>
   );
 }

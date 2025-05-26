@@ -8,7 +8,7 @@ import {
   Title,
 } from "@mantine/core";
 import '../App.css'
-import AdminHomeButtons from "./AdminButtons";
+import AdminButtons from "./AdminButtons";
 import Header from "./Header";
 
 
@@ -37,7 +37,7 @@ export default function DJForm() {
              {" "}
              Add DJ
            </Title>
-           <AdminHomeButtons />
+           <AdminButtons />
          </div>
         <div
         className="form-element-container"
@@ -62,7 +62,7 @@ export default function DJForm() {
       <FileInput className="form-element" label="DJ Image" onChange={setDjImage} />
 
       <Group mt="xl">
-        <Button className="general-button glow-button" onClick={handleSubmit}>Submit</Button>
+        <Button className="button" onClick={handleSubmit}>Submit</Button>
       </Group>
       </div>
    </>

@@ -1,8 +1,9 @@
-import { Button, Container, Text, Image } from "@mantine/core";
+import { Text, Image } from "@mantine/core";
 import Header from "../components/Header";
 import Logo from "../assets/ouro-logo.png";
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate } from "react-router-dom";
+import NextEventCard from "../components/NextEventCard";
+import Footer from "../components/Footer";
 
 import "../App.css";
 import LatestMixCard from "../components/LatestMix";
@@ -13,53 +14,63 @@ export default function Home() {
   const navigate = useNavigate();
   return (
     <>
-      <div style={{ position: "relative", zIndex: 2 }}>
-        <Header />
-        <Image className="home-logo" src={Logo} onClick={() => navigate("/")}></Image>
+      <Header />
+      <Image
+        className="home-logo"
+        src={Logo}
+        onClick={() => navigate("/")}
+        style={{ position: "relative", zIndex: 4 }}
+      />
+      <Text
+        className="page-intro-text"
+        style={{ position: "relative", zIndex: 1 }}
+      >
+        Collective Rhythm. Infinite Sound
+      </Text>
+      <div className="page-section">
+        <Text
+          className="page-section-header"
+          style={{ position: "relative", zIndex: 3 }}
+        >
+          Next Event
+        </Text>
+        <NextEventCard />
+      </div>
 
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <Text className="page-intro-text">
-            Collective Rhythm. Infinite Sound
-          </Text>
-          <Container className="page-section">
-            <Text className="page-section-header">Next Event</Text>
-            <div className="next-event-container">
-              <Text className="next-event-date">date</Text>
-              <div className="next-event-info">
-                <div className="next-event-card">
-                  {/* <Image className="next-event-item" height="200px" src={Record} /> */}
-                  <div className="next-event-item">
-                    <Text style={{ fontSize: "2rem"}}>
-                      Ouro Presents: Artist
-                    </Text>
-                    <Text style={{ fontSize: "1rem"}}>Location</Text>
-                    <Text style={{ fontSize: "1rem"}}>Description</Text>
-                    <Button variant="outline" className="rsvp-button glow-button">
-                      RSVP
-                    </Button>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-          </Container>
-          <Container className="page-section">
-            <Text className="page-section-header">Latest Mixes</Text>
-            <div className="latest-mix-container">
-              <LatestMixCard />
-              <LatestMixCard />
-              <LatestMixCard />
-            </div>
-          </Container>
-
-          <Container className="page-section">
-            <Text className="page-section-header">DJ Spotlight</Text>
-            <div className="latest-mix-container">
-              <DJCard />
-            </div>
-          </Container>
+      <div className="page-section">
+        <Text
+          className="page-section-header"
+          style={{ position: "relative", zIndex: 3 }}
+        >
+          Latest Mixes
+        </Text>
+        <div
+          className="latest-mix-scroll-container"
+          style={{ position: "relative", zIndex: 2 }}
+        >
+          {" "}
+          <LatestMixCard />
+          <LatestMixCard />
+          <LatestMixCard />
         </div>
       </div>
+
+      <div className="page-section">
+        <Text
+          className="page-section-header"
+          style={{ position: "relative", zIndex: 3 }}
+        >
+          DJ Spotlight
+        </Text>
+        <div
+          className="latest-mix-container"
+          style={{ position: "relative", zIndex: 2 }}
+        >
+          <DJCard />
+        </div>
+      </div>
+        <Footer/>
+
     </>
   );
 }

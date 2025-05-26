@@ -1,13 +1,16 @@
 // pages/AdminPage.tsx
 import Header from "../components/Header";
-import AdminHomeButtons from "../components/AdminButtons";
+import AdminButtons from "../components/AdminButtons";
+import '../App.css'
 
-export default function AdminHome() {
+export default function Admin() {
   return (
     <>
       <div style={{ position: "relative", zIndex: 2 }}>
         <Header />
-        <AdminHomeButtons />
+        <div>
+        <AdminButtons />
+        </div>
       </div>
     </>
   );

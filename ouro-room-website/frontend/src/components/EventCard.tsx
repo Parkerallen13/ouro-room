@@ -1,25 +1,31 @@
-import { Button, Card, Text } from "@mantine/core";
-import Record from "../assets/ouro-record.png"; // <-- You need a record image
+import { Button, Container, Text } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
+
+import "../App.css";
 
 export default function EventCard() {
   return (
-    <Card className="event-card">
-      <Card.Section>
-        <img src={Record} alt="record" className="backup-image-home" />
-      </Card.Section>
-      <div className="card-text">
-        <Text style={{ fontSize: "2rem" }} className="event-card-description">
-          Location
-        </Text>
-
-        <Text style={{ fontSize: "2rem" }} className="event-card-description">
-          Artist Name
-        </Text>
-
-        <Text>Event Description</Text>
-
-        <Button className="rsvp-button glow-button">RSVP</Button>
+    <Container
+      className="page-section"
+      style={{ position: "relative", zIndex: 10 }} // Add these styles
+    >
+      <div
+        className="event-container section-item"
+        style={{ position: "relative", zIndex: 10 }}
+      >
+        <div className="event-item">
+          <Text className="event-date date-text"> Oct 31st, 2025</Text>
+        </div>
+        <div className="event-item">
+          <Text className="body-text">Ouro Presents:</Text>
+          <Text  className="artist-text">Artist Name</Text>
+          <Text className="location-text">Location Ave 19th st </Text>
+          <Text className="body-text">Description of a great experience</Text>
+          <Button variant="outline" className="button">
+            RSVP
+          </Button>
+        </div>
       </div>
-    </Card>
+    </Container>
   );
 }

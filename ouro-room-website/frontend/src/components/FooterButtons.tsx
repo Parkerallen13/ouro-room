@@ -1,9 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Image } from "@mantine/core";
 import "../App.css";
-import Logo from "../assets/ouro-logo.png";
 
-export default function PageButtons() {
+export default function FooterButtons() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -16,31 +15,30 @@ export default function PageButtons() {
 
   return (
     <>
-      <Image className="logo" src={Logo} onClick={() => navigate("/")}></Image>
-      <Button className="header-button" onClick={() => navigate("/home")}>
+      <Button className="footer-button" onClick={() => navigate("/home")}>
         <span style={underlineStyle("/home")}>HOME</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/events")}>
+      <Button className="footer-button" onClick={() => navigate("/events")}>
         <span style={underlineStyle("/events")}>EVENTS</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/djs")}>
+      <Button className="footer-button" onClick={() => navigate("/djs")}>
         <span style={underlineStyle("/djs")}>DJs</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/mixes")}>
+      <Button className="footer-button" onClick={() => navigate("/mixes")}>
         <span style={underlineStyle("/mixes")}>MIXES</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/about")}>
+      <Button className="footer-button" onClick={() => navigate("/about")}>
         <span style={underlineStyle("/about")}>ABOUT</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/gallery")}>
+      <Button className="footer-button" onClick={() => navigate("/gallery")}>
         <span style={underlineStyle("/gallery")}>GALLERY</span>
       </Button>
-      <Button className="header-button" onClick={() => navigate("/contact")}>
+      <Button className="footer-button" onClick={() => navigate("/contact")}>
         <span style={underlineStyle("/contact")}>CONTACT</span>
       </Button>
       <Button
         style={{ fontWeight: "900" }}
-        className="header-button"
+        className="footer-button"
         onClick={() => navigate("/Admin")}
       >
         <span style={underlineStyle("/Admin")}>ADMIN</span>

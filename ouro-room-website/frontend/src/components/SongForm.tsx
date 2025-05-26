@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { TextInput, Button, Group, Title, FileInput } from "@mantine/core";
 import "../App.css";
-import AdminHomeButtons from "./AdminButtons";
+import AdminButtons from "./AdminButtons";
 import Header from "./Header";
 
 export default function SongForm() {
@@ -34,7 +34,7 @@ export default function SongForm() {
           {" "}
           Add Song
         </Title>
-        <AdminHomeButtons />
+        <AdminButtons />
       </div>
 
       <div

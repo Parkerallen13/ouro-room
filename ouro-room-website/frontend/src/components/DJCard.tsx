@@ -5,7 +5,7 @@ import Record from '../assets/ouro-record.png'
 
 import "../App.css";
 
-export default function DJSpotlightCard() {
+export default function DJCard() {
   return (
     <Container
       className="page-section"
