@@ -1,17 +1,20 @@
 // frontend/vite.config.ts
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  root: './',
+  root: "./",
   build: {
-    outDir: 'dist',
+    outDir: "dist",
     sourcemap: true,
   },
   server: {
-    port: 5173, // You can change this if needed
-    open: true,
-  }
-})
+    host: "0.0.0.0", // Required: allows access from host
+    port: 5173,
+    open: false, // Prevent error from trying to auto-open browser in Docker
+    watch: {
+      usePolling: true, // Required for file changes to be detected in Docker
+    },
+  },
+});
