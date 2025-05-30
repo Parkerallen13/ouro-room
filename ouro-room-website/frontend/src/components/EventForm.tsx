@@ -10,9 +10,11 @@ import {
 } from "@mantine/core";
 import "../App.css";
 import Header from "./Header";
-import AdminButtons from "./AdminButtons";
+import AdminButtons from "./AdminUploadButtons";
+import { useNavigate } from 'react-router-dom';
 
 export default function EventForm() {
+  const navigate = useNavigate();
   // States for each section
 
   const [eventTitle, setEventTitle] = useState("");
@@ -37,6 +39,17 @@ export default function EventForm() {
     <>
       <div className="form-header-container">
         <Header />
+            <Button
+         style={{
+            zIndex: "2",
+            position: "relative",
+          }}
+          className="back-button"
+          variant="outline"
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </Button>
         <Title
           order={2}
           style={{
@@ -47,7 +60,7 @@ export default function EventForm() {
           {" "}
           Add Event
         </Title>
-        <AdminButtons />
+        {/* <AdminButtons /> */}
       </div>
 
       <div

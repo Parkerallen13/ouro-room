@@ -13,8 +13,9 @@ export default function AdminLogin() {
   const navigate = useNavigate();
   return (
     <>
-      <div style={{ position: "relative", zIndex: 2 }}>
         <Header />
+
+      <div style={{ position: "relative", zIndex: 2 }}>
         <div
           className="admin-login-container"
           style={{ position: "relative", zIndex: 1 }}

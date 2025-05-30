@@ -1,19 +1,23 @@
 // pages/AdminPage.tsx
 import Header from "../components/Header";
-import AdminButtons from "../components/AdminButtons";
+import AdminUploadButtons from "../components/AdminUploadButtons";
 import "../App.css";
 import Footer from "../components/Footer";
+import { Text } from '@mantine/core';
 
-export default function Admin() {
+export default function AdminUpload() {
   return (
     <>
+      <Header />
+
       <div
         className="admin-container"
         style={{ position: "relative", zIndex: 2 }}
       >
-        <Header />
+        <Text className="header-text">Upload Content for Website</Text>
+
         <div>
-          <AdminButtons />
+          <AdminUploadButtons />
         </div>
       </div>
       <div style={{ position: "relative", zIndex: 10 }}>

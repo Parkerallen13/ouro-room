@@ -2,10 +2,11 @@
 import { useState } from "react";
 import { TextInput, Button, Group, Title, FileInput } from "@mantine/core";
 import "../App.css";
-import AdminButtons from "./AdminButtons";
 import Header from "./Header";
+import { useNavigate } from "react-router-dom";
 
 export default function SongForm() {
+  const navigate = useNavigate();
   // States for each section
 
   const [songTitle, setSongTitle] = useState("");
@@ -24,6 +25,17 @@ export default function SongForm() {
     <>
       <div className="form-header-container">
         <Header />
+        <Button
+         style={{
+            zIndex: "2",
+            position: "relative",
+          }}
+          className="back-button"
+          variant="outline"
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </Button>
         <Title
           order={2}
           style={{
@@ -34,8 +46,15 @@ export default function SongForm() {
           {" "}
           Add Song
         </Title>
-        <AdminButtons />
+        {/* <AdminButtons /> */}
       </div>
+      <Button
+        className="back-button"
+        variant="outline"
+        onClick={() => navigate(-1)}
+      >
+        Back
+      </Button>
 
       <div
         className="form-element-container"
@@ -61,8 +80,7 @@ export default function SongForm() {
           onChange={(e) => setSongArtist(e.currentTarget.value)}
         />
 
-          <FileInput label="Audio Track" onChange={setAudioTrack} />
-         
+        <FileInput label="Audio Track" onChange={setAudioTrack} />
 
         <Group mt="xl">
           <Button className="general-button glow-button" onClick={handleSubmit}>

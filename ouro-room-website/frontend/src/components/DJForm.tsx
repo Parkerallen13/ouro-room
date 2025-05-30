@@ -8,11 +8,14 @@ import {
   Title,
 } from "@mantine/core";
 import '../App.css'
-import AdminButtons from "./AdminButtons";
+import AdminButtons from "./AdminUploadButtons";
 import Header from "./Header";
+import { useNavigate } from 'react-router-dom';
 
 
 export default function DJForm() {
+  const navigate = useNavigate();
+
   const [djName, setDjName] = useState("");
   const [djBio, setDjBio] = useState("");
   const [djImage, setDjImage] = useState<File | null>(null);
@@ -27,6 +30,17 @@ export default function DJForm() {
     <>
      <div className="form-header-container">
            <Header />
+               <Button
+         style={{
+            zIndex: "2",
+            position: "relative",
+          }}
+          className="back-button"
+          variant="outline"
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </Button>
            <Title
              order={2}
              style={{
@@ -37,7 +51,7 @@ export default function DJForm() {
              {" "}
              Add DJ
            </Title>
-           <AdminButtons />
+           {/* <AdminButtons /> */}
          </div>
         <div
         className="form-element-container"

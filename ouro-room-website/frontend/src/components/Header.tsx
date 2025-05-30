@@ -1,4 +1,4 @@
-import PageButtons from "./PageButtons";
+import PageButtons from "./HeaderButtons";
 import StarField from "./StarBackground";
 import "../App.css";
 

@@ -15,10 +15,11 @@ import SongForm from "./components/SongForm";
 import EventForm from "./components/EventForm";
 import DJForm from "./components/DJForm";
 import GalleryForm from "./components/GalleryForm";
-import Admin from "./pages/Admin";
+import AdminUpload from "./pages/AdminUpload";
 import Mixes from "./pages/Mixes";
 import AdminLogin from "./pages/AdminLogin";
-// import djs from "./pages/DJs";
+import AdminHome from "./pages/AdminHome";
+import AdminChoose from './pages/AdminChoose';
 
 // Styling
 import "./App.css";
@@ -79,11 +80,13 @@ function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/Contact" element={<Contact />} />
-          <Route path="/Admin" element={<Admin />} />
+          <Route path="/admin-upload" element={<AdminUpload />} />
+          <Route path="/admin-choose" element={<AdminChoose />} />
           <Route path="/songform" element={<SongForm />} />
           <Route path="/eventform" element={<EventForm />} />
           <Route path="/djform" element={<DJForm />} />
           <Route path="/galleryform" element={<GalleryForm />} />
+          <Route path="/admin-home" element={<AdminHome />} />
 
           {/* <Route path="/djs" element={<DJs />} /> */}
         </Routes>

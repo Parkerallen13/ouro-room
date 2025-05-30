@@ -15,34 +15,28 @@ export default function FooterButtons() {
 
   return (
     <>
-      <Button className="header-button header-text" onClick={() => navigate("/home")}>
+      <Button className="footer-button footer-text" onClick={() => navigate("/home")}>
         <span style={underlineStyle("/home")}>HOME</span>
       </Button>
-      <Button className="header-button header-text" onClick={() => navigate("/events")}>
+      <Button className="footer-button footer-text" onClick={() => navigate("/events")}>
         <span style={underlineStyle("/events")}>EVENTS</span>
       </Button>
-      <Button className="header-button header-text" onClick={() => navigate("/djs")}>
+      <Button className="footer-button footer-text" onClick={() => navigate("/djs")}>
         <span style={underlineStyle("/djs")}>DJs</span>
       </Button>
-      <Button className="header-button header-text" onClick={() => navigate("/mixes")}>
+      <Button className="footer-button footer-text" onClick={() => navigate("/mixes")}>
         <span style={underlineStyle("/mixes")}>MIXES</span>
       </Button>
-      <Button className="header-button header-text" onClick={() => navigate("/about")}>
+      <Button className="footer-button footer-text" onClick={() => navigate("/about")}>
         <span style={underlineStyle("/about")}>ABOUT</span>
       </Button>
-      <Button className="header-button header-text" onClick={() => navigate("/gallery")}>
+      <Button className="footer-button footer-text" onClick={() => navigate("/gallery")}>
         <span style={underlineStyle("/gallery")}>GALLERY</span>
       </Button>
-      <Button className="header-button header-text" onClick={() => navigate("/contact")}>
+      <Button className="footer-button footer-text" onClick={() => navigate("/contact")}>
         <span style={underlineStyle("/contact")}>CONTACT</span>
       </Button>
-      <Button
-        style={{ fontWeight: "900" }}
-        className="header-button header-text"
-        onClick={() => navigate("/Admin")}
-      >
-        <span className="header-button header-text" style={underlineStyle("/Admin")}>ADMIN</span>
-      </Button>
+      
     </>
   );
 }
