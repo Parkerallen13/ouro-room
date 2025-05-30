@@ -198,8 +198,7 @@ img,
 .latest-mix-scroll-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  padding: 1rem 5vw;
+ width: 90vw;
 }
 
 @media (max-width: 768px) {
@@ -224,12 +223,15 @@ img,
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 2vw;
-  margin-left: 2vw;
   border-radius: 1vw;
-  width: clamp(250px, 30vw, 85vw);
-  max-width: clamp(20vw, 25vw, 35vw);
+  margin: 2vw;
+  width: clamp(250px, 25vw, 85vw);
   background-color: rgb(113, 191, 215);
+  padding: 1vw;
+}
+
+.mix-container {
+  width: 80vw;
 }
 
 .mix-card,
@@ -386,8 +388,13 @@ img,
   margin-bottom: 0.5vw;
 }
 
+/* Image fixes */
 .record-placeholder-img {
-  width: 15vw;
+  height: 200;
+  width: 300px;
+  margin: 0;
+  padding: 2vw;
+
 }
 
 .artist-img {
@@ -408,17 +415,14 @@ img,
 
 .mix-img {
   display: flex;
-  flex-direction: column;
-  text-align: left;
-  max-width: 100%;
-  justify-content: space-evenly;
+  justify-content: center;
+  align-items: center;
 }
 
 .mix-item {
   display: flex;
   flex-direction: column;
   text-align: center;
-  justify-content: space-evenly;
   margin: 0 !important;
   color: black;
 }
@@ -568,7 +572,7 @@ img,
 .form-box {
   width: 200px;
   background-color: transparent !important;
-  padding: 20px;
+  color: white;
 }
 
 .login-box {
@@ -630,3 +634,49 @@ img,
     width: clamp(40px, 20vw, 100px);
   }
 }
+
+.audio-controls {
+  padding-left: 2vw;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 10px;
+  justify-content:space-around;
+}
+
+.audio-light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: red;
+  opacity: 0.6;
+}
+
+.flashing {
+  animation: flash 1s infinite;
+}
+
+@keyframes flash {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.audio-label {
+  font-weight: 500;
+}
+
+.icon-button {
+  border: none !important;;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+

@@ -1,14 +1,49 @@
+import { useState } from "react";
 import { Text } from "@mantine/core";
 import Header from "../components/Header";
 import "../App.css";
 import Footer from "../components/Footer";
 import {
   IconBrandInstagram,
-  IconBrandLinkedin,
+  IconBrandX,
   IconMail,
+  IconPhone,
 } from "@tabler/icons-react";
 
 export default function Contact() {
+  // Add state for form inputs
+  const [nameValue, setNameValue] = useState("");
+  const [emailValue, setEmailValue] = useState("");
+  const [messageValue, setMessageValue] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:3000/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: nameValue,
+          email: emailValue,
+          message: messageValue,
+        }),
+      });
+
+      const result = await res.json();
+      alert(result.message);
+      // Optionally clear form on success
+      if (res.ok) {
+        setNameValue("");
+        setEmailValue("");
+        setMessageValue("");
+      }
+    } catch (error) {
+      alert("Error sending message");
+    }
+  };
+
   return (
     <>
       <div style={{ position: "relative", zIndex: 2 }}>
@@ -21,32 +56,42 @@ export default function Contact() {
             <h2 className="social-section">Follow Us</h2>
             <div className="social-icons">
               <a
-                href="https://instagram.com/yourusername"
+                href="https://instagram.com/ourocollective"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-link"
               >
                 <IconBrandInstagram size={32} />
               </a>
+              <a href="tel:7207425481" className="social-link">
+                <IconPhone size={32} />
+              </a>
+              <a href="mailto:parkerjeanneallen@gmail.com" className="social-link">
+                <IconMail size={32} />
+              </a>
               <a
-                href="https://linkedin.com/in/yourusername"
+                href="https://x.com/ourocollective"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-link"
               >
-                <IconBrandLinkedin size={32} />
-              </a>
-              <a href="mailto:youremail@example.com" className="social-link">
-                <IconMail size={32} />
+                <IconBrandX size={32} />
               </a>
             </div>
           </div>
           <div>
             <h1 className=" contact-item header-text">Contact Us</h1>
-            <form className="contact-item" onSubmit={(e) => e.preventDefault()}>
+            <form className="contact-item" onSubmit={handleSubmit}>
               <label className="contact-item">
                 Name
-                <input className="form-box" type="text" name="name" required />
+                <input
+                  className="form-box"
+                  type="text"
+                  name="name"
+                  required
+                  value={nameValue}
+                  onChange={(e) => setNameValue(e.target.value)}
+                />
               </label>
 
               <label className="contact-item">
@@ -56,6 +101,8 @@ export default function Contact() {
                   type="email"
                   name="email"
                   required
+                  value={emailValue}
+                  onChange={(e) => setEmailValue(e.target.value)}
                 />
               </label>
 
@@ -66,6 +113,8 @@ export default function Contact() {
                   name="message"
                   rows={5}
                   required
+                  value={messageValue}
+                  onChange={(e) => setMessageValue(e.target.value)}
                 />
               </label>
 

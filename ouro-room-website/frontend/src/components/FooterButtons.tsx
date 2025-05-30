@@ -15,28 +15,48 @@ export default function FooterButtons() {
 
   return (
     <>
-      <Button className="footer-button footer-text" onClick={() => navigate("/home")}>
-        <span style={underlineStyle("/home")}>HOME</span>
+      <Button
+        className="footer-button footer-text"
+        onClick={() => navigate("/home")}
+      >
+        <span>HOME</span>
       </Button>
-      <Button className="footer-button footer-text" onClick={() => navigate("/events")}>
-        <span style={underlineStyle("/events")}>EVENTS</span>
+      <Button
+        className="footer-button footer-text"
+        onClick={() => navigate("/events")}
+      >
+        <span>EVENTS</span>
       </Button>
-      <Button className="footer-button footer-text" onClick={() => navigate("/djs")}>
-        <span style={underlineStyle("/djs")}>DJs</span>
+      <Button
+        className="footer-button footer-text"
+        onClick={() => navigate("/djs")}
+      >
+        <span>DJs</span>
       </Button>
-      <Button className="footer-button footer-text" onClick={() => navigate("/mixes")}>
-        <span style={underlineStyle("/mixes")}>MIXES</span>
+      <Button
+        className="footer-button footer-text"
+        onClick={() => navigate("/mixes")}
+      >
+        <span>MIXES</span>
       </Button>
-      <Button className="footer-button footer-text" onClick={() => navigate("/about")}>
-        <span style={underlineStyle("/about")}>ABOUT</span>
+      <Button
+        className="footer-button footer-text"
+        onClick={() => navigate("/about")}
+      >
+        <span>ABOUT</span>
       </Button>
-      <Button className="footer-button footer-text" onClick={() => navigate("/gallery")}>
-        <span style={underlineStyle("/gallery")}>GALLERY</span>
+      <Button
+        className="footer-button footer-text"
+        onClick={() => navigate("/gallery")}
+      >
+        <span>GALLERY</span>
       </Button>
-      <Button className="footer-button footer-text" onClick={() => navigate("/contact")}>
-        <span style={underlineStyle("/contact")}>CONTACT</span>
+      <Button
+        className="footer-button footer-text"
+        onClick={() => navigate("/contact")}
+      >
+        <span>CONTACT</span>
       </Button>
-      
     </>
   );
 }
