@@ -9,6 +9,7 @@ interface Car {
 }
 
 export default function CarList() {
+  const [selectedCarId, setSelectedCarId] = useState<number | null>(null);
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,8 +42,15 @@ export default function CarList() {
   return (
     <div style={{ position: "relative", zIndex: 9, display: "flex", gap: "1rem" }}>
       {cars.map((car) => (
-      <CarCard key={car.id} make={car.make} model={car.model} year={car.year} />
-      ))}
+  <CarCard
+    key={car.id}
+    make={car.make}
+    model={car.model}
+    year={car.year}
+    onClick={() => setSelectedCarId(car.id)}
+    selected={selectedCarId === car.id}
+  />
+))}
     </div>
   );
 }

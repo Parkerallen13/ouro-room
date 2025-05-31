@@ -19,8 +19,11 @@ import AdminUpload from "./pages/AdminUpload";
 import Mixes from "./pages/Mixes";
 import AdminLogin from "./pages/AdminLogin";
 import AdminHome from "./pages/AdminHome";
-import AdminChoose from './pages/AdminChoose';
+import AdminChoose from "./pages/AdminChoose";
 import AddCarForm from "./pages/AddCarForm";
+import CarAdmin from "./pages/CarAdmin";
+import DisplayPage from "./pages/DisplayPage";
+import { SelectedCarsProvider } from "./context/SelectedCarsContext";
 
 // Styling
 import "./App.css";
@@ -65,36 +68,40 @@ const theme: MantineThemeOverride = {
 
 function App() {
   return (
-    <MantineProvider theme={theme}>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
-        rel="stylesheet"
-      ></link>
-       {/* <div>
+    <SelectedCarsProvider>
+      <MantineProvider theme={theme}>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
+          rel="stylesheet"
+        ></link>
+        {/* <div>
       <AddCarForm />
     </div> */}
-      <Router>
-        <Routes>
-          <Route path="/" element={<OpeningPage />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/djs" element={<DJs />} />
-          <Route path="/mixes" element={<Mixes />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/Contact" element={<Contact />} />
-          <Route path="/admin-upload" element={<AdminUpload />} />
-          <Route path="/admin-choose" element={<AdminChoose />} />
-          <Route path="/songform" element={<SongForm />} />
-          <Route path="/eventform" element={<EventForm />} />
-          <Route path="/djform" element={<DJForm />} />
-          <Route path="/galleryform" element={<GalleryForm />} />
-          <Route path="/admin-home" element={<AdminHome />} />
-          <Route path="/add-car" element={<AddCarForm />} />
-        </Routes>
-      </Router>
-    </MantineProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<OpeningPage />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/djs" element={<DJs />} />
+            <Route path="/mixes" element={<Mixes />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/Contact" element={<Contact />} />
+            <Route path="/admin-upload" element={<AdminUpload />} />
+            <Route path="/admin-choose" element={<AdminChoose />} />
+            <Route path="/songform" element={<SongForm />} />
+            <Route path="/eventform" element={<EventForm />} />
+            <Route path="/djform" element={<DJForm />} />
+            <Route path="/galleryform" element={<GalleryForm />} />
+            <Route path="/admin-home" element={<AdminHome />} />
+            <Route path="/add-car" element={<AddCarForm />} />
+            <Route path="/car-admin" element={<CarAdmin />} />
+            <Route path="/display" element={<DisplayPage />} />
+          </Routes>
+        </Router>
+      </MantineProvider>
+    </SelectedCarsProvider>
   );
 }
 
