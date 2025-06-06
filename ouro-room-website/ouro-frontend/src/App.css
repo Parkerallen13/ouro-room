@@ -94,6 +94,43 @@ img,
   font-size: clamp(0.5vw, 1vw, 2vw) !important;
 }
 
+.form-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: max-content;
+  justify-content: space-around;
+  z-index: 9;
+}
+
+.form-element {
+  margin: 3vw;
+}
+
+.form-header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 10vw;
+}
+
+.form-element-container {
+  background-color: rgb(113, 191, 215);
+  color: black;
+  border-radius: 1vw;
+  margin: 2w !important;
+  padding: 2vw !important;
+  padding-right: 5vw !important;
+  padding-left: 5vw !important;
+}
+
+.form-element.mantine-TextInput-root,
+.form-element.mantine-Textarea-root,
+.form-element.mantine-FileInput-root,
+.form-element.mantine-DateInput-root {
+  font-size: 1.5vw;
+}
 /* Buttons */
 
 .header-button {
@@ -119,14 +156,98 @@ img,
 .back-button {
   color: white;
   border: 2px solid white !important;
-  padding: 0.5em 1.5em;
   cursor: pointer;
-  transition: all 0.3s ease;
   border-radius: 1vw !important;
-  font-size: 1.5vw !important;
-  margin-left: 1vw;
-  margin-right: 1vw;
-  background-color: grey !important;
+  font-size: 1vw !important;
+  background-color:  rgb(113, 191, 215);
+  position: relative;
+  width: max-content;
+  margin-right: 2vw;
+}
+
+.select-button {
+  color: white !important;
+  border: 2px solid white !important;
+  cursor: pointer;
+  border-radius: 1vw !important;
+  font-size: 1vw !important;
+  background-color:  rgb(113, 191, 215);
+  position: relative;
+  width: max-content;
+  margin: 1vw;
+}
+
+.rsvp-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.url-button {
+  color: rgb(0, 0, 0) !important;
+  border: 2px solid white !important;
+  cursor: pointer;
+  border-radius: 1vw !important;
+  font-size: 1vw !important;
+  background-color: rgb(233, 222, 185) !important;
+  position: relative;
+  width: max-content;
+  margin: 1vw;
+  padding: .5vw;
+}
+
+.select-button-special {
+  color: white;
+  border: 2px solid white !important;
+  cursor: pointer;
+  border-radius: 1vw !important;
+  font-size: 1vw !important;
+  background-color:  rgb(113, 191, 215);
+  position: relative;
+  width: max-content;
+  margin: 1vw;
+}
+
+.delete-button {
+  color: white;
+  border: 2px solid white !important;
+  cursor: pointer;
+  border-radius: 1vw !important;
+  font-size: 1vw !important;
+  background-color:  rgb(188, 49, 95);
+  position: relative;
+  width: max-content;
+  margin: 1vw;
+}
+
+.select-item {
+  margin: 1vw;
+  color: black;
+
+}
+
+.select-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+ 
+}
+
+.submit-button {
+  color: white;
+  border: 2px solid white !important;
+  cursor: pointer;
+  border-radius: 1vw !important;
+  font-size: 1vw !important;
+  background-color:  rgb(113, 191, 215);
+  position: relative;
+  width: max-content;
+}
+
+.admin-title {
+  z-index: 2;
+  position: relative;
 }
 
 .mantine-focus-auto.mantine-active.button {
@@ -155,10 +276,16 @@ img,
   margin-top: 1vw;
 }
 
+.mix-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .mantine-focus-auto.mantine-active.button:hover,
 .admin-button:hover {
-  box-shadow: 0 0 2vw 1vw rgba(50, 146, 181, 0.8);
-  background-color: rgba(255, 255, 255, 0.1); /* optional hover background */
+  box-shadow: 0 0 2vw 1vw  rgb(113, 191, 215);
+  background-color:  rgb(113, 191, 215); /* optional hover background */
   cursor: pointer;
 }
 
@@ -198,7 +325,7 @@ img,
 .latest-mix-scroll-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
- width: 90vw;
+  width: 90vw;
 }
 
 @media (max-width: 768px) {
@@ -323,6 +450,99 @@ img,
   margin-right: 3vw;
 }
 
+.card-item {
+  margin: 0 !important;
+}
+
+.select-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  align-items: center;
+  justify-content: space-around;
+  min-height: 70vh;
+}
+
+.select-cards-layout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin: 2vw;
+}
+
+.event-select-card {
+  background-color: #171f26;
+  justify-content: space-around;
+  width: max-content;
+  z-index: 9;
+  padding: 0.5vw;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  color:white;
+  border-radius: 1vw;
+  margin: 2vw;
+  min-height: 300px;
+  align-items: center;
+}
+
+.select-card {
+  background-color: #171f26;
+  justify-content: space-around;
+  width: max-content;
+  z-index: 9;
+  padding: 0.5vw;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  color: white;
+  border-radius: 1vw;
+  align-items: center;
+  margin: 2vw;
+  min-height: 300px;
+}
+
+.gallery-select-card {
+  background-color:  #171f26;
+  justify-content: space-around;
+  width: max-content;
+  z-index: 9;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  border-radius: 1vw;
+  align-items: center;
+  margin: 1vw;
+}
+
+.gallery-select-img {
+  width: 15vw;
+}
+
+.select-item-header {
+  font-size: 1.2vw !important;
+}
+
+.select-item-footer {
+  font-size: 1vw;
+}
+
+.mantine-Text-root {
+  color: white;
+}
+
 .event-date {
   font-size: 1.5vw;
   font-weight: 600;
@@ -394,7 +614,6 @@ img,
   width: 300px;
   margin: 0;
   padding: 2vw;
-
 }
 
 .artist-img {
@@ -444,12 +663,19 @@ img,
 }
 
 .admin-container {
-  min-height: 50vh;
+  min-height: 45vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   margin-bottom: 25vh;
+}
+
+.select-header {
+  font-size: 2vw !important;
+  width: 20vw;
+  justify-content: space-around;
+  font-weight: 100;
 }
 
 .rolling-record-container {
@@ -484,7 +710,7 @@ img,
 .footer-container {
   display: flex;
   flex-direction: row;
-  background-color: hsl(208, 25%, 12%); /* or any color you want */
+  background-color:  #171f26; /* or any color you want */
   position: relative;
   padding-top: 3vh;
   padding-bottom: 2vh;
@@ -542,10 +768,16 @@ img,
 
 .gallery-container {
   display: flex;
-  flex-direction: column;
-  overflow-x: scroll;
-  margin-left: 10vw;
-  margin-right: 10vw;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 2vw;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.gallery-card {
+  height: 25vw;
+  margin: 1vw !important;
 }
 
 .gallery-row {
@@ -641,7 +873,7 @@ img,
   align-items: center;
   gap: 1rem;
   margin-top: 10px;
-  justify-content:space-around;
+  justify-content: space-around;
 }
 
 .audio-light {
@@ -657,7 +889,8 @@ img,
 }
 
 @keyframes flash {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.2;
   }
   50% {
@@ -670,7 +903,7 @@ img,
 }
 
 .icon-button {
-  border: none !important;;
+  border: none !important;
   background: transparent;
   padding: 0;
   cursor: pointer;
@@ -679,4 +912,3 @@ img,
   align-items: center;
   justify-content: center;
 }
-
