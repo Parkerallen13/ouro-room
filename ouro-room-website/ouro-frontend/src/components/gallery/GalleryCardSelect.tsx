@@ -24,19 +24,19 @@ const GalleryCardSelect = ({ image, selected, onClick, onDelete }: Props) => {
         alt="Gallery Image"
       />
       <div>
-        <Button
-          className="select-button"
-          style={{
-            backgroundColor: selected ? "green" : undefined,
-            color: selected ? "white" : undefined,
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            onClick();
-          }}
-        >
-          {selected ? "Deselect" : "Select"}
-        </Button>
+       <Button
+  className="select-button"
+  style={{
+    backgroundColor: selected ? "rgb(223, 177, 240)" : undefined,
+    color: selected ? "white" : undefined,
+  }} 
+  onClick={(e) => {
+    e.stopPropagation();
+    onClick();
+  }}
+>
+  {selected ? "Selected" : "Select"}
+</Button>
         <Button
           className="delete-button"
           style={{}}

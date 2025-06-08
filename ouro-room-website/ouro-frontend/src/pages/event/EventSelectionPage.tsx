@@ -4,17 +4,18 @@ import { Button, Title } from "@mantine/core";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
+import axios from "axios";
 
 type Event = {
   id: number;
   title: string;
   date: string;
-  artists: { name: string; time: string }[]; 
+  artists: { name: string; time: string }[];
   location: string;
   description: string;
   rsvp_link: string;
   isSelected: boolean;
-  isLatest?: boolean;
+  isUpcoming: boolean;
 };
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8002";
@@ -35,6 +36,25 @@ export default function EventSelectionPage() {
       else newSet.add(id);
       return newSet;
     });
+  };
+
+  const onToggleUpcoming = (id: number) => {
+    const targetEvent = events.find((event) => event.id === id);
+    if (targetEvent) {
+      const newIsUpcoming = !targetEvent.isUpcoming;
+
+      // Send the correct new value to the backend
+      axios.patch(`${API_URL}/api/elements/events/${id}/`, {
+        isUpcoming: newIsUpcoming,
+      });
+
+      // THEN update local state
+      setEvents((prevEvents) =>
+        prevEvents.map((event) =>
+          event.id === id ? { ...event, isUpcoming: newIsUpcoming } : event
+        )
+      );
+    }
   };
 
   const handleDelete = async (id: number) => {
@@ -67,13 +87,7 @@ export default function EventSelectionPage() {
         return res.json();
       })
       .then((data) => {
-        const transformedEvents = data.map((event: any) => ({
-          ...event,
-          artists: [{ name: event.artist, time: event.time }],
-          artist: undefined,
-          time: undefined,
-        }));
-        setEvents(transformedEvents);
+        setEvents(data); // Use the raw data assuming it already includes `artists` array
         setLoading(false);
       })
       .catch((err) => {
@@ -121,10 +135,11 @@ export default function EventSelectionPage() {
               <EventCardSelect
                 key={event.id}
                 event={event}
-                onClick={() => toggleSelection(event.id)}
                 selected={selectedEventIds.has(event.id)}
+                onClick={() => toggleSelection(event.id)}
                 deleted={false}
                 onDelete={() => handleDelete(event.id)}
+                onToggleUpcoming={() => onToggleUpcoming(event.id)}
               />
             ))
           )}

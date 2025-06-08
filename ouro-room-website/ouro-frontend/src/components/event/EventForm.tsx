@@ -9,25 +9,51 @@ import Footer from "../Footer";
 export default function EventForm() {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
-  
+
   // Date parts state
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
-  
+
   // Artists with time as strings in format "HH:MM AM/PM"
-  const [artists, setArtists] = useState([{ name: "", hour: "", minute: "", ampm: "AM" }]);
-  
+  const [artists, setArtists] = useState([
+    { name: "", hour: "", minute: "", ampm: "AM" },
+  ]);
+
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [rsvpLink, setRsvpLink] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const years = Array.from({ length: 11 }, (_, i) => (new Date().getFullYear() + i).toString());
-  const months = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, "0"));
-  const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString().padStart(2, "0"));
-  const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, "0")); // 1-12
-  const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, "0"));
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const years = Array.from({ length: 11 }, (_, i) =>
+    (new Date().getFullYear() + i).toString()
+  );
+  const months = monthNames.map((name, index) => ({
+    label: name,
+    value: (index + 1).toString().padStart(2, "0"),
+  }));
+  const days = Array.from({ length: 31 }, (_, i) =>
+    (i + 1).toString().padStart(2, "0")
+  );
+  const hours = Array.from({ length: 12 }, (_, i) =>
+    (i + 1).toString().padStart(2, "0")
+  ); // 1-12
+  const minutes = ["00", "30"]; // only 00 and 30
   const ampmOptions = ["AM", "PM"];
 
   const handleArtistChange = (
@@ -56,52 +82,53 @@ export default function EventForm() {
     return `${h.toString().padStart(2, "0")}:${minute}`;
   };
 
-  // Compose date string YYYY-MM-DD
   const dateString = year && month && day ? `${year}-${month}-${day}` : "";
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-  // Validate date
-  if (!dateString) {
-    alert("Please select a valid date");
-    setLoading(false);
-    return;
-  }
-
-  // Prepare artists with time in 24h HH:mm format
-  const artistsWith24hTime = artists.map(({ name, hour, minute, ampm }) => {
-    if (!name || !hour || !minute || !ampm) {
-      throw new Error("Please fill out all artist time fields");
+    // Validate date
+    if (!dateString) {
+      alert("Please select a valid date");
+      setLoading(false);
+      return;
     }
-    return {
-      name,
-      time: convertTo24Hour(hour, minute, ampm),
-    };
-  });
 
-  try {
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("date", dateString);
-    formData.append("artists", JSON.stringify(artistsWith24hTime));
-    formData.append("location", location);
-    formData.append("description", description);
-    formData.append("rsvp_link", rsvpLink);
-
-    await axios.post("http://localhost:8002/api/elements/events/", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    alert("Event uploaded!");
-  } catch (error) {
-    console.error("Upload failed:", error);
-    alert("Upload failed");
-  } finally {
-    setLoading(false);
+    // Prepare artists with time in 24h HH:mm format
+ const artistsWithTime = artists.map(({ name, hour, minute, ampm }) => {
+  if (!name || !hour || !minute || !ampm) {
+    throw new Error("Please fill out all artist time fields");
   }
-};
+  return {
+    name,
+    time: `${hour}:${minute} ${ampm}`,
+  };
+});
+
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("date", dateString);
+      formData.append("artists", JSON.stringify(artistsWithTime));
+      formData.append("location", location);
+      formData.append("description", description);
+      formData.append("rsvp_link", rsvpLink);
+
+      await axios.post("http://localhost:8002/api/elements/events/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      alert("Event uploaded!");
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Upload failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -140,21 +167,11 @@ const handleSubmit = async (e: React.FormEvent) => {
               />
 
               {/* Date dropdowns */}
-              <div className="form-element" style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+              <div
+                className="form-element"
+                style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}
+              >
                 <label>Date:</label>
-                <select
-                  value={year}
-                  onChange={(e) => setYear(e.currentTarget.value)}
-                  required
-                >
-                  <option value="">Year</option>
-                  {years.map((y) => (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  ))}
-                </select>
-
                 <select
                   value={month}
                   onChange={(e) => setMonth(e.currentTarget.value)}
@@ -162,8 +179,8 @@ const handleSubmit = async (e: React.FormEvent) => {
                 >
                   <option value="">Month</option>
                   {months.map((m) => (
-                    <option key={m} value={m}>
-                      {m}
+                    <option key={m.value} value={m.value}>
+                      {m.label}
                     </option>
                   ))}
                 </select>
@@ -177,6 +194,18 @@ const handleSubmit = async (e: React.FormEvent) => {
                   {days.map((d) => (
                     <option key={d} value={d}>
                       {d}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={year}
+                  onChange={(e) => setYear(e.currentTarget.value)}
+                  required
+                >
+                  <option value="">Year</option>
+                  {years.map((y) => (
+                    <option key={y} value={y}>
+                      {y}
                     </option>
                   ))}
                 </select>
@@ -203,7 +232,13 @@ const handleSubmit = async (e: React.FormEvent) => {
                   />
 
                   {/* Time dropdowns */}
-                  <div style={{ display: "flex", gap: "0.25rem", alignItems: "center" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "0.25rem",
+                      alignItems: "center",
+                    }}
+                  >
                     <label>Time:</label>
 
                     <select
@@ -224,7 +259,11 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <select
                       value={artist.minute}
                       onChange={(e) =>
-                        handleArtistChange(index, "minute", e.currentTarget.value)
+                        handleArtistChange(
+                          index,
+                          "minute",
+                          e.currentTarget.value
+                        )
                       }
                       required
                     >
@@ -263,7 +302,12 @@ const handleSubmit = async (e: React.FormEvent) => {
                 </div>
               ))}
 
-              <Button variant="outline" onClick={addArtist}>
+              <Button
+                style={{ marginTop: "1vw" }}
+                className="header-button"
+                variant="outline"
+                onClick={addArtist}
+              >
                 + Add Artist
               </Button>
 

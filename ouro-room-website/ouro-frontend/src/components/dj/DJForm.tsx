@@ -17,6 +17,7 @@ export default function DJForm() {
   const navigate = useNavigate();
   const [artist, setArtist] = useState("");
   const [description, setDescription] = useState("");
+  const [socialMedia, setSocialMedia] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -93,6 +94,12 @@ export default function DJForm() {
                 value={image}
                 onChange={setImage}
                 accept="jpg/*"
+              />
+                <Textarea
+                className="form-element"
+                label="Social Media"
+                value={socialMedia}
+                onChange={(e) => setSocialMedia(e.currentTarget.value)}
               />
               <Button 
               type="submit" loading={loading} className="submit-button">

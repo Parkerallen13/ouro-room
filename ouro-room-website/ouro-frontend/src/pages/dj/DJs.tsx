@@ -10,7 +10,9 @@ interface DJ {
   artist: string;
   description: string;
   image: string;
+  socialMedia: string;
   isSelected: boolean;
+  isSpotlight: boolean;
 }
 
 const API = import.meta.env.VITE_API_URL;
@@ -31,8 +33,10 @@ export default function DJs() {
             id: m.id,
             artist: m.artist,
             description: m.description,
+            socialMedia: m.socialmedia,
             image: m.image,
             isSelected: m.isSelected ?? false,
+            isSpotlight: m.isSpotlight,
           })
         );
 
@@ -50,23 +54,22 @@ export default function DJs() {
   return (
     <>
       <Header />
+      <Text
+        className="page-section-header"
+        style={{ position: "relative", zIndex: 3 }}
+      >
+        DJs
+      </Text>
 
-      <div className="page-section">
-        <Text
-          className="page-section-header"
-          style={{ position: "relative", zIndex: 3 }}
-        >
-          DJs
-        </Text>
-
+      <div className="dj-container">
         {loading && <Text>Loading...</Text>}
         {error && <Text>{error}</Text>}
 
         {!loading &&
           !error &&
           djs
-  .filter(dj => dj.isSelected)
-  .map(dj => <DJCard key={dj.id} dj={dj} />)}
+            .filter((dj) => dj.isSelected)
+            .map((dj) => <DJCard key={dj.id} dj={dj} />)}
       </div>
 
       <Footer />

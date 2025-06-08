@@ -11,6 +11,7 @@ type DJ = {
   artist: string;
   description: string;
   image: string;
+  socialMedia: string;
   isSelected?: boolean;
   isSpotlight?: boolean;
 };

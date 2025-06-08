@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {
   IconBrandInstagram,
   IconBrandLinkedin,
+  IconBrandX,
   IconMail,
 } from "@tabler/icons-react";
 
@@ -22,26 +23,21 @@ export default function Footer() {
 
         <div className="footer-social-icons footer-item">
           <a
-            style={{ color: "grey" }}
-            href="https://instagram.com/yourusername"
+            href="https://instagram.com/ourocollective"
             target="_blank"
             rel="noopener noreferrer"
-            className="social-link"
+            className="footer-social-icons"
           >
             <IconBrandInstagram size={32} />
           </a>
+
           <a
-            style={{ color: "grey" }}
-            href="https://linkedin.com/in/yourusername"
+            href="https://x.com/ourocollective"
             target="_blank"
             rel="noopener noreferrer"
-            className="social-link"
+            className="footer-social-icons"
           >
-            <IconBrandLinkedin size={32} />
-          </a>
-            
-          <a style={{ color: "grey" }} href="mailto:youremail@example.com" className="social-link">
-            <IconMail size={32} />
+            <IconBrandX size={32} />
           </a>
         </div>
         <Button

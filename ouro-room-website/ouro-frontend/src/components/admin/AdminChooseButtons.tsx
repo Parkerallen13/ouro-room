@@ -9,12 +9,12 @@ export default function AdminChooseButtons() {
       
       <div style={{ position: "relative", zIndex: 2 }}>
         <div style={{ position: "relative", zIndex: 1 }}>
-             <Button className="back-button"
+             {/* <Button className="back-button"
             variant="outline"
             onClick={() => navigate(-1)}
           >
             Back
-          </Button>
+          </Button> */}
           <Button className="admin-button"
             variant="outline"
             onClick={() => navigate("/mix-select")}

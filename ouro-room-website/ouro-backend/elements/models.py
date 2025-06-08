@@ -11,6 +11,7 @@ class Event(models.Model):
     rsvp_link = models.URLField()
     isSelected = models.BooleanField(default=False)
     isDelete = models.BooleanField(default=False)
+    isUpcoming = models.BooleanField(default=False)
     
 
     def __str__(self):
@@ -22,6 +23,7 @@ class DJ(models.Model):
     image = models.FileField(upload_to='dj_images/')
     artist = models.CharField(max_length=100)
     description = models.TextField()
+    socialMedia = models.CharField(max_length=255, default="")
     isSelected = models.BooleanField(default=False)
     isSpotlight = models.BooleanField(default=False)
     isDelete = models.BooleanField(default=False)

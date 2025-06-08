@@ -10,6 +10,7 @@ type Event = {
   description: string;
   rsvp_link: string;
   isSelected: boolean;
+  isUpcoming: boolean; // <-- Add this line
 };
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
   selected: boolean;
   deleted: boolean;
   onDelete: () => void;
+  onToggleUpcoming: () => void;
 };
 
 const EventCardSelect = ({
@@ -26,6 +28,7 @@ const EventCardSelect = ({
   selected,
   deleted,
   onDelete,
+  onToggleUpcoming,
 }: Props) => {
   return (
     <div className="event-select-card">
@@ -35,10 +38,17 @@ const EventCardSelect = ({
       </div>
       <div className="select-row">
         <Text className="select-item-header">Date:</Text>
-        <Text className="select-item-footer select-item">{event.date}</Text>
-      </div>{" "}
+        <Text className="select-item-footer select-item">
+          {new Date(event.date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </Text>
+      </div>
       <div className="flex flex-col space-y-1">
-        <Text className="text-sm font-semibold text-gray-500">Artists</Text>
+                <Text className="select-item-header">Artists:</Text>
+
         {event.artists?.length > 0 ? (
           event.artists.map((artist, index) => (
             <Text key={index} className="text-gray-700">
@@ -53,21 +63,24 @@ const EventCardSelect = ({
         <Text className="select-item-header">Location:</Text>
         <Text className="select-item-footer select-item">{event.location}</Text>
       </div>
-      <div className="rsvp-container">
-        <Button
-          className="url-button  select-item"
-          component="a"
-          href={event.rsvp_link}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          RSVP URL
-        </Button>
-      </div>
+      <div className="rsvp-container"></div>
+   
       <div>
-        <Button className="select-button  select-item" onClick={onClick}>
+        <Button
+         style={{
+            backgroundColor: selected ? "rgb(223, 177, 240)" : undefined,
+          }} className="select-button  select-item" onClick={onClick}>
           {selected ? "Deselect" : "Select"}
         </Button>
+           <Button
+        className="select-button select-item"
+        onClick={onToggleUpcoming}
+        style={{
+          backgroundColor: event.isUpcoming ? "rgb(223, 177, 240)" : undefined,
+        }}
+      >
+        {event.isUpcoming ? "Undo Upcoming" : "Mark as Upcoming"}
+      </Button>
         <Button
           className="delete-button"
           style={{}}

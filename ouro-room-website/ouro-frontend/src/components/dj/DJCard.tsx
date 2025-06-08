@@ -8,39 +8,45 @@ type DJ = {
   image: string;
   artist: string;
   description: string;
-  isSelected: boolean;
-  isSpotlight: boolean;
+  socialMedia: string;
 };
 
-export default function DJCard({ dj }: { dj: DJ }) {
+interface DJCardProps {
+  dj: DJ;
+  id: number;
+  image: string;
+  artist: string;
+  description: string;
+  socialMedia: string;
+  isSelected: boolean;
+  isSpotlight: boolean;
+}
+
+export default function DJCard({ dj }: DJCardProps) {
+  const { image, artist, description, socialMedia } = dj;
+
   const navigate = useNavigate();
 
   return (
-    <Container
-      className="page-section"
-      style={{ position: "relative", zIndex: 10 }}
+    <div
+      className="dj-spotlight-card"
+      style={{ position: "relative", zIndex: "8" }}
     >
-      <div
-        className="dj-spotlight-card"
-        style={{ position: "relative", zIndex: 10 }}
-      >
-        <div className="dj-spotlight-card-item">
-          <img 
-        style={{ width: "250px" }}
-          className="card-item" src={dj.image} alt="DJ Image" />
-        </div>
-        <div className="dj-spotlight-card-item">
-          <Text className="artist-text">{dj.artist}</Text>
-          <Text className="body-text">{dj.description}</Text>
-          <Button
-            variant="outline"
-            className="button"
-            onClick={() => navigate(`/profile/${dj.id}`)}
-          >
-            View Profile
-          </Button>
-        </div>
+      <div className="dj-spotlight-card-item">
+        <img className="card-item dj-img" src={image} alt="DJ Image" />
       </div>
-    </Container>
+      <div className="dj-spotlight-card-item">
+        <Text className="artist-text dj-text">{artist}</Text>
+        <Text className="body-text dj-text">{description}</Text>
+        <Text className="body-text dj-text">{socialMedia}</Text>
+        <Button
+          variant="outline"
+          className="button dj-text"
+          onClick={() => navigate(`/profile/${dj.id}`)}
+        >
+          View Profile
+        </Button>
+      </div>
+    </div>
   );
 }

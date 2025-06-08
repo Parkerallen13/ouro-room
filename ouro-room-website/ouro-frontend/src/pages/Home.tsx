@@ -36,13 +36,14 @@ type Event = {
   id: number;
   title: string;
   date: string;
-  artist: string;
+    artists: { name: string; time: string }[];
   location: string;
   description: string;
   rsvp_link: string;
   isSelected: boolean;
+  isUpcoming: boolean;
 };
-const API = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8002";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -54,76 +55,26 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchSelectedMixes = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(`${API}/api/elements/mixes/`);
-        console.log("Raw response:", res.data);
+        const [mixRes, eventRes, djRes] = await Promise.all([
+          axios.get(`${API_URL}/api/elements/mixes/`),
+          axios.get(`${API_URL}/api/elements/events/`),
+          axios.get(`${API_URL}/api/elements/djs/`),
+        ]);
 
-        const allMixes = res.data.map((m: any) => ({
-          ...m,
-          isSelected: m.isSelected ?? m.isSelected,
-        }));
-        setMixes(allMixes);
+        setMixes(mixRes.data);
+        setEvents(eventRes.data);
+        setDjs(djRes.data);
       } catch (err) {
-        console.error("Error fetching mixes:", err);
-        setError("Failed to load mixes.");
+        console.error("Error loading data:", err);
+        setError("Failed to load one or more resources.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchSelectedMixes();
-    const fetchSelectedEvents = async () => {
-      try {
-        const res = await axios.get(`${API}/api/elements/events/`);
-        console.log("Raw response:", res.data);
-        const allEvents = res.data.map(
-          (m: any): Event => ({
-            id: m.id,
-            title: m.title,
-            date: m.date,
-            artist: m.artist,
-            location: m.location,
-            description: m.description,
-            rsvp_link: m.rsvp_link ?? m.rsvpLink, // fallback if frontend expects camelCase
-            isSelected: m.isSelected ?? m.isSelected ?? false,
-          })
-        );
-        setEvents(allEvents);
-      } catch (err) {
-        console.error("Error fetching events:", err);
-        setError("Failed to load events.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSelectedEvents();
-    axios
-      .get("http://localhost:8002/api/elements/djs/")
-      .then((res) => {
-        setDjs(res.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching DJs:", err);
-      });
-
-    axios
-      .get("http://localhost:8002/api/elements/mixes/")
-      .then((res) => {
-        setMixes(res.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching mixes:", err);
-      });
-
-    axios
-      .get("http://localhost:8002/api/elements/events/")
-      .then((res) => {
-        setEvents(res.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching events:", err);
-      });
+    fetchData();
   }, []);
 
   return (
@@ -141,7 +92,6 @@ export default function Home() {
       >
         Collective Rhythm. Infinite Sound
       </Text>
-
       <div className="page-section">
         <Text
           className="page-section-header"
@@ -151,10 +101,26 @@ export default function Home() {
         </Text>
         {loading && <Text>Loading...</Text>}
         {error && <Text>{error}</Text>}
-
         {!loading &&
           !error &&
-          events.map((event) => <EventCard key={event.id} event={event} />)}
+          events
+            .filter((event) => event.isUpcoming)
+            .map((event) => <EventCard key={event.id} event={event} />)}
+      </div>
+
+       <div className="page-section">
+        <Text
+          className="page-section-header"
+          style={{ position: "relative", zIndex: 3 }}
+        >
+          DJ Spotlight
+        </Text>
+        {djs.length === 0 && <Text>No DJs found.</Text>}
+        {djs
+          .filter((dj) => dj.isSpotlight)
+          .map((dj) => (
+            <DJCard key={dj.id} dj={dj} />
+          ))}
       </div>
 
       <div className="page-section">
@@ -164,49 +130,18 @@ export default function Home() {
         >
           Latest Mixes
         </Text>
-
-        {loading ? (
-          <Center style={{ marginTop: "2rem" }}>
-            <Loader />
-          </Center>
-        ) : error ? (
-          <Center style={{ color: "red", marginTop: "2rem" }}>{error}</Center>
-        ) : mixes.length === 0 ? (
-          <Center style={{ marginTop: "2rem" }}>
-            <Text color="dimmed">No mixes selected yet.</Text>
-          </Center>
-        ) : (
-          <div
-            className="latest-mix-scroll-container"
-            style={{ position: "relative", zIndex: 2 }}
-          >
-            {mixes.map((mix) => (
-              <MixCard
-                mix={mix}
-                key={mix.id}
-                title={mix.title}
-                artist={mix.artist}
-                audioSrc={mix.audio}
-              />
-            ))}
-          </div>
-        )}
+        <div className="latest-mix-section">
+        {loading && <Text>Loading...</Text>}
+        {error && <Text>{error}</Text>}
+        {!loading &&
+          !error &&
+          mixes
+            .filter((mix) => mix.isLatest)
+            .map((mix) => <MixCard key={mix.id} mix={mix} />)}
+      </div>
       </div>
 
-      <div className="page-section">
-        <Text
-          className="page-section-header"
-          style={{ position: "relative", zIndex: 3 }}
-        >
-          DJ Spotlight
-        </Text>
-        {djs.length === 0 && <Text>No DJs found.</Text>}
-{djs
-  .filter((dj) => dj.isSpotlight)
-  .map((dj) => (
-    <DJCard key={dj.id} dj={dj} />
-  ))}
-      </div>
+     
 
       <Footer />
     </>

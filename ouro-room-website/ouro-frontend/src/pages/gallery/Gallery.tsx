@@ -12,7 +12,7 @@ type Image = {
   isSelected: boolean;
 };
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8002';
 
 export default function Gallery() {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ export default function Gallery() {
         const res = await axios.get(`${API}/api/elements/gallery/`);
         console.log("Raw response:", res.data);
         const allImages = res.data.map(
-          (i: any): Event => ({
+          (i: any): Image => ({
             id: i.id,
             image: i.image,
             isSelected: i.isSelected ?? i.isSelected ?? false,

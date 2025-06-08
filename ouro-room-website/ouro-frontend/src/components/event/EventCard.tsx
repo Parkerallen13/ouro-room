@@ -26,21 +26,42 @@ export default function EventCard({ event }: { event: Event }) {
         style={{ position: "relative", zIndex: 10 }}
       >
         <div className="event-item">
-          <Text className="event-date date-text">{event.date}</Text>
-        </div>
-        <div className="event-item">
-          <Text className="body-text">Ouro Presents:</Text>
-          <Text className="artist-text">{event.title}</Text>
           {event.artists.map(({ name, time }, idx) => (
-            <Text key={idx} className="artist-text">
-              {time} - {name}
+            <Text key={idx} className="artist-text event-card-item">
+              {name} - {time}
             </Text>
           ))}
-          <Text className="location-text">{event.location}</Text>
-          <Text className="body-text">{event.description}</Text>
+         
+          {/* <Text
+            style={{ marginTop: "2vw", marginBottom: "2vw" }}
+            className="big-text"
+          >
+            {event.title}
+          </Text> */}
+          {/* <Text
+            style={{ marginTop: "2vw", marginBottom: "2vw" }}
+            className="small-text"
+          >
+            {event.description}
+          </Text> */}
+        </div>
+        <div className="event-item">
+          <Text className="event-date date-text">
+            {new Date(event.date).toLocaleDateString("en-US", {
+              weekday: "short", // e.g., "Tue"
+              year: "numeric", // e.g., "2025"
+              month: "short", // e.g., "Jun"
+              day: "numeric", // e.g., "10"
+            })}
+          </Text>
+           <Text
+            className="location-text event-card-item"
+          >
+            {event.location}
+          </Text>
           <Button
             variant="outline"
-            className="button"
+            className="button event-item-section event-card-item"
             onClick={() => navigate(`/profile/${event.rsvp_link}`)}
           >
             RSVP

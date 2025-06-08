@@ -7,6 +7,7 @@ type DJ = {
   image: string;
   artist: string;
   description: string;
+  socialMedia: string;
   isSelected?: boolean;
   isSpotlight?: boolean;
 };
@@ -18,7 +19,6 @@ interface Props {
   spotlight: boolean;
   onSetSpotlight: () => void;
   deleted: boolean;
-
   onDelete: () => void;
 }
 
@@ -28,7 +28,6 @@ const DJCardSelect = ({
   onClick,
   spotlight,
   onSetSpotlight,
-  deleted,
   onDelete,
 }: Props) => {
   return (
@@ -45,6 +44,9 @@ const DJCardSelect = ({
       <Text className="select-item-footer select-item">{dj.description}</Text>
       <div className="select-buttons  select-item">
         <Button
+          style={{
+            backgroundColor: dj.isSelected ? "rgb(223, 177, 240)" : undefined,
+          }}
           className="select-button"
           onClick={(e) => {
             e.stopPropagation();
@@ -54,34 +56,44 @@ const DJCardSelect = ({
           {selected ? "Deselect" : "Select"}
         </Button>
 
-      <Button
-  className="select-button"
-  onClick={async (e) => {
-    e.stopPropagation();
-    try {
-      await axios.patch(`http://localhost:8002/api/elements/djs/${dj.id}/`, {
-        isSpotlight: !spotlight,
-      });
-      onSetSpotlight(); // Optional callback to re-fetch or update state in parent
-    } catch (err) {
-      console.error("Failed to update spotlight status:", err);
-    }
-  }}
->
-  {spotlight ? "Remove Spotlight" : "Set Spotlight"}
-</Button>
-
-      <Button
-      
-          className="delete-button"
+        <Button
           style={{
+            backgroundColor: dj.isSpotlight ? "rgb(223, 177, 240)" : undefined,
           }}
-          onClick={(e) => {
-            if (window.confirm("Are you sure you want to permanently delete this dj?"))
+          className="select-button"
+          onClick={async (e) => {
             e.stopPropagation();
+            try {
+              await axios.patch(
+                `http://localhost:8002/api/elements/djs/${dj.id}/`,
+                {
+                  isSpotlight: !spotlight,
+                }
+              );
+              onSetSpotlight(); // Optional callback to re-fetch or update state in parent
+            } catch (err) {
+              console.error("Failed to update spotlight status:", err);
+            }
+          }}
+        >
+          {spotlight ? "Remove Spotlight" : "Set Spotlight"}
+        </Button>
+
+        <Button
+          className="delete-button"
+          style={{}}
+          onClick={(e) => {
+            if (
+              window.confirm(
+                "Are you sure you want to permanently delete this dj?"
+              )
+            )
+              e.stopPropagation();
             onDelete();
           }}
-        > Delete
+        >
+          {" "}
+          Delete
         </Button>
       </div>
     </div>

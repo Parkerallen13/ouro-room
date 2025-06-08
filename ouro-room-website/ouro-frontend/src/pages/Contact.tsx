@@ -19,7 +19,7 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/api/contact", {
+      const res = await fetch("http://localhost:8002/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export default function Contact() {
           style={{ position: "relative", zIndex: 1 }}
         >
           <div className="social-container">
-            <h2 className="social-section">Follow Us</h2>
+            <h2 className="social-section">Follow Us:</h2>
             <div className="social-icons">
               <a
                 href="https://instagram.com/ourocollective"
@@ -63,12 +63,7 @@ export default function Contact() {
               >
                 <IconBrandInstagram size={32} />
               </a>
-              <a href="tel:7207425481" className="social-link">
-                <IconPhone size={32} />
-              </a>
-              <a href="mailto:parkerjeanneallen@gmail.com" className="social-link">
-                <IconMail size={32} />
-              </a>
+
               <a
                 href="https://x.com/ourocollective"
                 target="_blank"
@@ -79,8 +74,20 @@ export default function Contact() {
               </a>
             </div>
           </div>
+           <h1 className="social-section">Call Us:</h1>
+
+              <Text>720-742-5481</Text>
           <div>
-            <h1 className=" contact-item header-text">Contact Us</h1>
+            <h1 className="social-section">Leave a Message</h1>
+            {/* <a href="tel:7207425481" className="social-link">
+              <IconPhone size={32} />
+            </a>
+            <a
+              href="mailto:parkerjeanneallen@gmail.com"
+              className="social-link"
+            >
+              <IconMail size={32} />
+            </a> */}
             <form className="contact-item" onSubmit={handleSubmit}>
               <label className="contact-item">
                 Name
@@ -122,7 +129,8 @@ export default function Contact() {
                 Send
               </button>
             </form>
-            <div></div>
+           
+
           </div>
         </div>
         <Footer />

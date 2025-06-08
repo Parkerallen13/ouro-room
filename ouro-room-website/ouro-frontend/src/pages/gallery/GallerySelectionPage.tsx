@@ -18,11 +18,29 @@ export default function GallerySelectionPage() {
   const [images, setImages] = useState<Images[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
+  const [selectedImageIds, setSelectedImageIds] = useState<number[]>([]);
 
-  const toggleSelection = (id: number) => {
-    setSelectedImageId((prev) => (prev === id ? null : id));
-  };
+const toggleSelection = async (id: number) => {
+  const alreadySelected = selectedImageIds.includes(id);
+  const newSelectedIds = alreadySelected
+    ? selectedImageIds.filter((i) => i !== id)
+    : [...selectedImageIds, id];
+
+  setSelectedImageIds(newSelectedIds);
+
+  // ✅ Update selection state in the backend
+  try {
+    await fetch(`${API_URL}/api/elements/gallery/${id}/`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isSelected: !alreadySelected }),
+    });
+  } catch (error) {
+    console.error("Error updating selection:", error);
+  }
+};
 
   const handleDelete = async (id: number) => {
     try {
@@ -41,34 +59,26 @@ export default function GallerySelectionPage() {
     }
   };
 
-  useEffect(() => {
-    console.log("event list mounted, fetching Images...");
-    fetch(`${API_URL}/api/elements/gallery/`)
-      .then((res) => {
-        console.log("Fetch response:", res);
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        const ids = data.map((d: any) => d.id);
-        console.log("All IDs:", ids);
-        const duplicates = ids.filter(
-          (id: any, index: any) => ids.indexOf(id) !== index
-        );
-        console.log("Duplicate IDs:", duplicates);
-        console.log("Events data received:", data);
-        setImages(data);
-        console.log("One image object:", data[0]);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Fetch error:", err);
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
+useEffect(() => {
+  console.log("event list mounted, fetching Images...");
+  fetch(`${API_URL}/api/elements/gallery/`)
+    .then((res) => {
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      return res.json();
+    })
+ .then((data) => {
+  const ids = data.map((d: any) => d.id);
+  const selectedIds = data
+    .filter((img: any) => img.isSelected)
+    .map((img: any) => img.id); // <-- this is new
+
+  console.log("Selected IDs on load:", selectedIds);
+
+  setImages(data);
+  setSelectedImageIds(selectedIds); // <-- THIS LINE FIXES YOUR ISSUE
+  setLoading(false);
+});
+}, []);
 
   if (loading)
     return (
@@ -105,7 +115,7 @@ export default function GallerySelectionPage() {
             <GalleryCardSelect
               key={gallery.id}
               image={gallery} // pass the single gallery object here
-              selected={selectedImageId === gallery.id}
+              selected={selectedImageIds.includes(gallery.id)} // ← multiple selections
               deleted={false} // pass only once, or replace with your logic if you track deleted state
               onClick={() => toggleSelection(gallery.id)}
               onDelete={() => handleDelete(gallery.id)} // pass gallery.id here correctly

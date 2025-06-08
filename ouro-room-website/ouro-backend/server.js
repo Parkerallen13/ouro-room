@@ -1,5 +1,4 @@
 require("dotenv").config();
-const mixesPath = path.join(__dirname, "data", "mixes.json");
 
 let djs = []; // in-memory DJ array
 let nextId = 1; // simple incremental ID for DJ IDs
@@ -9,6 +8,7 @@ const nodemailer = require("nodemailer");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const mixesPath = path.join(__dirname, "data", "mixes.json");
 
 const app = express();
 const PORT = 8002;
@@ -31,7 +31,7 @@ app.patch("/api/elements/mixes/:id", (req, res) => {
 
   try {
     const mixes = JSON.parse(fs.readFileSync(mixesPath, "utf-8"));
-    const mixIndex = mixes.findIndex(mix => String(mix.id) === id);
+    const mixIndex = mixes.findIndex((mix) => String(mix.id) === id);
 
     if (mixIndex === -1) {
       return res.status(404).json({ message: "Mix not found" });
@@ -50,7 +50,7 @@ app.patch("/api/elements/mixes/:id", (req, res) => {
   }
 });
 
-app.delete('/api/events/:id', async (req, res) => {
+app.delete("/api/events/:id", async (req, res) => {
   const { id } = req.params;
   const deleted = await db.events.delete(id); // Use actual DB logic here
   if (deleted) {
@@ -60,7 +60,7 @@ app.delete('/api/events/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/djs/:id', async (req, res) => {
+app.delete("/api/djs/:id", async (req, res) => {
   const { id } = req.params;
   const deleted = await db.djs.delete(id); // Use actual DB logic here
   if (deleted) {
@@ -70,7 +70,7 @@ app.delete('/api/djs/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/mixes/:id', async (req, res) => {
+app.delete("/api/mixes/:id", async (req, res) => {
   const { id } = req.params;
   const deleted = await db.mixes.delete(id); // Use actual DB logic here
   if (deleted) {
@@ -80,11 +80,11 @@ app.delete('/api/mixes/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/gallery/:id', async (req, res) => {
+app.delete("/api/gallery/:id", async (req, res) => {
   const { id } = req.params;
   const deleted = await db.gallery.delete({
-  where: { id: Number(id) }
-});
+    where: { id: Number(id) },
+  });
   if (deleted) {
     res.status(204).send(); // No Content
   } else {
@@ -103,7 +103,9 @@ app.post("/api/elements/events", (req, res) => {
   // Validate structure of each artist
   for (const artist of artists) {
     if (!artist.name || !artist.time) {
-      return res.status(400).json({ error: "Each artist must have name and time" });
+      return res
+        .status(400)
+        .json({ error: "Each artist must have name and time" });
     }
   }
 
@@ -116,7 +118,7 @@ app.patch("/api/elements/events/:id", (req, res) => {
 
   try {
     const events = JSON.parse(fs.readFileSync(eventsPath, "utf-8"));
-    const eventIndex = events.findIndex(event => String(event.id) === id);
+    const eventIndex = events.findIndex((event) => String(event.id) === id);
 
     if (eventIndex === -1) {
       return res.status(404).json({ message: "Event not found" });
@@ -142,7 +144,7 @@ app.post("/api/contact", async (req, res) => {
   const mailOptions = {
     from: email,
     to: "parkerjeanneallen@gmail.com",
-    subject: `New message from ${name}`,
+    subject: `New message from ${name} (ouro)`,
     text: `You got a new message from ${name} (${email}):\n\n${message}`,
   };
 
@@ -164,15 +166,16 @@ app.get("/api/elements/djs/", (req, res) => {
     const djs = JSON.parse(fs.readFileSync(djsPath, "utf-8"));
     res.json(djs);
   } catch (err) {
-    res.status(500).json({ message: "Error reading DJ data." });
+    res.status(500).json({ message: "Error reading DJs." });
   }
 });
 
 // POST new DJ
 app.post("/api/elements/djs/", (req, res) => {
   const { image, artist, description, profileId } = req.body;
-  if (!image || !artist || !description || !profileId) {
-    return res.status(400).json({ message: "All fields required." });
+
+  if (!artist || !description) {
+    return res.status(400).json({ message: "Missing required fields." });
   }
 
   try {
@@ -180,12 +183,22 @@ app.post("/api/elements/djs/", (req, res) => {
     const maxId = djs.reduce((max, dj) => (dj.id > max ? dj.id : max), 0);
     const newId = maxId + 1;
 
-    const newDJ = { id: newId, image, artist, description, profileId, isSelected: false, isSpotlight: false };
+    const newDJ = {
+      id: newId,
+      image,
+      artist,
+      description,
+      profileId,
+      isSelected: false,
+      isSpotlight: false,
+    };
+
     djs.push(newDJ);
     fs.writeFileSync(djsPath, JSON.stringify(djs, null, 2));
     res.status(201).json(newDJ);
   } catch (err) {
-    res.status(500).json({ message: "Error writing DJ data." });
+    console.error("Error saving DJ:", err);
+    res.status(500).json({ message: "Error saving DJ data." });
   }
 });
 
@@ -219,7 +232,9 @@ app.post("/api/elements/mixes/", (req, res) => {
 
     // You could also save mix info to a JSON file or DB here if you want
 
-    res.status(201).json({ message: "Mix uploaded successfully!", path: filePath });
+    res
+      .status(201)
+      .json({ message: "Mix uploaded successfully!", path: filePath });
   });
 });
 
@@ -263,7 +278,9 @@ app.post("/api/elements", (req, res) => {
       const newEvent = { title, date, description, imagePath: filePath };
       events.push(newEvent);
       fs.writeFileSync(eventsPath, JSON.stringify(events, null, 2));
-      res.status(201).json({ message: "Event uploaded successfully!", event: newEvent });
+      res
+        .status(201)
+        .json({ message: "Event uploaded successfully!", event: newEvent });
     } catch (e) {
       console.error(e);
       res.status(500).json({ message: "Failed to save event data." });
@@ -293,11 +310,15 @@ app.post("/api/elements/gallery/", (req, res) => {
       savedImages.push(filePath);
     } catch (err) {
       console.error("Error saving gallery image:", err);
-      return res.status(500).json({ message: "Failed to save gallery images." });
+      return res
+        .status(500)
+        .json({ message: "Failed to save gallery images." });
     }
   }
 
-  res.status(201).json({ message: "Gallery images uploaded!", files: savedImages });
+  res
+    .status(201)
+    .json({ message: "Gallery images uploaded!", files: savedImages });
 });
 
 app.patch("/api/elements/djs/:id", (req, res) => {
@@ -309,7 +330,7 @@ app.patch("/api/elements/djs/:id", (req, res) => {
     const djs = JSON.parse(fs.readFileSync(djsPath, "utf-8"));
 
     // Find DJ index by id (convert id to number if needed)
-    const djIndex = djs.findIndex(dj => String(dj.id) === id);
+    const djIndex = djs.findIndex((dj) => String(dj.id) === id);
     if (djIndex === -1) {
       return res.status(404).json({ message: "DJ not found" });
     }

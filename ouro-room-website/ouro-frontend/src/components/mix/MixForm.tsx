@@ -12,41 +12,41 @@ export default function MixForm() {
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
+
   const handleSubmit = async (e: React.FormEvent) => {
-    
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("artist", artist);
+  e.preventDefault();
+  setLoading(true);
+  try {
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("artist", artist);
 
-      if (audioFile) {
-        formData.append("audio", audioFile);
-      } else {
-        alert("No audio file selected");
-        return;
-      }
-
-      const res = await axios.post(
-        "http://localhost:8002/api/elements/mixes/",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      console.log("Response:", res);
-      alert("Mix uploaded!");
-      setTitle("");
-      setArtist("");
-      setAudioFile(null);
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Upload failed");
-    } finally {
-      setLoading(false);
+    if (audioFile) {
+      formData.append("audio", audioFile);
+    } else {
+      alert("No audio file selected");
+      return;
     }
-  };
+
+    const res = await axios.post(
+      "http://localhost:8002/api/elements/mixes/",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    console.log("Response:", res);
+    alert("Mix uploaded!");
+    setTitle("");
+    setArtist("");
+    setAudioFile(null);
+  } catch (error) {
+    console.error("Upload error:", error);
+    alert("Upload failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>

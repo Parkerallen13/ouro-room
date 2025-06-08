@@ -42,7 +42,7 @@ export default function MixCard({ mix }: MixCardProps) {
   return (
     <Container className="mix-card" style={{ position: "relative", zIndex: 10 }}>
       <Text className="mix-text">{artist}</Text>
-      <Text className="footer-text">{title}</Text>
+      <Text className="mix-text-small">{title}</Text>
       
      <div className="mix-img">
   <img
