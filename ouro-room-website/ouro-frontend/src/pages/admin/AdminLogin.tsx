@@ -2,11 +2,7 @@ import { Text } from "@mantine/core";
 import Header from "../../components/Header";
 import "../../App.css";
 import Footer from "../../components/Footer";
-import {
-  IconBrandInstagram,
-  IconBrandLinkedin,
-  IconMail,
-} from "@tabler/icons-react";
+
 import { useNavigate } from "react-router-dom";
 
 export default function AdminLogin() {
@@ -21,7 +17,7 @@ export default function AdminLogin() {
           style={{ position: "relative", zIndex: 1 }}
         >
           <div>
-            <h1 className=" contact-item header-text">Login</h1>
+            <h1 className=" header-text">Login</h1>
             <form
               className="contact-item"
               onSubmit={(e) => {

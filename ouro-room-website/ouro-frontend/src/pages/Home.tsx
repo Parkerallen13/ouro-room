@@ -17,6 +17,7 @@ interface DJ {
   image: string;
   artist: string;
   description: string;
+  socialMedia: string;
   isSelected: boolean;
   isSpotlight: boolean;
 }
@@ -36,7 +37,7 @@ type Event = {
   id: number;
   title: string;
   date: string;
-    artists: { name: string; time: string }[];
+  artists: { name: string; time: string }[];
   location: string;
   description: string;
   rsvp_link: string;

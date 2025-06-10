@@ -7,6 +7,7 @@ import {
   IconBrandLinkedin,
   IconBrandX,
   IconMail,
+  IconHome,
 } from "@tabler/icons-react";
 
 export default function Footer() {
@@ -40,13 +41,30 @@ export default function Footer() {
             <IconBrandX size={32} />
           </a>
         </div>
-        <Button
-          className="footer-item footer-button"
-          style={{ fontWeight: "900" }}
-          onClick={() => navigate("/admin-login")}
-        >
-          <span>ADMIN</span>
-        </Button>
+        <div className="footer-item" style={{ display: "flex", gap: "8px" }}>
+          <Button
+            className="footer-button"
+            style={{ fontWeight: "900" }}
+            onClick={() => navigate("/admin-login")}
+          >
+            <span>ADMIN</span>
+          </Button>
+
+          <Button
+            variant="transparent"
+            onClick={() => navigate("/admin-home")}
+            style={{
+              padding: "4px",
+              height: "auto",
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            }}
+          >
+            <IconHome size={18} color="gray" />
+          </Button>
+        </div>
       </div>
     </>
   );
