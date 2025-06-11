@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextInput, Button, Title, Stack } from "@mantine/core";
+import { TextInput, Button, Title, Stack, FileInput } from "@mantine/core";
 import "../../App.css";
 import axios from "axios";
 import Header from "../Header";
@@ -24,6 +24,8 @@ export default function EventForm() {
   const [description, setDescription] = useState("");
   const [rsvpLink, setRsvpLink] = useState("");
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
+
 
   const monthNames = [
     "January",
@@ -158,6 +160,13 @@ export default function EventForm() {
         >
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <Stack>
+               <FileInput
+                              className="form-element"
+                              label="Image (JPG)"
+                              value={image}
+                              onChange={setImage}
+                              accept="jpg/*"
+                            />
               <TextInput
                 className="form-element"
                 label="Title"

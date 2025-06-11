@@ -3,6 +3,7 @@ import Header from "../../components/Header";
 import Logo from "../../assets/ouro-logo.png";
 import { useNavigate } from "react-router-dom";
 import EventCard from "../../components/event/EventCard";
+import EventCard2 from "../../components/event/EventCard2.0";
 import Footer from "../../components/Footer";
 import "../../App.css";
 import { useEffect, useState } from "react";
@@ -82,7 +83,7 @@ export default function Events() {
 
         {!loading &&
           !error &&
-          events.map((event) => <EventCard key={event.id} event={event} />)}
+          events.map((event) => <EventCard2 key={event.id} event={event} />)}
       </div>
 
       <Footer />

@@ -27,6 +27,7 @@ import EventSelectionPage from "./pages/event/EventSelectionPage";
 import GallerySelectionPage from "./pages/gallery/GallerySelectionPage";
 import MixSelectionPage from "./pages/mix/MixSelectionPage";
 import DJProfile from "./components/dj/DJProfile";
+import EventProfile from "./components/event/EventProfile";
 
 import "./App.css";
 
@@ -61,6 +62,7 @@ function App() {
               <Route path="/event-select" element={<EventSelectionPage />} />
               <Route path="/car-list" element={<CarList />} />
               <Route path="/profile/:id" element={<DJProfile />} />
+              <Route path="/event-profile/:id" element={<EventProfile />} />
             </Routes>
           </Router>
         </MantineProvider>

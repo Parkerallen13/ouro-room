@@ -11,7 +11,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ['id', 'title', 'date', 'artists', 'location', 'description', 'rsvp_link', 'isSelected', 'isDelete', 'isUpcoming']
+        fields = ['id', 'title', 'date', 'artists', 'image', 'location', 'description', 'rsvp_link', 'isSelected', 'isDelete', 'isUpcoming']
 
 class DJSerializer(serializers.ModelSerializer):
     class Meta:
