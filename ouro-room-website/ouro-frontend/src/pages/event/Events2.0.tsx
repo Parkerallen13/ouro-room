@@ -11,17 +11,10 @@ import axios from "axios";
 
 type Event = {
   id: number;
-  image: string;
-  title: string;
-  date: string;
-  artists: { name: string; time: string }[]; // ✅ this replaces 'artist'
-  location: string;
-  description: string;
-  rsvp_link: string;
-  isSelected: boolean;
+ image: string;
 };
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:8002";
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8002';
 
 export default function Events() {
   const navigate = useNavigate();
@@ -34,21 +27,12 @@ export default function Events() {
       try {
         const res = await axios.get(`${API}/api/elements/events/`);
         console.log("Raw response:", res.data);
-        const allEvents = res.data.map(
-          (m: any): Event => ({
-            id: m.id,
-            image: m.image
-              ? `${API}${m.image}`
-              : "/src/assets/ouro-record.png", // ✅ make sure the image path is usable
-            title: m.title,
-            date: m.date,
-            artists: m.artists ?? [{ name: m.artist, time: m.time }],
-            location: m.location,
-            description: m.description,
-            rsvp_link: m.rsvp_link ?? m.rsvpLink,
-            isSelected: m.isSelected ?? false,
-          })
-        );
+      const allEvents = res.data.map(
+  (m: any): Event => ({
+    id: m.id,
+    image: m.image;
+  })
+);
         setEvents(allEvents);
       } catch (err) {
         console.error("Error fetching events:", err);
@@ -87,7 +71,7 @@ export default function Events() {
 
         {!loading &&
           !error &&
-          events.map((event) => <EventCard key={event.id} event={event} />)}
+          events.map((event) => <EventCard2 key={event.id} event={event} />)}
       </div>
 
       <Footer />
