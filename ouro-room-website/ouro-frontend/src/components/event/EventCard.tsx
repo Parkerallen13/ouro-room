@@ -31,7 +31,7 @@ export default function EventCard({ event }: { event: Event }) {
               {name} - {time}
             </Text>
           ))}
-         
+
           {/* <Text
             style={{ marginTop: "2vw", marginBottom: "2vw" }}
             className="big-text"
@@ -54,9 +54,7 @@ export default function EventCard({ event }: { event: Event }) {
               day: "numeric", // e.g., "10"
             })}
           </Text>
-           <Text
-            className="location-text event-card-item"
-          >
+          <Text className="location-text event-card-item">
             {event.location}
           </Text>
           <Button

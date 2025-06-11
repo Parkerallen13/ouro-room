@@ -5,6 +5,7 @@ from django.utils import timezone
 class Event(models.Model):
     title = models.CharField(max_length=100)
     date = models.DateField(default=timezone.now)
+    image = models.ImageField(upload_to='event_images/', blank=True, null=True)
     artists = models.JSONField(default=list, blank=True)
     location = models.TextField()
     description = models.TextField()
