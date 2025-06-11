@@ -47,7 +47,7 @@ const EventCardSelect = ({
         </Text>
       </div>
       <div className="flex flex-col space-y-1">
-                <Text className="select-item-header">Artists:</Text>
+        <Text className="select-item-header">Artists:</Text>
 
         {event.artists?.length > 0 ? (
           event.artists.map((artist, index) => (
@@ -64,23 +64,28 @@ const EventCardSelect = ({
         <Text className="select-item-footer select-item">{event.location}</Text>
       </div>
       <div className="rsvp-container"></div>
-   
+
       <div>
         <Button
-         style={{
+          style={{
             backgroundColor: selected ? "rgb(223, 177, 240)" : undefined,
-          }} className="select-button  select-item" onClick={onClick}>
+          }}
+          className="select-button  select-item"
+          onClick={onClick}
+        >
           {selected ? "Deselect" : "Select"}
         </Button>
-           <Button
-        className="select-button select-item"
-        onClick={onToggleUpcoming}
-        style={{
-          backgroundColor: event.isUpcoming ? "rgb(223, 177, 240)" : undefined,
-        }}
-      >
-        {event.isUpcoming ? "Undo Upcoming" : "Mark as Upcoming"}
-      </Button>
+        <Button
+          className="select-button select-item"
+          onClick={onToggleUpcoming}
+          style={{
+            backgroundColor: event.isUpcoming
+              ? "rgb(223, 177, 240)"
+              : undefined,
+          }}
+        >
+          {event.isUpcoming ? "Undo Upcoming" : "Mark as Upcoming"}
+        </Button>
         <Button
           className="delete-button"
           style={{}}

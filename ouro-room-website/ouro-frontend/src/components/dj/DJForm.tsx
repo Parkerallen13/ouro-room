@@ -36,9 +36,13 @@ export default function DJForm() {
         return;
       }
 
-      const res = await axios.post("http://localhost:8002/api/elements/djs/", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await axios.post(
+        "http://localhost:8002/api/elements/djs/",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       console.log("Response:", res);
       alert("DJ added!");
     } catch (error) {
@@ -90,19 +94,18 @@ export default function DJForm() {
               />
               <FileInput
                 className="form-element"
-                label="Image (JPG)"
+                label="Upload Image or PDF"
                 value={image}
                 onChange={setImage}
-                accept="jpg/*"
+                accept="image/jpeg,image/png,application/pdf"
               />
-                <Textarea
+              <Textarea
                 className="form-element"
                 label="Social Media"
                 value={socialMedia}
                 onChange={(e) => setSocialMedia(e.currentTarget.value)}
               />
-              <Button 
-              type="submit" loading={loading} className="submit-button">
+              <Button type="submit" loading={loading} className="submit-button">
                 Add
               </Button>
             </Stack>
