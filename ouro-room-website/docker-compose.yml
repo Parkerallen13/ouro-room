@@ -19,6 +19,6 @@ services:
     volumes:
       - ./backend:/app
     ports:
-      - "8000:8000"
+      - "8000:8002"
     environment:
       - DEBUG=True

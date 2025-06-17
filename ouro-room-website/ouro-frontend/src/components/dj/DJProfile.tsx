@@ -31,20 +31,40 @@ export default function DJProfile() {
   return (
     <>
       <StarField className="starfield" />
-      <div  className="profile-button-container">
-      <Button className="submit-button" onClick={() => navigate(-1)}>
-        Back
-      </Button>
-      </div>
-      <Container  className="profile-container">
-        <Image className="profile-img" src={dj.image} alt={dj.artist} />
-        <div className="profile-info">
-          <Text className="profile-text-big">{dj.artist}</Text>
-
-          <Text className="profile-text-big">{dj.description}</Text>
-          <Text className="profile-text-big">{dj.socialMedia}</Text>
+     <Button
+  onClick={() => navigate(-1)}
+  className="card-button"
+  style={{
+    position: "absolute",
+    top: "20px",
+    left: "20px",
+    zIndex: 1000, // make sure it appears above other content
+    margin: "2vw",
+  }}
+>
+  Back
+</Button>
+      <div className="profile-container">
+        <div className="profile-item-box">
+          <Image
+            className="profile-img profile-item"
+            src={dj.image}
+            alt={dj.artist}
+          />
+          <Text className="profile-header-text profile-item">{dj.artist}</Text>
+          <Text className="profile-body-text">{dj.description}</Text>
+          <Text
+            className="profile-body-text"
+            component="a"
+            href={dj.socialMedia}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#4dabf7", textDecoration: "underline" }}
+          >
+            {dj.socialMedia}
+          </Text>
         </div>
-      </Container>
+      </div>
     </>
   );
 }

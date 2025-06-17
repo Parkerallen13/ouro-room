@@ -84,59 +84,58 @@ export default function EventForm() {
   };
 
   const dateString = year && month && day ? `${year}-${month}-${day}` : "";
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-  if (!dateString) {
-    alert("Please select a valid date");
-    setLoading(false);
-    return;
-  }
-
-  const artistsWithTime = artists.map(({ name, hour, minute, ampm }) => {
-    if (!name || !hour || !minute || !ampm) {
-      alert("Please fill out all artist time fields");
+    if (!dateString) {
+      alert("Please select a valid date");
       setLoading(false);
-      throw new Error("Incomplete artist fields");
-    }
-    return {
-      name,
-      time: convertTo24Hour(hour, minute, ampm),
-    };
-  });
-
-  try {
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("date", dateString);
-    formData.append("artists", JSON.stringify(artistsWithTime));
-    formData.append("location", location);
-    formData.append("description", description);
-    formData.append("rsvp_link", rsvpLink);
-    
-    if (image) {
-      formData.append("image", image);
+      return;
     }
 
-    console.log("Submitting event:", formData);
-
-    await axios.post("http://localhost:8002/api/elements/events/", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    const artistsWithTime = artists.map(({ name, hour, minute, ampm }) => {
+      if (!name || !hour || !minute || !ampm) {
+        alert("Please fill out all artist time fields");
+        setLoading(false);
+        throw new Error("Incomplete artist fields");
+      }
+      return {
+        name,
+        time: convertTo24Hour(hour, minute, ampm),
+      };
     });
 
-    alert("Event uploaded!");
-    // Optionally clear the form here
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("date", dateString);
+      formData.append("artists", JSON.stringify(artistsWithTime));
+      formData.append("location", location);
+      formData.append("description", description);
+      formData.append("rsvp_link", rsvpLink);
 
-  } catch (error) {
-    console.error("Upload failed:", error);
-    alert("Upload failed");
-  } finally {
-    setLoading(false);
-  }
-};
+      if (image) {
+        formData.append("image", image);
+      }
+
+      console.log("Submitting event:", formData);
+
+      await axios.post("http://localhost:8002/api/elements/events/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      alert("Event uploaded!");
+      // Optionally clear the form here
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Upload failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -168,10 +167,12 @@ const handleSubmit = async (e: React.FormEvent) => {
             <Stack>
               <FileInput
                 className="form-element"
-                label="Image"
+                label="Image (Event Poster)"
+                placeholder="click to upload"
                 value={image}
                 onChange={setImage}
                 accept="image/jpeg,image/png,application/pdf"
+                required
               />
               <TextInput
                 className="form-element"
@@ -335,7 +336,8 @@ const handleSubmit = async (e: React.FormEvent) => {
               />
               <TextInput
                 className="form-element"
-                label="Description"
+                label="Description (Optional)"
+                placeholder="byob/ breaking bad theme"
                 value={description}
                 onChange={(e) => setDescription(e.currentTarget.value)}
               />

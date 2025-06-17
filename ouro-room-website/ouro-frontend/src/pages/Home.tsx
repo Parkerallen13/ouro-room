@@ -11,6 +11,7 @@ import DJCard from "../components/dj/DJCard";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import EventCard2 from "../components/event/EventCard2.0";
 
 interface DJ {
   id: number;
@@ -35,9 +36,10 @@ interface Mix {
 
 type Event = {
   id: number;
+  image: string | null;
   title: string;
   date: string;
-  artists: { name: string; time: string }[];
+  artists: { name: string; time: string }[]; // ✅ this replaces 'artist'
   location: string;
   description: string;
   rsvp_link: string;
@@ -98,51 +100,71 @@ export default function Home() {
           className="page-section-header"
           style={{ position: "relative", zIndex: 3 }}
         >
-          Next Event
-        </Text>
-        {loading && <Text>Loading...</Text>}
-        {error && <Text>{error}</Text>}
-        {!loading &&
-          !error &&
-          events
-            .filter((event) => event.isUpcoming)
-            .map((event) => <EventCard key={event.id} event={event} />)}
-      </div>
-
-       <div className="page-section">
-        <Text
-          className="page-section-header"
-          style={{ position: "relative", zIndex: 3 }}
-        >
-          DJ Spotlight
-        </Text>
-        {djs.length === 0 && <Text>No DJs found.</Text>}
-        {djs
-          .filter((dj) => dj.isSpotlight)
-          .map((dj) => (
-            <DJCard key={dj.id} dj={dj} />
-          ))}
-      </div>
-
-      <div className="page-section">
-        <Text
-          className="page-section-header"
-          style={{ position: "relative", zIndex: 3 }}
-        >
           Latest Mixes
         </Text>
         <div className="latest-mix-section">
-        {loading && <Text>Loading...</Text>}
-        {error && <Text>{error}</Text>}
-        {!loading &&
-          !error &&
-          mixes
-            .filter((mix) => mix.isLatest)
-            .map((mix) => <MixCard key={mix.id} mix={mix} />)}
+          {loading && <Text>Loading...</Text>}
+          {error && <Text>{error}</Text>}
+          {!loading &&
+            !error &&
+            mixes
+              .filter((mix) => mix.isLatest)
+              .map((mix) => (
+                <MixCard
+                  key={mix.id}
+                  mix={mix}
+                  artist={""}
+                  title={""}
+                  audioSrc={""}
+                />
+              ))}
+        </div>
       </div>
-      </div>
+      <div>
+        <div className="page-section">
+          <Text
+            className="page-section-header"
+            style={{ position: "relative", zIndex: 3 }}
+          >
+            Next Event
+          </Text>
+        <div className="latest-mix-section">
 
-     
+          {loading && <Text>Loading...</Text>}
+          {error && <Text>{error}</Text>}
+          {!loading &&
+            !error &&
+            events
+              .filter((event) => event.isUpcoming)
+              .map((event) => <EventCard2 key={event.id} event={event} />)}
+        </div>
+        </div>
+
+        <div className="page-section">
+          <Text
+            className="page-section-header"
+            style={{ position: "relative", zIndex: 3 }}
+          >
+            DJ Spotlight
+          </Text>
+          {djs.length === 0 && <Text>No DJs found.</Text>}
+          {djs
+            .filter((dj) => dj.isSpotlight)
+            .map((dj) => (
+              <DJCard
+                key={dj.id}
+                dj={dj}
+                id={0}
+                image={""}
+                artist={""}
+                description={""}
+                socialMedia={""}
+                isSelected={false}
+                isSpotlight={false}
+              />
+            ))}
+        </div>
+      </div>
 
       <Footer />
     </>

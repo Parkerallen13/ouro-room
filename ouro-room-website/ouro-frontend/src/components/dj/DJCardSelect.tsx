@@ -32,22 +32,22 @@ const DJCardSelect = ({
 }: Props) => {
   return (
     <div className="select-card">
-      <img
+      {/* <img
         style={{ width: "250px" }}
         className="select-item"
         src={dj.image}
         alt="DJ Image"
-      />
-      <Text className="select-item-header select-item">Name:</Text>
-      <Text className="select-item-footer select-item">{dj.artist}</Text>
-      <Text className="select-item-header select-item">Description:</Text>
-      <Text className="select-item-footer select-item">{dj.description}</Text>
-      <div className="select-buttons  select-item">
+      /> */}
+      <Text className="select-item-header">Name:</Text>
+      <Text className="select-item-footer">{dj.artist}</Text>
+      <Text className="select-item-header">Description:</Text>
+      <Text className="select-item-footer">{dj.description}</Text>
+      <div className="select-buttons">
         <Button
+          className="select-button"
           style={{
             backgroundColor: dj.isSelected ? "rgb(223, 177, 240)" : undefined,
           }}
-          className="select-button"
           onClick={(e) => {
             e.stopPropagation();
             onClick();
@@ -55,12 +55,11 @@ const DJCardSelect = ({
         >
           {selected ? "Deselect" : "Select"}
         </Button>
-
         <Button
+          className="select-button"
           style={{
             backgroundColor: dj.isSpotlight ? "rgb(223, 177, 240)" : undefined,
           }}
-          className="select-button"
           onClick={async (e) => {
             e.stopPropagation();
             try {
@@ -70,7 +69,7 @@ const DJCardSelect = ({
                   isSpotlight: !spotlight,
                 }
               );
-              onSetSpotlight(); // Optional callback to re-fetch or update state in parent
+              onSetSpotlight();
             } catch (err) {
               console.error("Failed to update spotlight status:", err);
             }
@@ -78,10 +77,8 @@ const DJCardSelect = ({
         >
           {spotlight ? "Remove Spotlight" : "Set Spotlight"}
         </Button>
-
         <Button
           className="delete-button"
-          style={{}}
           onClick={(e) => {
             if (
               window.confirm(
@@ -92,7 +89,6 @@ const DJCardSelect = ({
             onDelete();
           }}
         >
-          {" "}
           Delete
         </Button>
       </div>
