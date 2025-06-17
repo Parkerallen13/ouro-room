@@ -78,6 +78,7 @@ export default function GalleryForm() {
               className="form-element"
               label="Upload Gallery Images"
               accept="image/*"
+              placeholder="click to upload"
               multiple
               onChange={(files) => setImages(files || [])}
               value={images}

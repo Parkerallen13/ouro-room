@@ -85,23 +85,25 @@ export default function DJForm() {
                 onChange={(e) => setArtist(e.currentTarget.value)}
                 required
               />
-              <Textarea
-                className="form-element"
-                label="Description"
-                value={description}
-                onChange={(e) => setDescription(e.currentTarget.value)}
-                required
-              />
+             
               <FileInput
                 className="form-element"
-                label="Upload Image or PDF"
+                label="Upload Image"
+                placeholder="click to upload"
                 value={image}
                 onChange={setImage}
                 accept="image/jpeg,image/png,application/pdf"
+                required
+              />
+               <Textarea
+                className="form-element"
+                label="Description (Optional)"
+                value={description}
+                onChange={(e) => setDescription(e.currentTarget.value)}
               />
               <Textarea
                 className="form-element"
-                label="Social Media"
+                label="Instagram (Optional)"
                 value={socialMedia}
                 onChange={(e) => setSocialMedia(e.currentTarget.value)}
               />

@@ -5,11 +5,12 @@ import { Text, Container, Image, Loader, Button } from "@mantine/core";
 import axios from "axios";
 import StarField from "../StarBackground";
 import { useNavigate } from "react-router-dom";
+import fallbackImage from "../../assets/record.png"; // use your imported image here
 
 type Event = {
   id: number;
   title: string;
-  image: string;
+  image: string | null;
   date: string;
   artists: { name: string; time: string }[]; // <-- changed from single artist/time
   location: string;
@@ -35,36 +36,55 @@ export default function EventProfile() {
   return (
     <>
       <StarField className="starfield" />
+      <Button
+        onClick={() => navigate(-1)}
+        className="card-button"
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          zIndex: 1000, // make sure it appears above other content
+          margin: "2vw",
+        }}
+      >
+        Back
+      </Button>
       <Container
-        className="page-section"
+        className="event-profile-container"
         style={{ position: "relative", zIndex: 10 }} // Add these styles
       >
-        <div
-          className="event-container section-item"
-          style={{ position: "relative", zIndex: 10 }}
-        >
-          <div className="event-item">
-            {event.artists.map(({ name, time }, idx) => (
-              <Text key={idx} className="artist-text event-card-item">
-                {name} - {time}
-              </Text>
-            ))}
-
+        <div className="event-profile-item-box">
+          {event.image ? (
+            <Image
+              style={{
+                cursor: "pointer",
+                borderRadius: 8,
+                maxWidth: "30vw",
+                position: "relative",
+                display: "inline-block",
+              }}
+              src={event.image}
+              alt={event.title}
+            />
+          ) : (
+            <>
+              <img
+                src={event.image || fallbackImage}
+                alt={event.title}
+                style={{ maxWidth: "100%", borderRadius: 8 }}
+              />
+            </>
+          )}
+        </div>
+        <div className="event-profile-item-box">
+          <div style={{ position: "relative", zIndex: 10 }}>
             <Text
               style={{ marginTop: "2vw", marginBottom: "2vw" }}
-              className="big-text"
+              className="event-profile-header-text event-profile-item"
             >
               {event.title}
             </Text>
-            <Text
-              style={{ marginTop: "2vw", marginBottom: "2vw" }}
-              className="small-text"
-            >
-              {event.description}
-            </Text>
-          </div>
-          <div className="event-item">
-            <Text className="event-date date-text">
+            <Text className="event-profile-body-text event-profile-item">
               {new Date(event.date).toLocaleDateString("en-US", {
                 weekday: "short", // e.g., "Tue"
                 year: "numeric", // e.g., "2025"
@@ -72,14 +92,32 @@ export default function EventProfile() {
                 day: "numeric", // e.g., "10"
               })}
             </Text>
-            <Text className="location-text event-card-item">
+            <Text className="event-profile-header-text event-profile-item">
+              Featuring:
+            </Text>
+
+            {event.artists.map(({ name, time }, idx) => (
+              <Text
+                key={idx}
+                className="event-profile-body-text event-profile-item"
+              >
+                {name} - {time}
+              </Text>
+            ))}
+
+            <Text
+              style={{ marginTop: "2vw", marginBottom: "2vw" }}
+              className="event-profile-body-text event-profile-item"
+            >
+              {event.description}
+            </Text>
+            <Text className="event-profile-body-text event-profile-item">
               {event.location}
             </Text>
             <Button
               variant="outline"
-              className="button event-item-section event-card-item"
-              onClick={() => navigate(`/profile/${event.rsvp_link}`)}
-            >
+              className="card-button event-profile-item"
+onClick={() => window.open(event.rsvp_link, "_blank")}            >
               RSVP
             </Button>
           </div>

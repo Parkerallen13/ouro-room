@@ -12,7 +12,7 @@ export default function OpeningPage() {
   return (
     <>
       <StarField />
-      <div className="opening-container">
+      <div className="opening-container" onClick={() => navigate("/home")}>
         <img src={Record} alt="record" className="opening-record" />
         
         {/* New wrapper for logo and text */}

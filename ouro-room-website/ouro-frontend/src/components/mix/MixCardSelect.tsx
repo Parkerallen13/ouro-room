@@ -1,6 +1,5 @@
 import { Text, Button } from "@mantine/core";
 import "../../App.css";
-import axios from "axios";
 
 type Mix = {
   id: number;
@@ -28,26 +27,18 @@ const MixCardSelect = ({
   onToggleLatest,
 }: Props) => {
   return (
-    <div className="select-card select-item">
-      <Text className="select-item-footer select-item">Title:</Text>
-      <Text className="select-item-header select-item">{mix.title}</Text>
-      <Text className="select-item-footer select-item">Artist:</Text>
-      <Text className="select-item-header select-item">{mix.artist}</Text>
-      <Text className="select-item-footer select-item">Audio Clip:</Text>
+    <div className="select-card">
+      <Text className="select-item-header">Title:</Text>
+      <Text className="select-item-footer">{mix.title}</Text>
+      <Text className="select-item-header">Artist:</Text>
+      <Text className="select-item-footer">{mix.artist}</Text>
+      <Text className="select-item-header">Audio Clip:</Text>
       {mix.audio ? (
-        <audio
-          className="select-item-footer select-item"
-          src={mix.audio}
-          controls
-        />
+        <audio className="select-item-footer" src={mix.audio} controls />
       ) : (
-        <Text className="select-item-footer select-item">
-          No audio available
-        </Text>
+        <Text className="select-item-footer">No audio available</Text>
       )}
-
-      <div className="select-buttons select-item">
-        {/* Select / Deselect */}
+      <div className="select-buttons">
         <Button
           className="select-button"
           style={{
@@ -62,11 +53,10 @@ const MixCardSelect = ({
           {selected ? "Deselect" : "Select"}
         </Button>
         <Button
-          className="select-button select-item"
+          className="select-button"
           onClick={onToggleLatest}
           style={{
-          backgroundColor: mix.isLatest ? "rgb(221, 135, 212)" : undefined,
-
+            backgroundColor: mix.isLatest ? "rgb(221, 135, 212)" : undefined,
           }}
         >
           {mix.isLatest ? "Undo Latest" : "Is Latest"}

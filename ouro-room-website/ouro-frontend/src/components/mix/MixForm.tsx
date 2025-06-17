@@ -10,43 +10,47 @@ export default function MixForm() {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [audioFile, setAudioFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
-
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
-  try {
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("artist", artist);
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("artist", artist);
 
-    if (audioFile) {
-      formData.append("audio", audioFile);
-    } else {
-      alert("No audio file selected");
-      return;
-    }
-
-    const res = await axios.post(
-      "http://localhost:8002/api/elements/mixes/",
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
+      if (!audioFile) {
+        alert("No audio file selected");
+        return;
       }
-    );
-    console.log("Response:", res);
-    alert("Mix uploaded!");
-    setTitle("");
-    setArtist("");
-    setAudioFile(null);
-  } catch (error) {
-    console.error("Upload error:", error);
-    alert("Upload failed");
-  } finally {
-    setLoading(false);
-  }
-};
+      formData.append("audio", audioFile);
+
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
+
+      const res = await axios.post(
+        "http://localhost:8002/api/elements/mixes/",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      console.log("Response:", res);
+      alert("Mix uploaded!");
+      setTitle("");
+      setArtist("");
+      setAudioFile(null);
+      setImageFile(null);
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Upload failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -92,10 +96,19 @@ export default function MixForm() {
               <FileInput
                 className="form-element"
                 label="Audio File"
+                placeholder="click to upload"
                 value={audioFile}
                 onChange={setAudioFile}
                 accept="audio/*"
                 required
+              />
+              <FileInput
+                className="form-element"
+                placeholder="click to upload"
+                label="Cover Image (optional)"
+                value={imageFile}
+                onChange={setImageFile}
+                accept="image/*"
               />
               <Button className="submit-button" type="submit" loading={loading}>
                 Add

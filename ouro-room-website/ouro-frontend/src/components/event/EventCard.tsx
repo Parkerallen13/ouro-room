@@ -17,36 +17,20 @@ type Event = {
 export default function EventCard({ event }: { event: Event }) {
   const navigate = useNavigate();
   return (
-    <Container
-      className="page-section"
-      style={{ position: "relative", zIndex: 10 }} // Add these styles
+    <div
+      className="event-container"
+      style={{ position: "relative", zIndex: 10 }}
     >
-      <div
-        className="event-container section-item"
-        style={{ position: "relative", zIndex: 10 }}
-      >
-        <div className="event-item">
+      <div className="event-card">
+        <div className="event-card-item">
           {event.artists.map(({ name, time }, idx) => (
             <Text key={idx} className="artist-text event-card-item">
               {name} - {time}
             </Text>
           ))}
-
-          {/* <Text
-            style={{ marginTop: "2vw", marginBottom: "2vw" }}
-            className="big-text"
-          >
-            {event.title}
-          </Text> */}
-          {/* <Text
-            style={{ marginTop: "2vw", marginBottom: "2vw" }}
-            className="small-text"
-          >
-            {event.description}
-          </Text> */}
         </div>
-        <div className="event-item">
-          <Text className="event-date date-text">
+        <div className="event-card-item">
+          <Text className="event-date date-text event-card-item">
             {new Date(event.date).toLocaleDateString("en-US", {
               weekday: "short", // e.g., "Tue"
               year: "numeric", // e.g., "2025"
@@ -54,18 +38,16 @@ export default function EventCard({ event }: { event: Event }) {
               day: "numeric", // e.g., "10"
             })}
           </Text>
-          <Text className="location-text event-card-item">
-            {event.location}
-          </Text>
+          <Text className="body-text event-card-item">{event.location}</Text>
           <Button
             variant="outline"
-            className="button event-item-section event-card-item"
+            className="card-button event-card-item"
             onClick={() => navigate(`/profile/${event.rsvp_link}`)}
           >
             RSVP
           </Button>
         </div>
       </div>
-    </Container>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import EventCardSelect from "../../components/event/EventCardSelect";
+import EventCardSelect2 from "../../components/event/EventCardSelect2.0";
 import { Button, Title } from "@mantine/core";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +10,7 @@ import axios from "axios";
 type Event = {
   id: number;
   title: string;
+  image: string;
   date: string;
   artists: { name: string; time: string }[];
   location: string;
@@ -132,7 +134,7 @@ export default function EventSelectionPage() {
             <p>No events available.</p>
           ) : (
             events.map((event) => (
-              <EventCardSelect
+              <EventCardSelect2
                 key={event.id}
                 event={event}
                 selected={selectedEventIds.has(event.id)}

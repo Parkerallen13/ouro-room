@@ -28,24 +28,22 @@ export default function DJCard({ dj }: DJCardProps) {
   const navigate = useNavigate();
 
   return (
-    <div
-      className="dj-spotlight-card"
-      style={{ position: "relative", zIndex: "8" }}
-    >
-      <div className="dj-spotlight-card-item">
-        <img className="card-item dj-img" src={image} alt="DJ Image" />
-      </div>
-      <div className="dj-spotlight-card-item">
-        <Text className="artist-text dj-text">{artist}</Text>
-        <Text className="body-text dj-text">{description}</Text>
-        <Text className="body-text dj-text">{socialMedia}</Text>
-        <Button
-          variant="outline"
-          className="button dj-text"
-          onClick={() => navigate(`/profile/${dj.id}`)}
-        >
-          View Profile
-        </Button>
+    <div className="dj-container">
+      <div className="dj-card" style={{ position: "relative", zIndex: "8" }}>
+        <div>
+          <img className="dj-img" src={image} alt="DJ Image" />
+        </div>
+        <div>
+          <Text className="header-text dj-card-item">{artist}</Text>
+          {/* <Text className="body-text dj-card-item">{description}</Text> */}
+          {/* <Text className="body-text dj-card-item">{socialMedia}</Text> */}
+          <Button
+            className="card-button dj-card-item"
+            onClick={() => navigate(`/profile/${dj.id}`)}
+          >
+            View Profile
+          </Button>
+        </div>
       </div>
     </div>
   );

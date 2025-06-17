@@ -11,7 +11,7 @@ import axios from "axios";
 
 type Event = {
   id: number;
-  image: string;
+  image: string | null;
   title: string;
   date: string;
   artists: { name: string; time: string }[]; // ✅ this replaces 'artist'
@@ -37,9 +37,11 @@ export default function Events() {
         const allEvents = res.data.map(
           (m: any): Event => ({
             id: m.id,
-            image: m.image
+            image: m.image?.startsWith("http")
+              ? m.image
+              : m.image
               ? `${API}${m.image}`
-              : "/src/assets/ouro-record.png", // ✅ make sure the image path is usable
+              : "/assets/record.png",
             title: m.title,
             date: m.date,
             artists: m.artists ?? [{ name: m.artist, time: m.time }],
@@ -75,21 +77,20 @@ export default function Events() {
       >
         Experience The Collective Rhythm
       </Text>
-      <div className="page-section">
-        <Text
-          className="page-section-header"
-          style={{ position: "relative", zIndex: 3 }}
-        >
-          Events
-        </Text>
+      <Text
+        className="page-section-header"
+        style={{ position: "relative", zIndex: 3 }}
+      >
+        Events
+      </Text>
+      <div className="event-container">
         {loading && <Text>Loading...</Text>}
         {error && <Text>{error}</Text>}
 
         {!loading &&
           !error &&
-          events.map((event) => <EventCard key={event.id} event={event} />)}
+          events.map((event) => <EventCard2 key={event.id} event={event} />)}
       </div>
-
       <Footer />
     </>
   );

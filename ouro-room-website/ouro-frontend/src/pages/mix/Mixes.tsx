@@ -70,7 +70,7 @@ export default function Mixes() {
           </Center>
         ) : (
           <div
-            className="latest-mix-scroll-container"
+            className="mix-container"
             style={{ position: "relative", zIndex: 2 }}
           >
             {mixes.map((mix) => (

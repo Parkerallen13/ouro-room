@@ -1,4 +1,12 @@
 /* General Reset and Layout */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 html,
 body,
 #root {
@@ -42,7 +50,6 @@ img,
   width: 30vw;
   max-width: 600px;
   min-width: 100px;
-
   z-index: 5;
   position: relative;
   cursor: pointer;
@@ -234,6 +241,7 @@ img,
   flex-direction: row;
   align-items: center;
   text-align: left;
+  z-index: 10;
 }
 
 .submit-button {
@@ -288,8 +296,12 @@ img,
 .admin-button:hover,
 .admin-button:hover,
 .submit-button:hover,
-.back-button:hover {
-  box-shadow: 0 0 2vw 1vw rgb(113, 191, 215);
+.back-button:hover,
+.card-button:hover,
+.audio-play-button:hover,
+.poster-img:hover,
+.message-button:hover {
+  box-shadow: 0 0 2vw 0.5vw rgb(113, 191, 215);
   background-color: transparent;
   cursor: pointer;
   color: white;
@@ -311,12 +323,16 @@ img,
 }
 
 .page-intro-text {
-  font-size: clamp(1.2rem, 2vw, 2.5rem);
+  font-size: clamp(1vw, 1.5vw, 2vw);
   margin: clamp(1rem, 3vh, 5rem) auto;
   text-align: center;
   transform: translateX(-50%);
   opacity: 0;
   animation: slideInCenter 1s forwards ease-out;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /* Section Layouts */
@@ -350,67 +366,35 @@ img,
   }
 }
 
-.dj-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2vh;
-  margin-right: 1vw;
-  margin-left: 1vw;
-  border-radius: 1vw;
-  max-width: 350px;
-  
-}
-
-.dj-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-around;
-  margin: 2vw;
-}
-
-.dj-img {
-  width: 12vw;
-  margin: 2vw;
-}
-
 .mix-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 1vw;
   margin: 1.5vw;
-  margin-bottom:2vw;
+  margin-bottom: 2vw;
   width: clamp(250px, 25vw, 85vw);
-  background-color: rgb(113, 191, 215);
-  padding: .5vw;
+  background-color: rgb(26, 79, 95);
+  padding: 0.5vw;
   border: 2px solid white;
-
 }
-
 
 .mix-container {
-  width: 80vw;
-}
-
-.mix-card,
-.dj-card,
-.event-container,
-.dj-spotlight-card,
-.form-box {
-  transition: box-shadow 0.3s ease;
-}
-
-.mix-card:hover,
-.dj-card:hover,
-.event-container:hover,
-.dj-spotlight-card:hover {
-  box-shadow: 0 0 2vw 1vw rgba(0, 174, 255, 0.8);
 }
 
 .page-section-header {
+  font-size: clamp(1.5vw, 2.8vw, 3.2vw) !important;
+  font-weight: bold;
+  color: white;
+  text-align: left;
+  margin-bottom: 1vh;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3vh;
+}
+
+.page-section-header-1 {
   font-size: clamp(1.5vw, 2.8vw, 3.2vw) !important;
   font-weight: bold;
   color: white;
@@ -432,11 +416,7 @@ img,
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  border-radius: 1vw !important;
-  border: 2px solid white;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 2vh;
 }
 
 /* Next Event Card Styling */
@@ -445,24 +425,10 @@ img,
   flex-direction: row;
   align-items: center;
   background-color: #171f26;
-  width: 90vw;
   box-sizing: border-box;
-  border-radius: 1vw !important;
-
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   overflow-y: scroll;
-  justify-content: space-around;
-}
-
-.event-item {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  padding: 3vw !important;
   justify-content: space-evenly;
-  width: max-content;
-  align-items: center;
-  min-width: 30vw;
 }
 
 .event-item-section {
@@ -478,32 +444,15 @@ img,
   font-size: 1.5vw;
 }
 
-.mantine-focus-auto.dj-spotlight-card {
+.mantine-focus-auto.dj-card {
   display: flex;
   flex-direction: row;
   text-align: left;
-  max-width: 100%;
+  max-width: max-content;
   padding: 3vw !important;
   justify-content: space-between;
   position: relative;
   border-radius: 1vw !important;
-
-}
-
-.dj-spotlight-card {
-  display: flex;
-  flex-direction: row;
-  padding: 1vw !important;
-  padding-top: 2vw !important;
-  padding-bottom: 2vw !important;
-  align-items: center;
-  justify-content: space-evenly;
-  background-color: #171f26;
-  width: max-content;
-  border-radius: 1vw;
-  margin: 2vw;
-  height: 30vh;
-  border: 2px solid white;
 }
 
 .dj-text {
@@ -516,6 +465,7 @@ img,
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  height: 20vh;
 }
 
 .select-container {
@@ -546,14 +496,13 @@ img,
   padding-right: 1vw;
   text-align: left;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: max-content;
   color: white;
   border-radius: 1vw;
   margin: 2vw;
   min-height: 300px;
-  align-items: left;
-  
+  align-items: center;
 }
 
 .select-card {
@@ -596,25 +545,15 @@ img,
 }
 
 .select-item-header {
-  font-size: 1.5vw !important;
+  font-size: 0.7vw !important;
 }
 
 .select-item-footer {
-  font-size: 0.7vw;
+  font-size: 1.1vw;
 }
 
 .mantine-Text-root {
   color: white;
-}
-
-.event-date {
-  font-size: 2vw;
-  font-weight: 600;
-  color: rgb(5, 0, 0);
-  background-color: rgb(113, 191, 215);
-  padding: 3vw;
-  border-radius: 1vw !important;
-  text-align: center;
 }
 
 /* Typography */
@@ -627,16 +566,29 @@ img,
   margin: 0 !important;
 }
 
-.body-text {
-  font-family: "Orbitron", sans-serif;
+.body-text-white {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
   font-weight: 400;
-  font-size: 1.2vw;
+  font-style: normal;
   color: white;
-  text-align: center;
+  text-align: left;
   margin: 0 !important;
+  font-size: 1vw;
 }
 
-.event-card-section {
+.body-text-black {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: rgb(0, 0, 0);
+  text-align: left;
+  margin: 0 !important;
+  font-size: 1vw;
+}
+
+/* .event-card-section {
   display: flex;
   flex-direction: row;
   width: 30vw;
@@ -647,11 +599,7 @@ img,
 .event-card-item {
   margin-top: 2vh !important;
   margin-bottom: 2vh !important;
-}
-
-.date-text {
-  font-size: 2vw !important;
-}
+} */
 
 .location-text {
   font-family: "Orbitron", sans-serif;
@@ -745,7 +693,7 @@ img,
   align-items: center;
   justify-content: center;
   text-align: center;
-height: 70vh;
+  height: 70vh;
   margin-left: 20vw;
   margin-right: 20vw;
 }
@@ -855,6 +803,15 @@ height: 70vh;
   width: 25vw;
 }
 
+.poster-img {
+  cursor: pointer;
+  width: 25vw;
+  margin: 3vw !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .gallery-container {
   display: flex;
   flex-direction: row;
@@ -875,10 +832,13 @@ height: 70vh;
 }
 
 .contact-container {
+  margin-top: 10vh;
   display: flex;
   align-items: center; /* vertical centering */
   flex-direction: column;
-  margin-bottom: 2vw;
+  height: max-content;
+  justify-content: space-evenly;
+  margin-bottom: 12vh;
 }
 
 .admin-login-container {
@@ -908,7 +868,6 @@ height: 70vh;
   margin-right: 5vw;
   margin-left: 5vw;
   align-items: center;
-  border: 2px solid white;
   border-radius: 1vw;
   font-size: 1vw;
 }
@@ -997,8 +956,6 @@ height: 70vh;
   font-size: 1vw;
 }
 
-
-
 .icon-button {
   border: none !important;
   background: transparent;
@@ -1010,24 +967,82 @@ height: 70vh;
   justify-content: center;
 }
 
+.page-header-text {
+}
+
+.header-text {
+}
+
+.body-text {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.card-button {
+  color: white;
+  border: 2px solid white !important;
+  cursor: pointer;
+  border-radius: 1vw !important;
+  font-size: 1vw !important;
+  background-color: transparent;
+  position: relative;
+  width: fit-content !important;
+}
+
+.dj-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; /* or center, if you prefer */
+}
+
+.dj-card {
+  background-color: #171f26;
+  border: 2px solid white;
+  border-radius: 1vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between; /* Ensures proper spacing */
+  width: 40vw;
+  min-height: 17vw;
+  max-height: 17vw;
+  padding: 2vw;
+  margin: 2vw;
+  gap: 2vw; /* Adds spacing between items inside the card */
+  overflow: hidden; /* Prevent content from overflowing */
+}
+
+.dj-card-item {
+  margin: 2vw;
+}
+
+.dj-img {
+  width: 12vw;
+  margin: 2vw;
+}
+
+.dj-card-select {
+}
+
 .profile-container {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  margin: 2vw;
   align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 
-.profile-button-container {
+.profile-item-box {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  margin: 5vw;
-}
-
-.profile-info {
-   display: flex;
   flex-direction: column;
-  align-items: left;
   text-align: left;
 }
 
@@ -1036,10 +1051,138 @@ height: 70vh;
   margin: 10vw;
 }
 
-.profile-text-big {
+.profile-header-text {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 600;
+  font-style: normal;
   color: white;
   z-index: 11;
   position: relative;
   font-size: 1.5vw;
 }
 
+.profile-body-text {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: white;
+  z-index: 11;
+  position: relative;
+  font-size: 1.5vw;
+}
+
+.mix-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.mix-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  padding: 2vw !important;
+  padding-left: 3vw;
+  padding-right: 3vw;
+  margin: 3vw;
+}
+
+.mix-card-select {
+}
+
+.event-container {
+}
+
+/* .event-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: max-content;
+}
+
+.event-card-item {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 3vw !important;
+  justify-content: space-evenly;
+  width: max-content;
+  align-items: center;
+} */
+
+.event-date {
+  font-size: 2vw;
+  font-weight: 600;
+  color: rgb(5, 0, 0);
+  background-color: rgb(113, 191, 215);
+  padding: 3vw;
+  border-radius: 1vw !important;
+  text-align: center;
+}
+
+.event-profile-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  background-color: rgba(152, 61, 90, 0.2);
+  height: 100vh;
+  justify-content: space-evenly;
+}
+
+.event-profile-header-text {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  color: white;
+  z-index: 11;
+  position: relative;
+  font-size: 3vw;
+}
+
+.event-profile-body-text {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: white;
+  z-index: 11;
+  position: relative;
+  font-size: 2vw;
+  text-align: left;
+}
+
+.event-profile-item {
+  margin: 4vh;
+  min-width: 30vw;
+}
+
+.date-text {
+  font-size: 2vw !important;
+}
+
+.event-card-select {
+}
+
+.gallery-container {
+}
+
+.gallery-card {
+}
+
+.gallery-card-select {
+}
+
+.contact-box {
+  width: 30vw;
+  padding: 1vw;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255);
+  border-radius: 1vw;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 1vw;
+}

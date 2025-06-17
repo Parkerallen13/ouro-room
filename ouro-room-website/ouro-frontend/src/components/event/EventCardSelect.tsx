@@ -10,7 +10,7 @@ type Event = {
   description: string;
   rsvp_link: string;
   isSelected: boolean;
-  isUpcoming: boolean; // <-- Add this line
+  isUpcoming: boolean;
 };
 
 type Props = {
@@ -31,52 +31,41 @@ const EventCardSelect = ({
   onToggleUpcoming,
 }: Props) => {
   return (
-    <div className="event-select-card">
-      <div className="select-row">
-        <Text className="select-item-header">Title:</Text>
-        <Text className="select-item-footer select-item">{event.title}</Text>
-      </div>
-      <div className="select-row">
-        <Text className="select-item-header">Date:</Text>
-        <Text className="select-item-footer select-item">
-          {new Date(event.date).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </Text>
-      </div>
-      <div className="flex flex-col space-y-1">
-        <Text className="select-item-header">Artists:</Text>
-
-        {event.artists?.length > 0 ? (
-          event.artists.map((artist, index) => (
-            <Text key={index} className="text-gray-700">
-              {artist.name} — {artist.time}
-            </Text>
-          ))
-        ) : (
-          <Text className="text-gray-500 italic">No artists listed</Text>
-        )}
-      </div>
-      <div className="select-row">
-        <Text className="select-item-header">Location:</Text>
-        <Text className="select-item-footer select-item">{event.location}</Text>
-      </div>
-      <div className="rsvp-container"></div>
-
-      <div>
+    <div className="select-card">
+      <Text className="select-item-header">Title:</Text>
+      <Text className="select-item-footer">{event.title}</Text>
+      <Text className="select-item-header">Date:</Text>
+      <Text className="select-item-footer">
+        {new Date(event.date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
+      </Text>
+      <Text className="select-item-header">Artists:</Text>
+      {event.artists?.length > 0 ? (
+        event.artists.map((artist, index) => (
+          <Text key={index} className="select-item-footer">
+            {artist.name} — {artist.time}
+          </Text>
+        ))
+      ) : (
+        <Text className="text-gray-500 italic">No artists listed</Text>
+      )}
+      <Text className="select-item-header">Location:</Text>
+      <Text className="select-item-footer">{event.location}</Text>
+      <div className="select-buttons">
         <Button
+          className="select-button"
           style={{
             backgroundColor: selected ? "rgb(223, 177, 240)" : undefined,
           }}
-          className="select-button  select-item"
           onClick={onClick}
         >
           {selected ? "Deselect" : "Select"}
         </Button>
         <Button
-          className="select-button select-item"
+          className="select-button"
           onClick={onToggleUpcoming}
           style={{
             backgroundColor: event.isUpcoming
@@ -88,7 +77,6 @@ const EventCardSelect = ({
         </Button>
         <Button
           className="delete-button"
-          style={{}}
           onClick={(e) => {
             if (
               window.confirm(
@@ -99,7 +87,6 @@ const EventCardSelect = ({
             onDelete();
           }}
         >
-          {" "}
           Delete
         </Button>
       </div>
