@@ -28,10 +28,23 @@ import GallerySelectionPage from "./pages/gallery/GallerySelectionPage";
 import MixSelectionPage from "./pages/mix/MixSelectionPage";
 import DJProfile from "./components/dj/DJProfile";
 import EventProfile from "./components/event/EventProfile";
+import { logoTrail } from "./assets/logoTrail";
+import logoMini from '../src/assets/ouro-logo.png'
 
 import "./App.css";
+import { useEffect } from "react";
 
 function App() {
+   useEffect(() => {
+    const trail = logoTrail({
+      logo: logoMini,
+      size: 24,   // change based on your logo's dimensions
+      gap: 10,
+    });
+
+    return () => trail.destroy(); // cleanup
+  }, []);
+
   return (
       <SelectionProvider>
         <MantineProvider>
