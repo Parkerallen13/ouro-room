@@ -24,44 +24,62 @@ export default function MixSelectionPage() {
   const [mixes, setMixes] = useState<Mix[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedMixIds, setSelectedMixIds] = useState<Set<number>>(new Set());
-  const [latestMixIds, setLatestMixIds] = useState<Set<number>>(new Set());
   const [deletedMixIds, setDeletedMixIds] = useState<Set<number>>(new Set());
 
-  const toggleSelection = (id: number) => {
-    setSelectedMixIds((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) newSet.delete(id);
-      else newSet.add(id);
-      return newSet;
-    });
-  };
-  
- const onToggleLatest = (id: number) => {
+  const onToggleSelection = async (id: number) => {
   const targetMix = mixes.find((mix) => mix.id === id);
-  if (targetMix) {
-    const newIsLatest = !targetMix.isLatest;
+  if (!targetMix) return;
 
-    // Send the correct new value to the backend
-axios.patch(`${API_URL}/api/elements/mixes/${id}/`, { isLatest: true });
+  const newIsSelected = !targetMix.isSelected;
 
-    // THEN update local state
-    setMixes((prevMixes) =>
-      prevMixes.map((mix) =>
-        mix.id === id ? { ...mix, isLatest: newIsLatest } : mix
-      )
-    );
+  try {
+    const res = await axios.patch(`${API_URL}/api/elements/mixes/${id}/`, {
+      isSelected: newIsSelected,
+    });
+
+    if (res.status === 200 || res.status === 204) {
+      setMixes((prevMixes) =>
+        prevMixes.map((mix) =>
+          mix.id === id ? { ...mix, isSelected: newIsSelected } : mix
+        )
+      );
+    }
+  } catch (err) {
+    console.error("Failed to update isSelected:", err);
   }
 };
 
- const handleDelete = async (id: number) => {
+const onToggleLatest = async (id: number) => {
+  const targetMix = mixes.find((mix) => mix.id === id);
+  if (!targetMix) return;
+
+  const newIsLatest = !targetMix.isLatest;
+
+  try {
+    const res = await axios.patch(`${API_URL}/api/elements/mixes/${id}/`, {
+      isLatest: newIsLatest,
+    });
+
+    if (res.status === 200 || res.status === 204) {
+      setMixes((prevMixes) =>
+        prevMixes.map((mix) =>
+          mix.id === id ? { ...mix, isLatest: newIsLatest } : mix
+        )
+      );
+    }
+  } catch (err) {
+    console.error("Failed to update isLatest:", err);
+  }
+};
+
+const handleDelete = async (id: number) => {
   try {
     const res = await fetch(`${API_URL}/api/elements/mixes/${id}/`, {
       method: "DELETE",
     });
 
     if (res.ok) {
-      await fetchMixes(); // <-- Refresh list after deletion
+      await fetchMixes(); // Refreshes the list
     } else {
       console.error("Failed to delete mix");
     }
@@ -71,40 +89,22 @@ axios.patch(`${API_URL}/api/elements/mixes/${id}/`, { isLatest: true });
 };
 
   const fetchMixes = async () => {
-  try {
-    const res = await fetch(`${API_URL}/api/elements/mixes/`);
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    const data = await res.json();
-    setMixes(data);
-    setLoading(false);
-  } catch (err: any) {
-    console.error("Fetch error:", err);
-    setError(err.message);
-    setLoading(false);
-  }
-};
+    try {
+      const res = await fetch(`${API_URL}/api/elements/mixes/`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      const data = await res.json();
+      setMixes(data);
+      setLoading(false);
+    } catch (err: any) {
+      console.error("Fetch error:", err);
+      setError(err.message);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     console.log("mix list mounted, fetching mixes...");
-    fetch(`${API_URL}/api/elements/mixes/`)
-      .then((res) => {
-        console.log("Fetch response:", res);
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Mixes data received:", data); // was 'Cars data'
-        setMixes(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Fetch error:", err);
-        setError(err.message);
-        setLoading(false);
-      });
-      fetchMixes();
+    fetchMixes();
   }, []);
 
   if (loading)
@@ -144,12 +144,10 @@ axios.patch(`${API_URL}/api/elements/mixes/${id}/`, { isLatest: true });
               <MixCardSelect
                 key={mix.id}
                 mix={mix}
-                onClick={() => toggleSelection(mix.id)}
-                selected={selectedMixIds.has(mix.id)}
+                onClick={() => onToggleSelection(mix.id)}
                 deleted={deletedMixIds.has(mix.id)}
                 onDelete={() => handleDelete(mix.id)}
                 onToggleLatest={() => onToggleLatest(mix.id)}
-
               />
             ))
           )}
@@ -159,5 +157,3 @@ axios.patch(`${API_URL}/api/elements/mixes/${id}/`, { isLatest: true });
     </>
   );
 }
-
-

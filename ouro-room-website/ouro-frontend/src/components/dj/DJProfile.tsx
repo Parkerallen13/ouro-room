@@ -31,40 +31,55 @@ export default function DJProfile() {
   return (
     <>
       <StarField className="starfield" />
-     <Button
-  onClick={() => navigate(-1)}
-  className="card-button"
-  style={{
-    position: "absolute",
-    top: "20px",
-    left: "20px",
-    zIndex: 1000, // make sure it appears above other content
-    margin: "2vw",
-  }}
->
-  Back
-</Button>
-      <div className="profile-container">
-        <div className="profile-item-box">
+      <Button
+        onClick={() => navigate(-1)}
+        className="card-button"
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          zIndex: 1000,
+          margin: "2vw",
+        }}
+      >
+        Back
+      </Button>
+      <Container
+        className="event-profile-container"
+        style={{
+          position: "relative",
+          zIndex: 10,
+        }}
+      >
+        {/* Left box: DJ Image */}
+        <div className="event-profile-item-box" style={{ flex: 1 }}>
           <Image
-            className="profile-img profile-item"
+            className="profile-img event-profile-item"
             src={dj.image}
             alt={dj.artist}
+            style={{ maxWidth: "100%", borderRadius: 8, margin: "5vw" }}
           />
-          <Text className="profile-header-text profile-item">{dj.artist}</Text>
-          <Text className="profile-body-text">{dj.description}</Text>
+        </div>
+
+        {/* Right box: DJ info */}
+        <div className="event-profile-item-box">
+          <Text className="event-profile-header-text event-profile-item">
+            {dj.artist}
+          </Text>
+          <Text className="event-profile-body-text event-profile-item">
+            {dj.description}
+          </Text>
           <Text
-            className="profile-body-text"
+            className="event-profile-body-text"
             component="a"
             href={dj.socialMedia}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: "#4dabf7", textDecoration: "underline" }}
           >
             {dj.socialMedia}
           </Text>
         </div>
-      </div>
+      </Container>
     </>
   );
 }

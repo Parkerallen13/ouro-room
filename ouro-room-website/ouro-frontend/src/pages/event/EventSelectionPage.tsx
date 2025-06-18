@@ -18,6 +18,7 @@ type Event = {
   rsvp_link: string;
   isSelected: boolean;
   isUpcoming: boolean;
+  isLatest: boolean;
 };
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8002";
@@ -31,14 +32,35 @@ export default function EventSelectionPage() {
     new Set()
   );
 
-  const toggleSelection = (id: number) => {
+  const onToggleSelection = (id: number) => {
+  const targetEvent = events.find((event) => event.id === id);
+  if (targetEvent) {
+    const newIsSelected = !targetEvent.isSelected;
+
+    // Send update to backend
+    axios.patch(`${API_URL}/api/elements/events/${id}/`, {
+      isSelected: newIsSelected,
+    });
+
+    // Update the local event state
+    setEvents((prevEvents) =>
+      prevEvents.map((event) =>
+        event.id === id ? { ...event, isSelected: newIsSelected } : event
+      )
+    );
+
+    // 🔥 Update the selection state here too!
     setSelectedEventIds((prev) => {
       const newSet = new Set(prev);
-      if (newSet.has(id)) newSet.delete(id);
-      else newSet.add(id);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
       return newSet;
     });
-  };
+  }
+};
 
   const onToggleUpcoming = (id: number) => {
     const targetEvent = events.find((event) => event.id === id);
@@ -137,11 +159,11 @@ export default function EventSelectionPage() {
               <EventCardSelect2
                 key={event.id}
                 event={event}
-                selected={selectedEventIds.has(event.id)}
-                onClick={() => toggleSelection(event.id)}
+                onClick={() => onToggleSelection(event.id)}
                 deleted={false}
                 onDelete={() => handleDelete(event.id)}
                 onToggleUpcoming={() => onToggleUpcoming(event.id)}
+                onToggleSelection={() => onToggleSelection(event.id)}
               />
             ))
           )}

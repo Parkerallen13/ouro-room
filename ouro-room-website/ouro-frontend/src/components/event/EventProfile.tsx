@@ -79,7 +79,6 @@ export default function EventProfile() {
         <div className="event-profile-item-box">
           <div style={{ position: "relative", zIndex: 10 }}>
             <Text
-              style={{ marginTop: "2vw", marginBottom: "2vw" }}
               className="event-profile-header-text event-profile-item"
             >
               {event.title}
@@ -100,6 +99,7 @@ export default function EventProfile() {
               <Text
                 key={idx}
                 className="event-profile-body-text event-profile-item"
+                style={{ textAlign: "center" }}
               >
                 {name} - {time}
               </Text>
@@ -111,13 +111,30 @@ export default function EventProfile() {
             >
               {event.description}
             </Text>
-            <Text className="event-profile-body-text event-profile-item">
-              {event.location}
-            </Text>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                event.location
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none" }}
+            >
+              <Text
+                style={{
+                  textDecoration: "underline",
+                  color: "#ADD8E6",
+                  cursor: "pointer",
+                }}
+                className="event-profile-body-text event-profile-item glow-text"
+              >
+                {event.location}
+              </Text>
+            </a>
             <Button
               variant="outline"
               className="card-button event-profile-item"
-onClick={() => window.open(event.rsvp_link, "_blank")}            >
+              onClick={() => window.open(event.rsvp_link, "_blank")}
+            >
               RSVP
             </Button>
           </div>

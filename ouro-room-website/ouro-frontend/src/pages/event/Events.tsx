@@ -89,7 +89,9 @@ export default function Events() {
 
         {!loading &&
           !error &&
-          events.map((event) => <EventCard2 key={event.id} event={event} />)}
+          events
+            .filter((event) => event.isSelected)
+            .map((event) => <EventCard2 key={event.id} event={event} />)}
       </div>
       <Footer />
     </>

@@ -95,6 +95,7 @@ export default function Home() {
       >
         Collective Rhythm. Infinite Sound
       </Text>
+      <div className="home-container">
       <div className="page-section">
         <Text
           className="page-section-header"
@@ -128,16 +129,15 @@ export default function Home() {
           >
             Next Event
           </Text>
-        <div className="latest-mix-section">
-
-          {loading && <Text>Loading...</Text>}
-          {error && <Text>{error}</Text>}
-          {!loading &&
-            !error &&
-            events
-              .filter((event) => event.isUpcoming)
-              .map((event) => <EventCard2 key={event.id} event={event} />)}
-        </div>
+          <div className="latest-mix-section">
+            {loading && <Text>Loading...</Text>}
+            {error && <Text>{error}</Text>}
+            {!loading &&
+              !error &&
+              events
+                .filter((event) => event.isUpcoming)
+                .map((event) => <EventCard2 key={event.id} event={event} />)}
+          </div>
         </div>
 
         <div className="page-section">
@@ -164,6 +164,7 @@ export default function Home() {
               />
             ))}
         </div>
+      </div>
       </div>
 
       <Footer />

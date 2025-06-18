@@ -15,26 +15,28 @@ export default function EventCard2({ event }: { event: Event }) {
   console.log("Final event image URL:", event.image);
 
   return (
-    <Box
-      onClick={() => navigate(`/event-profile/${event.id}`)}
-      className='poster-img'
-    >
-      {event.image ? (
-        <Image
-          className="poster-img"
-          src={event.image}
-          alt={event.title}
-          style={{ borderRadius: 8, maxWidth: "100%" }}
-        />
-      ) : (
-        <>
-          <img
-            src={event.image || fallbackImage}
+    <>
+      <Box
+        onClick={() => navigate(`/event-profile/${event.id}`)}
+        className="poster-img"
+      >
+        {event.image ? (
+          <Image
+            className="poster-img"
+            src={event.image}
             alt={event.title}
-            style={{ maxWidth: "100%", borderRadius: 8 }}
+            style={{ borderRadius: 8, maxWidth: "100%" }}
           />
-        </>
-      )}
-    </Box>
+        ) : (
+          <>
+            <img
+              src={event.image || fallbackImage}
+              alt={event.title}
+              style={{ maxWidth: "100%", borderRadius: 8 }}
+            />
+          </>
+        )}
+      </Box>
+    </>
   );
 }

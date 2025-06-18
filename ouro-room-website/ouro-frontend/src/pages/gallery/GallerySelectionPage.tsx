@@ -20,7 +20,7 @@ export default function GallerySelectionPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedImageIds, setSelectedImageIds] = useState<number[]>([]);
 
-const toggleSelection = async (id: number) => {
+const onToggleSelection = async (id: number) => {
   const alreadySelected = selectedImageIds.includes(id);
   const newSelectedIds = alreadySelected
     ? selectedImageIds.filter((i) => i !== id)
@@ -30,16 +30,23 @@ const toggleSelection = async (id: number) => {
 
   // ✅ Update selection state in the backend
   try {
-    await fetch(`${API_URL}/api/elements/gallery/${id}/`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ isSelected: !alreadySelected }),
-    });
-  } catch (error) {
-    console.error("Error updating selection:", error);
-  }
+  await fetch(`${API_URL}/api/elements/gallery/${id}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ isSelected: !alreadySelected }),
+  });
+
+  // ✅ Update the image in the local state too
+  setImages((prevImages) =>
+    prevImages.map((img) =>
+      img.id === id ? { ...img, isSelected: !alreadySelected } : img
+    )
+  );
+} catch (error) {
+  console.error("Error updating selection:", error);
+}
 };
 
   const handleDelete = async (id: number) => {
@@ -117,7 +124,7 @@ useEffect(() => {
               image={gallery} // pass the single gallery object here
               selected={selectedImageIds.includes(gallery.id)} // ← multiple selections
               deleted={false} // pass only once, or replace with your logic if you track deleted state
-              onClick={() => toggleSelection(gallery.id)}
+              onClick={() => onToggleSelection(gallery.id)}
               onDelete={() => handleDelete(gallery.id)} // pass gallery.id here correctly
             />
           ))}
