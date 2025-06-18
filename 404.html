@@ -1,8 +1,15 @@
-<!-- ouro-frontend/public/404.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta http-equiv="refresh" content="0; url=/ouro-room/" />
+    <meta charset="UTF-8" />
+    <title>Ouro Room</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript">
+      // Redirect to correct route in SPA
+      const path = window.location.pathname.replace('/ouro-room', '');
+      sessionStorage.redirect = path;
+      window.location.replace('/ouro-room/');
+    </script>
   </head>
   <body>
     <p>Redirecting...</p>
