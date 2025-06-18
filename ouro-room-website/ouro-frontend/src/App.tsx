@@ -50,7 +50,7 @@ function App() {
         <MantineProvider>
           <Router>
             <Routes>
-              <Route path="/" element={<OpeningPage />} />
+              <Route path="/opening" element={<OpeningPage />} />
               <Route path="/home" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/events" element={<Events />} />

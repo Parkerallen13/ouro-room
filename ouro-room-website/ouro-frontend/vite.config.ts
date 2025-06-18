@@ -4,6 +4,7 @@ import path from "path"; // ⬅️ Add this
 
 export default defineConfig({
   plugins: [react()],
+  base: "/ouro-room/",
   root: "./",
   resolve: {
     alias: {

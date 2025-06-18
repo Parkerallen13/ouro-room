@@ -230,6 +230,7 @@ export default function EventForm() {
               {/* Artists */}
               {artists.map((artist, index) => (
                 <div
+                className="form-element"
                   key={index}
                   style={{
                     display: "flex",
@@ -320,7 +321,7 @@ export default function EventForm() {
 
               <Button
                 style={{ marginTop: "1vw" }}
-                className="header-button"
+                className="header-button "
                 variant="outline"
                 onClick={addArtist}
               >

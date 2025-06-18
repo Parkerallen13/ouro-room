@@ -16,19 +16,19 @@ type Event = {
 type Props = {
   event: Event;
   onClick: () => void;
-  selected: boolean;
   deleted: boolean;
   onDelete: () => void;
   onToggleUpcoming: () => void;
+  onToggleSelection: () => void;
 };
 
 const EventCardSelect = ({
   event,
   onClick,
-  selected,
   deleted,
   onDelete,
   onToggleUpcoming,
+  onToggleSelection,
 }: Props) => {
   return (
     <div className="select-card">
@@ -58,11 +58,13 @@ const EventCardSelect = ({
         <Button
           className="select-button"
           style={{
-            backgroundColor: selected ? "rgb(223, 177, 240)" : undefined,
+            backgroundColor: event.isSelected
+              ? "rgb(223, 177, 240)"
+              : undefined,
           }}
           onClick={onClick}
         >
-          {selected ? "Deselect" : "Select"}
+          {event.isSelected ? "Undo Selected" : "Mark as Selected"}
         </Button>
         <Button
           className="select-button"

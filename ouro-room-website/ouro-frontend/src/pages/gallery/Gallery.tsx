@@ -3,7 +3,7 @@ import axios from "axios";
 import "../../App.css";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import GalleryCard from "../../components/gallery/GalleryCard";
 
 type Image = {
@@ -16,32 +16,33 @@ const API = import.meta.env.VITE_API_URL || 'http://localhost:8002';
 
 export default function Gallery() {
   const navigate = useNavigate();
+  const location = useLocation(); // ⬅️ added
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [images, setImages] = useState<Image[]>([]);
 
+  const fetchSelectedImages = async () => {
+    try {
+      const res = await axios.get(`${API}/api/elements/gallery/`);
+      const allImages = res.data.map(
+        (i: any): Image => ({
+          id: i.id,
+          image: i.image,
+          isSelected: i.isSelected ?? false,
+        })
+      );
+      setImages(allImages);
+    } catch (err) {
+      console.error("Error fetching events:", err);
+      setError("Failed to load events.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchSelectedImages = async () => {
-      try {
-        const res = await axios.get(`${API}/api/elements/gallery/`);
-        console.log("Raw response:", res.data);
-        const allImages = res.data.map(
-          (i: any): Image => ({
-            id: i.id,
-            image: i.image,
-            isSelected: i.isSelected ?? i.isSelected ?? false,
-          })
-        );
-        setImages(allImages);
-      } catch (err) {
-        console.error("Error fetching events:", err);
-        setError("Failed to load events.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchSelectedImages();
-  }, []);
+  }, [location.key]); // ⬅️ This ensures the effect runs whenever the user navigates back
 
   return (
     <>
@@ -49,9 +50,9 @@ export default function Gallery() {
       <div className="gallery-container">
         {!loading &&
           !error &&
-          images.map((images) => (
-            <GalleryCard key={images.id} image={images} />
-          ))}
+          images
+            .filter((img) => img.isSelected) // ⬅️ make sure to filter for selected ones only
+            .map((img) => <GalleryCard key={img.id} image={img} />)}
       </div>
       <Footer />
     </>

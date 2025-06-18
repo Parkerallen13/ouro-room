@@ -26,7 +26,7 @@ export default function DJSelectionPage() {
   const [selectedDJIds, setSelectedDJIds] = useState<Set<number>>(new Set());
   const [deletedDJIds, setDeletedDJIds] = useState<Set<number>>(new Set());
 
-  const toggleSelection = async (djId: number) => {
+  const onToggleSelection = async (djId: number) => {
     setDJs((prevDjs) =>
       prevDjs.map((dj) =>
         dj.id === djId ? { ...dj, isSelected: !dj.isSelected } : dj
@@ -124,7 +124,7 @@ export default function DJSelectionPage() {
                 key={dj.id}
                 dj={dj}
                 selected={dj.isSelected ?? false}
-                onClick={() => toggleSelection(dj.id)}
+                onClick={() => onToggleSelection(dj.id)}
                 spotlight={dj.isSpotlight ?? false}
                 onSetSpotlight={() => toggleSpotlight(dj.id)}
                 onDelete={() => handleDelete(dj.id)}

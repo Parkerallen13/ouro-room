@@ -5,6 +5,7 @@ import StarField from "../components/StarBackground";
 import Logo from "../assets/ouro-logo.png"
 import Record from "../assets/ouro-record.png"; // <-- You need a record image
 import '../App.css';
+import { Text } from '@mantine/core';
 
 export default function OpeningPage() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function OpeningPage() {
             onClick={() => navigate("/home")}
           />
         </div>
+        <Text className="click-text">Click Anywhere</Text>
       </div>
     </>
   );

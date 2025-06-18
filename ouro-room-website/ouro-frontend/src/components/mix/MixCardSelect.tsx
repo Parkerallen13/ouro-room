@@ -12,7 +12,6 @@ type Mix = {
 
 interface Props {
   mix: Mix;
-  selected: boolean;
   onClick: () => void;
   deleted: boolean;
   onDelete: () => void;
@@ -21,7 +20,6 @@ interface Props {
 
 const MixCardSelect = ({
   mix,
-  selected,
   onClick,
   onDelete,
   onToggleLatest,
@@ -42,15 +40,15 @@ const MixCardSelect = ({
         <Button
           className="select-button"
           style={{
-            backgroundColor: selected ? "green" : undefined,
-            color: selected ? "white" : undefined,
+            backgroundColor: mix.isSelected ? "green" : undefined,
+            color: mix.isSelected ? "white" : undefined,
           }}
           onClick={(e) => {
             e.stopPropagation();
             onClick();
           }}
         >
-          {selected ? "Deselect" : "Select"}
+          {mix.isSelected ? "Deselect" : "Select"}
         </Button>
         <Button
           className="select-button"
