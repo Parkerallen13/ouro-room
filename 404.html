@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8" />
-    <title>Ouro Room</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="text/javascript">
-      // Redirect to correct route in SPA
-      const path = window.location.pathname.replace('/ouro-room', '');
-      sessionStorage.redirect = path;
-      window.location.replace('/ouro-room/');
+    <title>404 Not Found</title>
+    <script>
+      // This script rewrites the URL to your base path but keeps the rest for React Router
+      // It replaces the page with the index.html app content
+      window.location.replace(window.location.pathname.replace(/^\/ouro-room/, '/ouro-room') + window.location.search);
     </script>
   </head>
   <body>
-    <p>Redirecting...</p>
+    <h1>404 - Page Not Found</h1>
+    <p>Loading the app...</p>
   </body>
 </html>
