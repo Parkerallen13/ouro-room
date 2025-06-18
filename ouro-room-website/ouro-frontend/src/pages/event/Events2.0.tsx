@@ -12,6 +12,8 @@ import axios from "axios";
 type Event = {
   id: number;
  image: string;
+ title: string;
+ date: string;
 };
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8002';
@@ -30,7 +32,9 @@ export default function Events() {
       const allEvents = res.data.map(
   (m: any): Event => ({
     id: m.id,
-    image: m.image;
+    image: m.image,
+    title: m.title,
+    date: m.date,
   })
 );
         setEvents(allEvents);
