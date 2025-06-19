@@ -22,4 +22,4 @@ COPY . /app/
 EXPOSE 8002
 
 # Run Django development server on all interfaces
-CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:${PORT:-8002}"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:$PORT"]
