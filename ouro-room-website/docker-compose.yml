@@ -1,10 +1,10 @@
 services:
   frontend:
     build:
-      context: ./frontend
+      context: ./ouro-frontend
       dockerfile: Dockerfile
     volumes:
-      - ./frontend:/app
+      - ./ouro-frontend:/app
       - /app/node_modules
     ports:
       - "5173:5173"
@@ -14,12 +14,11 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./ouro-backend   # Fix here
       dockerfile: Dockerfile
     volumes:
-      - ./backend:/app
+      - ./ouro-backend:/app     # Match container folder to what your Dockerfile expects (or set appropriately)
     ports:
-      - "8000:8002"
-      
+      - "8002:8002"             # Host:Container, ports aligned with your backend config
     environment:
       - DEBUG=True
