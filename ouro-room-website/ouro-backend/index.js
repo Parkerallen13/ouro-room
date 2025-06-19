@@ -1,4 +1,4 @@
-// index.js
+// ouro-backend/api/index.js
 const express = require('express');
 const cors = require('cors');
 
@@ -9,10 +9,8 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Ouro backend is live!');
+  res.send('Ouro backend is live from Vercel!');
 });
 
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+module.exports = app;

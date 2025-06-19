@@ -1,6 +1,13 @@
 {
+  "homepage": "https://parkerallen13.github.io/ouro-room",
   "dependencies": {
     "@mantine/core": "^8.0.2",
     "@mantine/hooks": "^8.0.2"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
+  },
+  "scripts": {
+    "deploy": "gh-pages -d build"
   }
 }

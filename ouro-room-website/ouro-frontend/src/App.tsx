@@ -8,7 +8,7 @@ import Events from "./pages/event/Events";
 import DJs from "./pages/dj/DJs";
 import Gallery from "./pages/gallery/Gallery";
 import Contact from "./pages/Contact";
-import MixForm from './components/mix/MixForm'
+import MixForm from "./components/mix/MixForm";
 import EventForm from "./components/event/EventForm";
 import DJForm from "./components/dj/DJForm";
 import GalleryForm from "./components/gallery/GalleryForm";
@@ -29,16 +29,16 @@ import MixSelectionPage from "./pages/mix/MixSelectionPage";
 import DJProfile from "./components/dj/DJProfile";
 import EventProfile from "./components/event/EventProfile";
 import { logoTrail } from "./assets/logoTrail";
-import logoMini from '../src/assets/ouro-logo.png'
+import logoMini from "../src/assets/ouro-logo.png";
 
 import "./App.css";
 import { useEffect } from "react";
 
 function App() {
-   useEffect(() => {
+  useEffect(() => {
     const trail = logoTrail({
       logo: logoMini,
-      size: 24,   // change based on your logo's dimensions
+      size: 24, // change based on your logo's dimensions
       gap: 10,
     });
 
@@ -46,40 +46,40 @@ function App() {
   }, []);
 
   return (
-      <SelectionProvider>
-        <MantineProvider>
-          <Router basename="/ouro-room">
-            <Routes >
-              <Route path="/opening" element={<OpeningPage />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/events" element={<Events />} />
-              <Route path="/djs" element={<DJs />} />
-              <Route path="/mixes" element={<Mixes />} />
-              <Route path="/gallery" element={<Gallery />} />
-              <Route path="/admin-login" element={<AdminLogin />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/admin-upload" element={<AdminUpload />} />
-              <Route path="/admin-choose" element={<AdminChoose />} />
-              <Route path="/mix-form" element={<MixForm />} />
-              <Route path="/event-form" element={<EventForm />} />
-              <Route path="/dj-form" element={<DJForm />} />
-              <Route path="/gallery-form" element={<GalleryForm />} />
-              <Route path="/admin-home" element={<AdminHome />} />
-              <Route path="/add-car" element={<AddCarForm />} />
-              <Route path="/car-admin" element={<CarAdmin />} />
-              <Route path="/display" element={<DisplayPage />} />
-              <Route path="/mix-select" element={<MixSelectionPage />} />
-              <Route path="/dj-select" element={<DJSelectionPage />} />
-              <Route path="/gallery-select" element={<GallerySelectionPage />} />
-              <Route path="/event-select" element={<EventSelectionPage />} />
-              <Route path="/car-list" element={<CarList />} />
-              <Route path="/profile/:id" element={<DJProfile />} />
-              <Route path="/event-profile/:id" element={<EventProfile />} />
-            </Routes>
-          </Router>
-        </MantineProvider>
-      </SelectionProvider>
+    <SelectionProvider>
+      <MantineProvider>
+        <Router basename="/ouro-room">
+          <Routes>
+            <Route path="/opening" element={<OpeningPage />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/djs" element={<DJs />} />
+            <Route path="/mixes" element={<Mixes />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/admin-upload" element={<AdminUpload />} />
+            <Route path="/admin-choose" element={<AdminChoose />} />
+            <Route path="/mix-form" element={<MixForm />} />
+            <Route path="/event-form" element={<EventForm />} />
+            <Route path="/dj-form" element={<DJForm />} />
+            <Route path="/gallery-form" element={<GalleryForm />} />
+            <Route path="/admin-home" element={<AdminHome />} />
+            <Route path="/add-car" element={<AddCarForm />} />
+            <Route path="/car-admin" element={<CarAdmin />} />
+            <Route path="/display" element={<DisplayPage />} />
+            <Route path="/mix-select" element={<MixSelectionPage />} />
+            <Route path="/dj-select" element={<DJSelectionPage />} />
+            <Route path="/gallery-select" element={<GallerySelectionPage />} />
+            <Route path="/event-select" element={<EventSelectionPage />} />
+            <Route path="/car-list" element={<CarList />} />
+            <Route path="/profile/:id" element={<DJProfile />} />
+            <Route path="/event-profile/:id" element={<EventProfile />} />
+          </Routes>
+        </Router>
+      </MantineProvider>
+    </SelectionProvider>
   );
 }
 
