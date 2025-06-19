@@ -33,6 +33,7 @@ export default function Events() {
     const fetchSelectedEvents = async () => {
       try {
         const res = await axios.get(`${API}/api/elements/events/`);
+        console.log("Using API URL:", API);
         console.log("Raw response:", res.data);
         const allEvents = res.data.map(
           (m: any): Event => ({
