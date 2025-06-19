@@ -12,14 +12,14 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements file and install Python dependencies
-COPY requirements.txt /app/
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project source code
-COPY . /app/
+COPY . .
 
 # Expose port 8000
 EXPOSE 8002
 
 # Run Django development server on all interfaces
-CMD ["python", "manage.py", "runserver", "0.0.0.0:$PORT"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8002"]
