@@ -44,7 +44,3 @@ class MixSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.audio.url)
         return ""
     
-class MixSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Mix
-        fields = ['id', 'title', 'artist', 'audio', 'description', 'image', 'isSelected', 'isLatest', 'isDelete']
