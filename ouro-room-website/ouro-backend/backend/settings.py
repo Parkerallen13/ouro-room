@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'authapp',
-    'cars',
 'elements',]
 
 MIDDLEWARE = [
