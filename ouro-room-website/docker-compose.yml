@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   frontend:
     build:
@@ -7,18 +9,39 @@ services:
       - ./ouro-frontend:/app
       - /app/node_modules
     ports:
-      - "5173:5173"
+      - "5173:5173"   # Local access
+      - "80:5173"     # EC2 access on HTTP port
     environment:
       - CHOKIDAR_USEPOLLING=true
     command: npm run dev
 
   backend:
     build:
-      context: ./ouro-backend   # Fix here
+      context: ./ouro-backend
       dockerfile: Dockerfile
     volumes:
-      - ./ouro-backend:/app     # Match container folder to what your Dockerfile expects (or set appropriately)
+      - ./ouro-backend:/app
     ports:
-      - "8002:8002"             # Host:Container, ports aligned with your backend config
+      - "8002:8002"
+    depends_on:
+      - db
     environment:
       - DEBUG=True
+      - DB_HOST=db
+      - DB_NAME=ourodb
+      - DB_USER=ouro
+      - DB_PASSWORD=password
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ourodb
+      POSTGRES_USER: ouro
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
