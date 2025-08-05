@@ -11,7 +11,8 @@ interface Images {
   image: string;
   isSelected: boolean;
 }
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8002";
+
+import { API } from '../../api/config';
 
 export default function GallerySelectionPage() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const onToggleSelection = async (id: number) => {
 
   // ✅ Update selection state in the backend
   try {
-  await fetch(`${API_URL}/api/elements/gallery/${id}/`, {
+  await fetch(`${API}/api/elements/gallery/${id}/`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -51,7 +52,7 @@ const onToggleSelection = async (id: number) => {
 
   const handleDelete = async (id: number) => {
     try {
-      const res = await fetch(`${API_URL}/api/elements/gallery/${id}/`, {
+      const res = await fetch(`${API}/api/elements/gallery/${id}/`, {
         method: "DELETE",
       });
       
@@ -68,7 +69,7 @@ const onToggleSelection = async (id: number) => {
 
 useEffect(() => {
   console.log("event list mounted, fetching Images...");
-  fetch(`${API_URL}/api/elements/gallery/`)
+  fetch(`${API}/api/elements/gallery/`)
     .then((res) => {
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return res.json();

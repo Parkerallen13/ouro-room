@@ -15,7 +15,7 @@ interface DJ {
   isSpotlight: boolean;
 }
 
-const API = import.meta.env.VITE_API_URL;
+import { API } from '../../api/config';
 
 export default function DJs() {
   const [djs, setDJs] = useState<DJ[]>([]);

@@ -21,7 +21,7 @@ type Event = {
   isLatest: boolean;
 };
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8002";
+import { API } from '../../api/config';
 
 export default function EventSelectionPage() {
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ export default function EventSelectionPage() {
     const newIsSelected = !targetEvent.isSelected;
 
     // Send update to backend
-    axios.patch(`${API_URL}/api/elements/events/${id}/`, {
+    axios.patch(`${API}/api/elements/events/${id}/`, {
       isSelected: newIsSelected,
     });
 
@@ -68,7 +68,7 @@ export default function EventSelectionPage() {
       const newIsUpcoming = !targetEvent.isUpcoming;
 
       // Send the correct new value to the backend
-      axios.patch(`${API_URL}/api/elements/events/${id}/`, {
+      axios.patch(`${API}/api/elements/events/${id}/`, {
         isUpcoming: newIsUpcoming,
       });
 
@@ -84,7 +84,7 @@ export default function EventSelectionPage() {
   const handleDelete = async (id: number) => {
     try {
       const res = await fetch(
-        `http://localhost:8002/api/elements/events/${id}/`,
+        `${API}/api/elements/events/${id}/`,
         {
           method: "DELETE",
         }
@@ -102,7 +102,7 @@ export default function EventSelectionPage() {
 
   useEffect(() => {
     console.log("event list mounted, fetching Events...");
-    fetch(`${API_URL}/api/elements/events/`)
+    fetch(`${API}/api/elements/events/`)
       .then((res) => {
         console.log("Fetch response:", res);
         if (!res.ok) {

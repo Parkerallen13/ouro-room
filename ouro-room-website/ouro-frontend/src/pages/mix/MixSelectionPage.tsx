@@ -17,7 +17,8 @@ interface Mix {
   isLatest: boolean;
 }
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8002";
+import { API } from '../../api/config';
+
 
 export default function MixSelectionPage() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export default function MixSelectionPage() {
   const newIsSelected = !targetMix.isSelected;
 
   try {
-    const res = await axios.patch(`${API_URL}/api/elements/mixes/${id}/`, {
+    const res = await axios.patch(`${API}/api/elements/mixes/${id}/`, {
       isSelected: newIsSelected,
     });
 
@@ -56,7 +57,7 @@ const onToggleLatest = async (id: number) => {
   const newIsLatest = !targetMix.isLatest;
 
   try {
-    const res = await axios.patch(`${API_URL}/api/elements/mixes/${id}/`, {
+    const res = await axios.patch(`${API}/api/elements/mixes/${id}/`, {
       isLatest: newIsLatest,
     });
 
@@ -74,7 +75,7 @@ const onToggleLatest = async (id: number) => {
 
 const handleDelete = async (id: number) => {
   try {
-    const res = await fetch(`${API_URL}/api/elements/mixes/${id}/`, {
+    const res = await fetch(`${API}/api/elements/mixes/${id}/`, {
       method: "DELETE",
     });
 
@@ -90,7 +91,7 @@ const handleDelete = async (id: number) => {
 
   const fetchMixes = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/elements/mixes/`);
+      const res = await fetch(`${API}/api/elements/mixes/`);
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       setMixes(data);

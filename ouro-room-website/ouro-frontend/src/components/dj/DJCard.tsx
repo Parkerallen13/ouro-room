@@ -9,21 +9,16 @@ type DJ = {
   artist: string;
   description: string;
   socialMedia: string;
+  isSelected: boolean;
+  isSpotlight: boolean;
 };
 
 interface DJCardProps {
   dj: DJ;
-  id: number;
-  image: string;
-  artist: string;
-  description: string;
-  socialMedia: string;
-  isSelected: boolean;
-  isSpotlight: boolean;
 }
 
 export default function DJCard({ dj }: DJCardProps) {
-  const { image, artist, description, socialMedia } = dj;
+  const { image, artist } = dj;
 
   const navigate = useNavigate();
 

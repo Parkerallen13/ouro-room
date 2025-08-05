@@ -12,7 +12,7 @@ type Image = {
   isSelected: boolean;
 };
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8002';
+import { API } from '../../api/config';
 
 export default function Gallery() {
   const navigate = useNavigate();

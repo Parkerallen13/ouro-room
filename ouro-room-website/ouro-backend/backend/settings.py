@@ -10,22 +10,35 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+load_dotenv()
+
+# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# SECRET KEY (from .env or fallback for dev)
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dev-key')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+iol3rrrz6e%4=_^6&6me6=^#6*ys0!!m7ajeg!12&bw_6-+*z'
+import os
 
+from pathlib import Path
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['your-app-name.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'ouroroomcollective.com',
+    'www.ouroroomcollective.com',
+    '3.134.207.90'  # Optional, your EC2 IP
+]
 
 # Application definition
 
@@ -33,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'whitenoise.runserver_nostatic',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -48,6 +62,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -79,14 +94,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 import os
 
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'USER': os.getenv('POSTGRES_USER', 'ouro_user'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'ouro_pass'),
-        'HOST': os.getenv('POSTGRES_HOST', 'db'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'ourodb'),
+        'USER': os.getenv('DB_USER', 'ouro'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'password'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -141,10 +159,12 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
     "http://localhost:8002",
 ]
 
 # settings.py
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'  # or os.path.join(BASE_DIR, 'media')
+MEDIA_URLS = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # or os.path.join(BASE_DIR, 'media')
+
 

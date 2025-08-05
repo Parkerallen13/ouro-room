@@ -6,6 +6,9 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
 
+import { API } from '../../api/config';;
+
+
 type DJ = {
   id: number;
   artist: string;
@@ -15,8 +18,6 @@ type DJ = {
   isSelected?: boolean;
   isSpotlight?: boolean;
 };
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8002";
 
 export default function DJSelectionPage() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function DJSelectionPage() {
 
     try {
       const dj = djs.find((dj) => dj.id === djId);
-      await axios.patch(`${API_URL}/api/elements/djs/${djId}/`, {
+      await axios.patch(`${API}/api/elements/djs/${djId}/`, {
         isSelected: !dj?.isSelected,
       });
     } catch (error) {
@@ -45,7 +46,7 @@ export default function DJSelectionPage() {
 
   const handleDelete = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:8002/api/elements/djs/${id}/`, {
+      const res = await fetch(`${API}/api/elements/djs/${id}/`, {
         method: "DELETE",
       });
 
@@ -68,7 +69,7 @@ export default function DJSelectionPage() {
 
     try {
       const dj = djs.find((dj) => dj.id === djId);
-      await axios.patch(`${API_URL}/api/elements/djs/${djId}/`, {
+      await axios.patch(`${API}/api/elements/djs/${djId}/`, {
         isSpotlight: !dj?.isSpotlight,
       });
     } catch (error) {
@@ -78,7 +79,7 @@ export default function DJSelectionPage() {
 
   useEffect(() => {
     console.log("event list mounted, fetching DJs...");
-    fetch(`${API_URL}/api/elements/djs/`)
+    fetch(`${API}/api/elements/djs/`)
       .then((res) => {
         console.log("Fetch response:", res);
         if (!res.ok) {

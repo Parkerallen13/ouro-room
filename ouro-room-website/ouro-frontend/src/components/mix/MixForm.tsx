@@ -32,7 +32,7 @@ export default function MixForm() {
       }
 
       const res = await axios.post(
-        "http://localhost:8002/api/elements/mixes/",
+        "http://3.134.207.90/api/elements/mixes/",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

@@ -9,6 +9,8 @@ import "../../App.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+import { API } from '../../api/config';
+
 type Event = {
   id: number;
   image: string | null;
@@ -21,7 +23,6 @@ type Event = {
   isSelected: boolean;
 };
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:8002";
 
 export default function Events() {
   const navigate = useNavigate();

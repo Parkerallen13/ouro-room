@@ -48,7 +48,7 @@ function App() {
   return (
     <SelectionProvider>
       <MantineProvider>
-        <Router basename="/ouro-room">
+        <Router basename="/">
           <Routes>
             <Route path="/opening" element={<OpeningPage />} />
             <Route path="/home" element={<Home />} />

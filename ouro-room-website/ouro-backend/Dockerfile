@@ -22,4 +22,4 @@ COPY . .
 EXPOSE 8002
 
 # Run Django development server on all interfaces
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8002"]
+CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8002"]

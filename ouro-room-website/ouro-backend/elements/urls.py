@@ -1,12 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import MixesFromJsonView
 
 from .views import (
     DJViewSet, EventViewSet,
     EventListCreateView, MixListCreateView,
     GalleryImgListCreateView, MixRetrieveUpdateDestroyView,
-    GalleryImgRetrieveUpdateDestroyView
+    GalleryImgRetrieveUpdateDestroyView, MixesFromJsonView, show_secret_key
 )
 
 router = DefaultRouter()
@@ -22,4 +21,5 @@ urlpatterns = [
     path('gallery/<int:pk>/', GalleryImgRetrieveUpdateDestroyView.as_view(), name='gallery-detail'),
     path('mixes/<int:pk>/', MixRetrieveUpdateDestroyView.as_view(), name='mix-detail'),
     path('api/mixes/from-json/', MixesFromJsonView.as_view(), name='mixes-from-json'),
+    path('test-secret/', show_secret_key),
 ]

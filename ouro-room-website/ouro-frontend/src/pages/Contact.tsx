@@ -9,6 +9,9 @@ import {
   IconBrandX,
 } from "@tabler/icons-react";
 
+import { API } from '../api/config';
+
+
 export default function Contact() {
   const [nameValue, setNameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
@@ -18,7 +21,7 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8002/api/contact", {
+      const res = await fetch(`${API}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

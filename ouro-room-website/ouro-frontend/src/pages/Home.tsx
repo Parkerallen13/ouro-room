@@ -46,7 +46,8 @@ type Event = {
   isSelected: boolean;
   isUpcoming: boolean;
 };
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8002";
+
+import { API } from '../api/config';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -61,9 +62,9 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const [mixRes, eventRes, djRes] = await Promise.all([
-          axios.get(`${API_URL}/api/elements/mixes/`),
-          axios.get(`${API_URL}/api/elements/events/`),
-          axios.get(`${API_URL}/api/elements/djs/`),
+          axios.get(`${API}/api/elements/mixes/`),
+          axios.get(`${API}/api/elements/events/`),
+          axios.get(`${API}/api/elements/djs/`),
         ]);
 
         setMixes(mixRes.data);
@@ -151,17 +152,7 @@ export default function Home() {
           {djs
             .filter((dj) => dj.isSpotlight)
             .map((dj) => (
-              <DJCard
-                key={dj.id}
-                dj={dj}
-                id={0}
-                image={""}
-                artist={""}
-                description={""}
-                socialMedia={""}
-                isSelected={false}
-                isSpotlight={false}
-              />
+              <DJCard key={dj.id} dj={dj} />
             ))}
         </div>
       </div>
