@@ -11,8 +11,7 @@ const path = require("path");
 const mixesPath = path.join(__dirname, "data", "mixes.json");
 
 const app = express();
-const PORT = 8002;
-
+const PORT = process.env.PORT || 8002;
 app.use(cors());
 app.use(express.json({ limit: "50mb" })); // <-- increased limit for base64 audio
 
@@ -350,6 +349,6 @@ app.patch("/api/elements/djs/:id", (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
 });

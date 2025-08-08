@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import Header from "../Header";
 import Footer from "../Footer";
 
+import { API } from '../../api/config';
+
 export default function MixForm() {
   let navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -32,7 +34,7 @@ export default function MixForm() {
       }
 
       const res = await axios.post(
-        "http://3.134.207.90/api/elements/mixes/",
+        `${import.meta.env.VITE_API_URL}/api/elements/mixes/`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

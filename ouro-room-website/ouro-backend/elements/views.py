@@ -21,10 +21,9 @@ class EventListCreateView(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
-class DJViewSet(viewsets.ModelViewSet):  # ✅ this now works
-    queryset = DJ.objects.all()
+class DJViewSet(viewsets.ModelViewSet):  # ✅ Cleaned
     serializer_class = DJSerializer
-    queryset = DJ.objects.filter(isDelete=False)
+    queryset = DJ.objects.filter(isDelete=False) 
 
 # elements/views.py
 class MixListCreateView(generics.ListCreateAPIView):

@@ -13,6 +13,8 @@ import Header from "../Header";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 
+import { API } from '../../api/config';
+
 export default function DJForm() {
   const navigate = useNavigate();
   const [artist, setArtist] = useState("");
@@ -37,7 +39,7 @@ export default function DJForm() {
       }
 
       const res = await axios.post(
-        "http://localhost:8002/api/elements/djs/",
+        `${import.meta.env.VITE_API_URL}/api/elements/djs/`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

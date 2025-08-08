@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 import axios from "axios";
 
+import { API } from '../../api/config';
+
 export default function GalleryForm() {
   const navigate = useNavigate();
 
@@ -29,7 +31,7 @@ export default function GalleryForm() {
         formData.append("isSelected", "false"); // optional
 
         await axios.post(
-          "http://localhost:8002/api/elements/gallery/",
+          `${import.meta.env.VITE_API_URL}/api/elements/gallery/`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
