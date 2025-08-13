@@ -2,9 +2,11 @@ import { Text, Button } from "@mantine/core";
 import axios from "axios";
 import "../../App.css";
 
+import { API_PROD, API_LOCAL, API } from "../../api/config";
+
 type DJ = {
   id: number;
-  image: string;
+  imagePath?: string;
   artist: string;
   description: string;
   socialMedia: string;
@@ -22,22 +24,9 @@ interface Props {
   onDelete: () => void;
 }
 
-const DJCardSelect = ({
-  dj,
-  selected,
-  onClick,
-  spotlight,
-  onSetSpotlight,
-  onDelete,
-}: Props) => {
+const DJCardSelect = ({ dj, selected, onClick, spotlight, onSetSpotlight, onDelete }: Props) => {
   return (
     <div className="select-card">
-      {/* <img
-        style={{ width: "250px" }}
-        className="select-item"
-        src={dj.image}
-        alt="DJ Image"
-      /> */}
       <Text className="select-item-header">Name:</Text>
       <Text className="select-item-footer">{dj.artist}</Text>
       <Text className="select-item-header">Description:</Text>
@@ -45,30 +34,18 @@ const DJCardSelect = ({
       <div className="select-buttons">
         <Button
           className="select-button"
-          style={{
-            backgroundColor: dj.isSelected ? "rgb(223, 177, 240)" : undefined,
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            onClick();
-          }}
+          style={{ backgroundColor: dj.isSelected ? "rgb(223, 177, 240)" : undefined }}
+          onClick={(e) => { e.stopPropagation(); onClick(); }}
         >
           {selected ? "Deselect" : "Select"}
         </Button>
         <Button
           className="select-button"
-          style={{
-            backgroundColor: dj.isSpotlight ? "rgb(223, 177, 240)" : undefined,
-          }}
+          style={{ backgroundColor: dj.isSpotlight ? "rgb(223, 177, 240)" : undefined }}
           onClick={async (e) => {
             e.stopPropagation();
             try {
-              await axios.patch(
-                `http://localhost:8002/api/elements/djs/${dj.id}/`,
-                {
-                  isSpotlight: !spotlight,
-                }
-              );
+              await axios.patch(`${API}/api/elements/djs/${dj.id}/`, { isSpotlight: !spotlight });
               onSetSpotlight();
             } catch (err) {
               console.error("Failed to update spotlight status:", err);
@@ -80,13 +57,10 @@ const DJCardSelect = ({
         <Button
           className="delete-button"
           onClick={(e) => {
-            if (
-              window.confirm(
-                "Are you sure you want to permanently delete this dj?"
-              )
-            )
-              e.stopPropagation();
-            onDelete();
+            e.stopPropagation();
+            if (window.confirm("Are you sure you want to permanently delete this dj?")) {
+              onDelete();
+            }
           }}
         >
           Delete

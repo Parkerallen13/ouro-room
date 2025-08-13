@@ -6,7 +6,7 @@ import Header from "../Header";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 
-import { API } from '../../api/config';
+import { API_PROD, API_LOCAL, API } from "../../api/config";
 
 export default function EventForm() {
   const navigate = useNavigate();
@@ -77,66 +77,73 @@ export default function EventForm() {
     setArtists(artists.filter((_, i) => i !== index));
   };
 
-  // Helper: Convert hour/minute/ampm to 24-hour time string "HH:MM"
-  const convertTo24Hour = (hour: string, minute: string, ampm: string) => {
-    let h = parseInt(hour);
-    if (ampm === "PM" && h !== 12) h += 12;
-    if (ampm === "AM" && h === 12) h = 0;
-    return `${h.toString().padStart(2, "0")}:${minute}`;
-  };
-
-  const dateString = year && month && day ? `${year}-${month}-${day}` : "";
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
+    // Build date string once
+    const dateString = year && month && day ? `${year}-${month}-${day}` : "";
     if (!dateString) {
       alert("Please select a valid date");
       setLoading(false);
       return;
     }
 
-    const artistsWithTime = artists.map(({ name, hour, minute, ampm }) => {
-      if (!name || !hour || !minute || !ampm) {
-        alert("Please fill out all artist time fields");
-        setLoading(false);
-        throw new Error("Incomplete artist fields");
-      }
-      return {
-        name,
-        time: convertTo24Hour(hour, minute, ampm),
-      };
-    });
-
+    // Validate + convert artists
+    let artistsWithTime: { name: string; time: string }[] = [];
     try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("date", dateString);
-      formData.append("artists", JSON.stringify(artistsWithTime));
-      formData.append("location", location);
-      formData.append("description", description);
-      formData.append("rsvp_link", rsvpLink);
-
-      if (image) {
-        formData.append("image", image);
-      }
-
-      console.log("Submitting event:", formData);
-
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/elements/events/`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      artistsWithTime = artists.map(({ name, hour, minute, ampm }) => {
+        if (!name || !hour || !minute || !ampm) {
+          throw new Error("Please fill out all artist time fields");
+        }
+        let h = parseInt(hour, 10);
+        if (ampm === "PM" && h !== 12) h += 12;
+        if (ampm === "AM" && h === 12) h = 0;
+        return { name, time: `${h.toString().padStart(2, "0")}:${minute}` };
       });
-
-      alert("Event uploaded!");
-      // Optionally clear the form here
-    } catch (error) {
-      console.error("Upload failed:", error);
-      alert("Upload failed");
-    } finally {
+    } catch (err) {
+      alert((err as Error).message);
       setLoading(false);
+      return;
     }
+
+    const safeDescription = description.trim() === "" ? "-" : description;
+    // Helper: new FormData for each request (FormData is one‑shot)
+    const buildFD = () => {
+      const fd = new FormData();
+      fd.append("title", title);
+      fd.append("date", dateString);
+      fd.append("artists", JSON.stringify(artistsWithTime));
+      fd.append("location", location);
+      fd.append("description", safeDescription); // <-- fallback
+      fd.append("rsvp_link", rsvpLink);
+      if (image) fd.append("image", image);
+      return fd;
+    };
+
+    const fdDebug = buildFD();
+    console.log("[EventForm] FD dump:");
+    for (const [k, v] of (fdDebug as any).entries()) {
+      console.log(
+        " -",
+        k,
+        v instanceof File ? `(File) ${v.name} ${v.size}B` : v
+      );
+    }
+
+ try {
+  console.log("[EventForm] posting to:", `${API}/api/elements/events/`);
+  const res = await axios.post(`${API}/api/elements/events/`, buildFD(), {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  console.log("[events] OK", res.status, res.data);
+  alert("Event uploaded!");
+} catch (err: any) {
+  console.error("[events] FAIL", err?.response?.status, err?.response?.data || err?.message);
+  alert(`Upload failed${err?.response?.status ? ` (status ${err.response.status})` : ""}`);
+} finally {
+  setLoading(false);
+}
   };
 
   return (
@@ -202,7 +209,6 @@ export default function EventForm() {
                     </option>
                   ))}
                 </select>
-
                 <select
                   value={day}
                   onChange={(e) => setDay(e.currentTarget.value)}
@@ -232,7 +238,7 @@ export default function EventForm() {
               {/* Artists */}
               {artists.map((artist, index) => (
                 <div
-                className="form-element"
+                  className="form-element"
                   key={index}
                   style={{
                     display: "flex",

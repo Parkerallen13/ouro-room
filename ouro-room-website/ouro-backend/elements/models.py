@@ -8,7 +8,7 @@ class Event(models.Model):
     image = models.ImageField(upload_to='event_images/', blank=True, null=True)
     artists = models.JSONField(default=list, blank=True)
     location = models.TextField()
-    description = models.TextField()
+    description = models.TextField(blank=True)
     rsvp_link = models.URLField()
     isSelected = models.BooleanField(default=False)
     isDelete = models.BooleanField(default=False)

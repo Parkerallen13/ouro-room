@@ -3,17 +3,12 @@ import { Text } from "@mantine/core";
 import Header from "../components/Header";
 import "../App.css";
 import Footer from "../components/Footer";
-import {
-  IconBrandFacebook,
-  IconBrandInstagram,
-  IconBrandX,
-} from "@tabler/icons-react";
-
-import { API } from '../api/config';
+import { IconBrandFacebook, IconBrandInstagram, IconBrandX } from "@tabler/icons-react";
+import { API } from "../api/config";
 
 
 export default function Contact() {
-  const [nameValue, setNameValue] = useState("");
+   const [nameValue, setNameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [messageValue, setMessageValue] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -23,24 +18,13 @@ export default function Contact() {
     try {
       const res = await fetch(`${API}/api/contact`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: nameValue,
-          email: emailValue,
-          message: messageValue,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: nameValue, email: emailValue, message: messageValue }),
       });
-
       const result = await res.json();
       alert(result.message);
-      if (res.ok) {
-        setNameValue("");
-        setEmailValue("");
-        setMessageValue("");
-      }
-    } catch (error) {
+      if (res.ok) { setNameValue(""); setEmailValue(""); setMessageValue(""); }
+    } catch {
       alert("Error sending message");
     }
   };
@@ -57,7 +41,7 @@ export default function Contact() {
             <h2 className="social-section">Follow Us:</h2>
             <div className="social-icons">
               <a
-                href="https://instagram.com/ourocollective"
+                href="https://instagram.com/ouro.collective"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-link"
@@ -65,27 +49,27 @@ export default function Contact() {
                 <IconBrandInstagram size={32} />
               </a>
 
-              <a
+              {/* <a
                 href="https://x.com/ourocollective"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-link"
               >
                 <IconBrandX size={32} />
-              </a>
-              <a
+              </a> */}
+              {/* <a
                 href="https://x.com/ourocollective"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-link"
               >
                 <IconBrandFacebook size={32} />
-              </a>
+              </a> */}
             </div>
           </div>
           <h1 className="social-section">Call Us:</h1>
 
-          <Text>720-742-5481</Text>
+          <Text>720-544-1510</Text>
           <div>
             <button
               className="social-section button message-button"

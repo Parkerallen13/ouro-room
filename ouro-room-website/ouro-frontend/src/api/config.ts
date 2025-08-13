@@ -1,14 +1,8 @@
-const getApiUrl = () => {
-  const defaultUrl = import.meta.env.VITE_API_URL;
+// src/api/config.ts
+export const API_LOCAL = "http://localhost:8002";
+export const API_PROD  = "https://ouroroomcollective.com";
 
-  if (
-    window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1'
-  ) {
-    return 'http://127.0.0.1:8002';  // Local Django backend
-  }
-
-  return defaultUrl;  // Production API
-};
-
-export const API = getApiUrl();
+export const API =
+  window.location.hostname.includes("ouroroomcollective.com")
+    ? "https://ouroroomcollective.com"
+    : "http://localhost:8002";

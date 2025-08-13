@@ -13,42 +13,49 @@ import Header from "../Header";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 
-import { API } from '../../api/config';
+import { API_PROD, API_LOCAL, API } from "../../api/config";
+
+// one-time helpful logs
+console.log("[DJForm] hostname:", window.location.hostname);
+console.log("[DJForm] API_LOCAL:", API_LOCAL);
+console.log("[DJForm] API_PROD:", API_PROD);
+console.log("[DJForm] chosen API:", API);
 
 export default function DJForm() {
   const navigate = useNavigate();
   const [artist, setArtist] = useState("");
   const [description, setDescription] = useState("");
-  const [socialMedia, setSocialMedia] = useState("");
+  const [socialMedia, setsocialMedia] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!image) {
+      alert("no image selected");
+      return;
+    }
+
     setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append("artist", artist);
-      formData.append("description", description);
+      const fd = new FormData();
+      fd.append("artist", artist);
+      fd.append("description", description);
+      fd.append("socialMedia", socialMedia); // matches your backend reads
+      fd.append("image", image);
 
-      if (image) {
-        formData.append("image", image);
-      } else {
-        alert("No image selected");
-        return;
-      }
+      const res = await axios.post(`${API}/api/elements/djs/`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/elements/djs/`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      console.log("Response:", res);
-      alert("DJ added!");
-    } catch (error) {
-      alert("Failed to add DJ");
+      console.log("[dj create] OK", res.status, res.data);
+      alert("DJ Added!");
+    } catch (error: any) {
+      const status = error?.response?.status;
+      const data = error?.response?.data;
+      console.error("Failed to add DJ:", status, data || error?.message);
+      alert(`Failed to add DJ${status ? ` (status ${status})` : ""}`);
     } finally {
       setLoading(false);
     }
@@ -87,17 +94,16 @@ export default function DJForm() {
                 onChange={(e) => setArtist(e.currentTarget.value)}
                 required
               />
-             
               <FileInput
                 className="form-element"
                 label="Upload Image"
                 placeholder="click to upload"
                 value={image}
                 onChange={setImage}
-                accept="image/jpeg,image/png,application/pdf"
+                accept="image/jpeg,image/png"
                 required
               />
-               <Textarea
+              <Textarea
                 className="form-element"
                 label="Description (Optional)"
                 value={description}
@@ -107,10 +113,10 @@ export default function DJForm() {
                 className="form-element"
                 label="Instagram (Optional)"
                 value={socialMedia}
-                onChange={(e) => setSocialMedia(e.currentTarget.value)}
+                onChange={(e) => setsocialMedia(e.currentTarget.value)}
               />
               <Button type="submit" loading={loading} className="submit-button">
-                Add
+                Addddddd
               </Button>
             </Stack>
           </form>

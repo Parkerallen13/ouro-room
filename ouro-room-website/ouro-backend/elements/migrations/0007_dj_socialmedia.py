@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='dj',
-            name='socialMedia',
+            name='socialmedia',
             field=models.CharField(default='', max_length=255),
         ),
     ]

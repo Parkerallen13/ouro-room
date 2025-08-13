@@ -1,15 +1,7 @@
 import "../../App.css";
 
-type Image = {
-  id: number;
-  image: string;
-  isSelected: boolean;
-};
+type ImageT = { id: number; image: string; isSelected: boolean };
 
-export default function GalleryCard({ image }: { image: Image }) {
-  return (
-    <>
-      <img className="gallery-card" src={image.image} />
-    </>
-  );
+export default function GalleryCard({ image }: { image: ImageT }) {
+  return <img className="gallery-card" src={image.image} alt="" />;
 }

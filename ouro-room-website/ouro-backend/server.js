@@ -1,354 +1,420 @@
+// server.js
 require("dotenv").config();
 
-let djs = []; // in-memory DJ array
-let nextId = 1; // simple incremental ID for DJ IDs
-
 const express = require("express");
-const nodemailer = require("nodemailer");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
-const mixesPath = path.join(__dirname, "data", "mixes.json");
+const multer = require("multer");
+const morgan = require("morgan");
+const nodemailer = require("nodemailer");
 
 const app = express();
 const PORT = process.env.PORT || 8002;
+
+// ---------------------- infra & helpers ----------------------
 app.use(cors());
-app.use(express.json({ limit: "50mb" })); // <-- increased limit for base64 audio
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms"));
 
-// Nodemailer setup
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const root = __dirname;
+const uploadsRoot = path.join(root, "uploads");
+const dataDir     = path.join(root, "data");
 
-app.patch("/api/elements/mixes/:id", (req, res) => {
-  const { id } = req.params;
-  const updates = req.body;
+for (const p of [uploadsRoot, dataDir]) {
+  if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
+}
 
-  try {
-    const mixes = JSON.parse(fs.readFileSync(mixesPath, "utf-8"));
-    const mixIndex = mixes.findIndex((mix) => String(mix.id) === id);
+const djsPath     = path.join(dataDir, "djs.json");
+const mixesPath   = path.join(dataDir, "mixes.json");
+const eventsPath  = path.join(dataDir, "events.json");
+const galleryPath = path.join(dataDir, "gallery.json");
 
-    if (mixIndex === -1) {
-      return res.status(404).json({ message: "Mix not found" });
-    }
+for (const p of [djsPath, mixesPath, eventsPath, galleryPath]) {
+  if (!fs.existsSync(p)) fs.writeFileSync(p, "[]");
+}
 
-    console.log("Updating mix with ID:", mixes[mixIndex].id);
+// serve uploads
+app.use("/uploads", express.static(uploadsRoot));
 
-    mixes[mixIndex] = { ...mixes[mixIndex], ...updates };
+// JSON file helpers
+const readJson  = (p) => JSON.parse(fs.readFileSync(p, "utf-8"));
+const writeJson = (p, data) => fs.writeFileSync(p, JSON.stringify(data, null, 2));
 
-    fs.writeFileSync(mixesPath, JSON.stringify(mixes, null, 2));
+// create subdirs + multers
+function mkStore(subdir) {
+  const dir = path.join(uploadsRoot, subdir);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  return multer({ dest: dir });
+}
+const upDJ      = mkStore("djs");      // .single("image")
+const upEvent   = mkStore("events");   // .single("image")
+const upMix     = mkStore("mixes");    // .fields([{name:"audio"},{name:"image"}])
+const upGallery = mkStore("gallery");  // .single("image")
 
-    res.json(mixes[mixIndex]);
-  } catch (err) {
-    console.error("Error updating mix:", err);
-    res.status(500).json({ message: "Error updating mix" });
-  }
-});
+// util: absolute URL for a relative /uploads path
+const fileUrl = (req, relPath) => `${req.protocol}://${req.get("host")}${relPath}`;
 
-app.delete("/api/events/:id", async (req, res) => {
-  const { id } = req.params;
-  const deleted = await db.events.delete(id); // Use actual DB logic here
-  if (deleted) {
-    res.status(204).send(); // No Content
-  } else {
-    res.status(404).send({ error: "Event not found" });
-  }
-});
+// -------------------------------------------------------------
+// health
+app.get("/", (_req, res) => res.send("Ouro Node backend is running."));
 
-app.delete("/api/djs/:id", async (req, res) => {
-  const { id } = req.params;
-  const deleted = await db.djs.delete(id); // Use actual DB logic here
-  if (deleted) {
-    res.status(204).send(); // No Content
-  } else {
-    res.status(404).send({ error: "Djs not found" });
-  }
-});
-
-app.delete("/api/mixes/:id", async (req, res) => {
-  const { id } = req.params;
-  const deleted = await db.mixes.delete(id); // Use actual DB logic here
-  if (deleted) {
-    res.status(204).send(); // No Content
-  } else {
-    res.status(404).send({ error: "Images not found" });
-  }
-});
-
-app.delete("/api/gallery/:id", async (req, res) => {
-  const { id } = req.params;
-  const deleted = await db.gallery.delete({
-    where: { id: Number(id) },
-  });
-  if (deleted) {
-    res.status(204).send(); // No Content
-  } else {
-    res.status(404).send({ error: "Imagess not found" });
-  }
-});
-
-// Example backend POST handler (Node/Express-like)
-app.post("/api/elements/events", (req, res) => {
-  const { title, date, location, description, rsvp_link, artists } = req.body;
-
-  if (!Array.isArray(artists)) {
-    return res.status(400).json({ error: "Artists must be an array" });
-  }
-
-  // Validate structure of each artist
-  for (const artist of artists) {
-    if (!artist.name || !artist.time) {
-      return res
-        .status(400)
-        .json({ error: "Each artist must have name and time" });
-    }
-  }
-
-  // Proceed to store in DB...
-});
-
-app.patch("/api/elements/events/:id", (req, res) => {
-  const { id } = req.params;
-  const updates = req.body;
-
-  try {
-    const events = JSON.parse(fs.readFileSync(eventsPath, "utf-8"));
-    const eventIndex = events.findIndex((event) => String(event.id) === id);
-
-    if (eventIndex === -1) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-
-    console.log("Updating mix with ID:", events[eventIndex].id);
-
-    events[eventIndex] = { ...events[eventIndex], ...updates };
-
-    fs.writeFileSync(eventsPath, JSON.stringify(events, null, 2));
-
-    res.json(events[eventIndex]);
-  } catch (err) {
-    console.error("Error updating event:", err);
-    res.status(500).json({ message: "Error updating event" });
-  }
-});
-
-// Contact form route
-app.post("/api/contact", async (req, res) => {
-  const { name, email, message } = req.body;
-
-  const mailOptions = {
-    from: email,
-    to: "parkerjeanneallen@gmail.com",
-    subject: `New message from ${name} (ouro)`,
-    text: `You got a new message from ${name} (${email}):\n\n${message}`,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    res.json({ message: "Message sent successfully!" });
-  } catch (error) {
-    console.error("Error sending email:", error);
-    res.status(500).json({ message: "Error sending message" });
-  }
-});
-
-// DJ routes
-const djsPath = path.join(__dirname, "data", "djs.json");
-
-// GET all DJs
+// -------------------------------------------------------------
+// DJs
+// GET list
 app.get("/api/elements/djs/", (req, res) => {
   try {
-    const djs = JSON.parse(fs.readFileSync(djsPath, "utf-8"));
-    res.json(djs);
-  } catch (err) {
-    res.status(500).json({ message: "Error reading DJs." });
+    const out = readJson(djsPath);
+    res.json(out);
+  } catch (e) {
+    console.error("[djs list] error:", e);
+    res.status(500).json({ message: "Error reading DJs" });
   }
 });
 
-// POST new DJ
-app.post("/api/elements/djs/", (req, res) => {
-  const { image, artist, description, profileId } = req.body;
-
-  if (!artist || !description) {
-    return res.status(400).json({ message: "Missing required fields." });
-  }
-
+// POST multipart
+app.post("/api/elements/djs/", upDJ.single("image"), (req, res) => {
   try {
-    const djs = JSON.parse(fs.readFileSync(djsPath, "utf-8"));
-    const maxId = djs.reduce((max, dj) => (dj.id > max ? dj.id : max), 0);
-    const newId = maxId + 1;
+    console.log("---- /djs/ POST ----");
+    console.log("[ctype]", req.headers["content-type"]);
+    console.log("[file ]", req.file && { fieldname: req.file.fieldname, originalname: req.file.originalname, size: req.file.size, path: req.file.path });
+    console.log("[body ]", req.body);
+
+    const { artist, description, socialmedia } = req.body; // frontend uses 'socialmedia'
+    if (!artist || !description) {
+      return res.status(400).json({ message: "artist and description are required" });
+    }
+
+    const djs = readJson(djsPath);
+    const newId = (djs.reduce((m, x) => Math.max(m, x.id || 0), 0) || 0) + 1;
+
+    const imageRel = req.file ? `/uploads/djs/${req.file.filename}` : null;
 
     const newDJ = {
       id: newId,
-      image,
       artist,
       description,
-      profileId,
+      socialMedia: socialmedia || "",
+      image: imageRel, // your frontend reads dj.image
       isSelected: false,
       isSpotlight: false,
     };
 
     djs.push(newDJ);
-    fs.writeFileSync(djsPath, JSON.stringify(djs, null, 2));
+    writeJson(djsPath, djs);
     res.status(201).json(newDJ);
-  } catch (err) {
-    console.error("Error saving DJ:", err);
-    res.status(500).json({ message: "Error saving DJ data." });
+  } catch (e) {
+    console.error("[djs post] error:", e);
+    res.status(500).json({ message: "Error saving DJ" });
   }
 });
 
-// === New route: Upload mixes with base64 audio ===
-
-app.post("/api/elements/mixes/", (req, res) => {
-  const { title, artist, audioBase64, audioName } = req.body;
-  if (!title || !artist || !audioBase64 || !audioName) {
-    return res.status(400).json({ message: "Missing required fields." });
-  }
-
-  // Decode base64 string to Buffer
-  const audioBuffer = Buffer.from(audioBase64, "base64");
-
-  // Make sure uploads directory exists
-  const uploadsDir = path.join(__dirname, "uploads");
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir);
-  }
-
-  // Create a unique filename
-  const safeName = audioName.replace(/[^a-zA-Z0-9.-]/g, "-");
-  const filePath = path.join(uploadsDir, `${Date.now()}-${safeName}`);
-
-  // Save the audio file
-  fs.writeFile(filePath, audioBuffer, (err) => {
-    if (err) {
-      console.error("Error saving audio file:", err);
-      return res.status(500).json({ message: "Failed to save audio file." });
-    }
-
-    // You could also save mix info to a JSON file or DB here if you want
-
-    res
-      .status(201)
-      .json({ message: "Mix uploaded successfully!", path: filePath });
-  });
-});
-
-// Root route
-app.get("/", (req, res) => {
-  res.send("Ouro backend is running.");
-});
-
-const eventsPath = path.join(__dirname, "data", "events.json");
-const galleryPath = path.join(__dirname, "uploads", "gallery");
-
-// POST event with image base64
-app.post("/api/elements", (req, res) => {
-  const { title, date, description, imageName, imageBase64 } = req.body;
-  if (!title || !date || !description || !imageName || !imageBase64) {
-    return res.status(400).json({ message: "Missing required event fields." });
-  }
-
-  // Save image file
-  const uploadsDir = path.join(__dirname, "uploads");
-  if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
-
-  const safeName = imageName.replace(/\s+/g, "-");
-  const filePath = path.join(uploadsDir, `${Date.now()}-${safeName}`);
-
-  const imageBuffer = Buffer.from(imageBase64, "base64");
-
-  fs.writeFile(filePath, imageBuffer, (err) => {
-    if (err) {
-      console.error("Error saving event image:", err);
-      return res.status(500).json({ message: "Failed to save event image." });
-    }
-
-    // Save event info (with image path) to events.json
-    try {
-      let events = [];
-      if (fs.existsSync(eventsPath)) {
-        events = JSON.parse(fs.readFileSync(eventsPath, "utf-8"));
-      }
-
-      const newEvent = { title, date, description, imagePath: filePath };
-      events.push(newEvent);
-      fs.writeFileSync(eventsPath, JSON.stringify(events, null, 2));
-      res
-        .status(201)
-        .json({ message: "Event uploaded successfully!", event: newEvent });
-    } catch (e) {
-      console.error(e);
-      res.status(500).json({ message: "Failed to save event data." });
-    }
-  });
-});
-
-// POST gallery images (multiple)
-app.post("/api/elements/gallery/", (req, res) => {
-  const { images } = req.body;
-  if (!images || !Array.isArray(images) || images.length === 0) {
-    return res.status(400).json({ message: "No images provided." });
-  }
-
-  const galleryDir = path.join(__dirname, "uploads", "gallery");
-  if (!fs.existsSync(galleryDir)) fs.mkdirSync(galleryDir, { recursive: true });
-
-  const savedImages = [];
-
-  for (const { name, base64 } of images) {
-    const safeName = name.replace(/\s+/g, "-");
-    const filePath = path.join(galleryDir, `${Date.now()}-${safeName}`);
-    const imageBuffer = Buffer.from(base64, "base64");
-
-    try {
-      fs.writeFileSync(filePath, imageBuffer);
-      savedImages.push(filePath);
-    } catch (err) {
-      console.error("Error saving gallery image:", err);
-      return res
-        .status(500)
-        .json({ message: "Failed to save gallery images." });
-    }
-  }
-
-  res
-    .status(201)
-    .json({ message: "Gallery images uploaded!", files: savedImages });
-});
-
-app.patch("/api/elements/djs/:id", (req, res) => {
-  const { id } = req.params;
-  const updates = req.body;
-
+// PATCH by id
+app.patch("/api/elements/djs/:id/", (req, res) => {
   try {
-    // Read existing DJs
-    const djs = JSON.parse(fs.readFileSync(djsPath, "utf-8"));
-
-    // Find DJ index by id (convert id to number if needed)
-    const djIndex = djs.findIndex((dj) => String(dj.id) === id);
-    if (djIndex === -1) {
-      return res.status(404).json({ message: "DJ not found" });
-    }
-
-    // Update DJ with incoming fields (shallow merge)
-    djs[djIndex] = { ...djs[djIndex], ...updates };
-
-    // Save back to file
-    fs.writeFileSync(djsPath, JSON.stringify(djs, null, 2));
-
-    // Respond with updated DJ
-    res.json(djs[djIndex]);
-  } catch (err) {
-    console.error(err);
+    const id = String(req.params.id);
+    const djs = readJson(djsPath);
+    const i = djs.findIndex((x) => String(x.id) === id);
+    if (i === -1) return res.status(404).json({ message: "DJ not found" });
+    djs[i] = { ...djs[i], ...req.body };
+    writeJson(djsPath, djs);
+    res.json(djs[i]);
+  } catch (e) {
+    console.error("[djs patch] error:", e);
     res.status(500).json({ message: "Error updating DJ" });
   }
 });
 
-// Start server
+// DELETE by id
+app.delete("/api/elements/djs/:id/", (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const djs = readJson(djsPath);
+    const n = djs.filter((x) => String(x.id) !== id);
+    if (n.length === djs.length) return res.status(404).json({ message: "DJ not found" });
+    writeJson(djsPath, n);
+    res.status(204).end();
+  } catch (e) {
+    console.error("[djs del] error:", e);
+    res.status(500).json({ message: "Error deleting DJ" });
+  }
+});
+
+// -------------------------------------------------------------
+// Events
+// GET list
+app.get("/api/elements/events/", (req, res) => {
+  try {
+    const evts = readJson(eventsPath);
+    res.json(evts);
+  } catch (e) {
+    console.error("[events list] error:", e);
+    res.status(500).json({ message: "Error reading events" });
+  }
+});
+
+// POST multipart
+app.post("/api/elements/events/", upEvent.single("image"), (req, res) => {
+  try {
+    console.log("---- /events/ POST ----");
+    console.log("[ctype]", req.headers["content-type"]);
+    console.log("[file ]", req.file && { fieldname: req.file.fieldname, originalname: req.file.originalname, size: req.file.size, path: req.file.path });
+    console.log("[body ]", req.body);
+
+    const { title, date, location, description, rsvp_link, artists } = req.body;
+    if (!title || !date) {
+      return res.status(400).json({ message: "title and date are required" });
+    }
+
+    let artistsArray = [];
+    if (artists) {
+      try { artistsArray = JSON.parse(artists); }
+      catch { return res.status(400).json({ message: "invalid artists JSON" }); }
+    }
+
+    const events = readJson(eventsPath);
+    const newId = (events.reduce((m, x) => Math.max(m, x.id || 0), 0) || 0) + 1;
+
+    const imageRel = req.file ? `/uploads/events/${req.file.filename}` : null;
+
+    const newEvent = {
+      id: newId,
+      title,
+      date, // YYYY-MM-DD from frontend
+      location: location || "",
+      description: description || "",
+      rsvp_link: rsvp_link || "",
+      artists: artistsArray, // [{name,time}]
+      image: imageRel,
+      isSelected: false,
+      isUpcoming: false,
+      isLatest: false,
+    };
+
+    events.push(newEvent);
+    writeJson(eventsPath, events);
+    res.status(201).json(newEvent);
+  } catch (e) {
+    console.error("[events post] error:", e);
+    res.status(500).json({ message: "Error creating event" });
+  }
+});
+
+// PATCH by id
+app.patch("/api/elements/events/:id/", (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const events = readJson(eventsPath);
+    const i = events.findIndex((x) => String(x.id) === id);
+    if (i === -1) return res.status(404).json({ message: "Event not found" });
+    events[i] = { ...events[i], ...req.body };
+    writeJson(eventsPath, events);
+    res.json(events[i]);
+  } catch (e) {
+    console.error("[events patch] error:", e);
+    res.status(500).json({ message: "Error updating event" });
+  }
+});
+
+// DELETE by id
+app.delete("/api/elements/events/:id/", (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const events = readJson(eventsPath);
+    const n = events.filter((x) => String(x.id) !== id);
+    if (n.length === events.length) return res.status(404).json({ message: "Event not found" });
+    writeJson(eventsPath, n);
+    res.status(204).end();
+  } catch (e) {
+    console.error("[events del] error:", e);
+    res.status(500).json({ message: "Error deleting event" });
+  }
+});
+
+// -------------------------------------------------------------
+// Mixes
+// GET list
+app.get("/api/elements/mixes/", (req, res) => {
+  try {
+    const mixes = readJson(mixesPath);
+    res.json(mixes);
+  } catch (e) {
+    console.error("[mixes list] error:", e);
+    res.status(500).json({ message: "Error reading mixes" });
+  }
+});
+
+// POST multipart (audio + optional image)
+app.post(
+  "/api/elements/mixes/",
+  upMix.fields([{ name: "audio", maxCount: 1 }, { name: "image", maxCount: 1 }]),
+  (req, res) => {
+    try {
+      console.log("---- /mixes/ POST ----");
+      console.log("[ctype]", req.headers["content-type"]);
+      console.log("[files]", Object.fromEntries(Object.entries(req.files || {}).map(([k, arr]) => [k, arr.map(f => ({ orig: f.originalname, size: f.size, path: f.path }))])));
+      console.log("[body ]", req.body);
+
+      const { title, artist, description } = req.body;
+      if (!title || !artist) {
+        return res.status(400).json({ message: "title and artist are required" });
+      }
+
+      const audio = req.files?.audio?.[0];
+      if (!audio) return res.status(400).json({ message: "audio file is required" });
+
+      const img = req.files?.image?.[0];
+
+      const mixes = readJson(mixesPath);
+      const newId = (mixes.reduce((m, x) => Math.max(m, x.id || 0), 0) || 0) + 1;
+
+      const newMix = {
+        id: newId,
+        title,
+        artist,
+        description: description || "",
+        audio: `/uploads/mixes/${audio.filename}`,
+        image: img ? `/uploads/mixes/${img.filename}` : null,
+        isSelected: false,
+        isLatest: false,
+      };
+
+      mixes.push(newMix);
+      writeJson(mixesPath, mixes);
+      res.status(201).json(newMix);
+    } catch (e) {
+      console.error("[mixes post] error:", e);
+      res.status(500).json({ message: "Error creating mix" });
+    }
+  }
+);
+
+// PATCH by id
+app.patch("/api/elements/mixes/:id/", (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const mixes = readJson(mixesPath);
+    const i = mixes.findIndex((x) => String(x.id) === id);
+    if (i === -1) return res.status(404).json({ message: "Mix not found" });
+    mixes[i] = { ...mixes[i], ...req.body };
+    writeJson(mixesPath, mixes);
+    res.json(mixes[i]);
+  } catch (e) {
+    console.error("[mixes patch] error:", e);
+    res.status(500).json({ message: "Error updating mix" });
+  }
+});
+
+// DELETE by id
+app.delete("/api/elements/mixes/:id/", (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const mixes = readJson(mixesPath);
+    const n = mixes.filter((x) => String(x.id) !== id);
+    if (n.length === mixes.length) return res.status(404).json({ message: "Mix not found" });
+    writeJson(mixesPath, n);
+    res.status(204).end();
+  } catch (e) {
+    console.error("[mixes del] error:", e);
+    res.status(500).json({ message: "Error deleting mix" });
+  }
+});
+
+// -------------------------------------------------------------
+// Gallery
+// GET list
+app.get("/api/elements/gallery/", (req, res) => {
+  try {
+    const gallery = readJson(galleryPath);
+    res.json(gallery);
+  } catch (e) {
+    console.error("[gallery list] error:", e);
+    res.status(500).json({ message: "Error reading gallery" });
+  }
+});
+
+// POST multipart (one image per request)
+app.post("/api/elements/gallery/", upGallery.single("image"), (req, res) => {
+  try {
+    console.log("---- /gallery/ POST ----");
+    console.log("[ctype]", req.headers["content-type"]);
+    console.log("[file ]", req.file && { originalname: req.file.originalname, size: req.file.size, path: req.file.path });
+
+    if (!req.file) return res.status(400).json({ message: "image is required" });
+
+    const items = readJson(galleryPath);
+    const newId = (items.reduce((m, x) => Math.max(m, x.id || 0), 0) || 0) + 1;
+
+    const newImg = {
+      id: newId,
+      image: `/uploads/gallery/${req.file.filename}`,
+      isSelected: false,
+    };
+
+    items.push(newImg);
+    writeJson(galleryPath, items);
+    res.status(201).json(newImg);
+  } catch (e) {
+    console.error("[gallery post] error:", e);
+    res.status(500).json({ message: "Error saving image" });
+  }
+});
+
+// PATCH by id
+app.patch("/api/elements/gallery/:id/", (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const items = readJson(galleryPath);
+    const i = items.findIndex((x) => String(x.id) === id);
+    if (i === -1) return res.status(404).json({ message: "Image not found" });
+    items[i] = { ...items[i], ...req.body };
+    writeJson(galleryPath, items);
+    res.json(items[i]);
+  } catch (e) {
+    console.error("[gallery patch] error:", e);
+    res.status(500).json({ message: "Error updating image" });
+  }
+});
+
+// DELETE by id
+app.delete("/api/elements/gallery/:id/", (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const items = readJson(galleryPath);
+    const n = items.filter((x) => String(x.id) !== id);
+    if (n.length === items.length) return res.status(404).json({ message: "Image not found" });
+    writeJson(galleryPath, n);
+    res.status(204).end();
+  } catch (e) {
+    console.error("[gallery del] error:", e);
+    res.status(500).json({ message: "Error deleting image" });
+  }
+});
+
+// -------------------------------------------------------------
+// Contact (email) — unchanged
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+});
+app.post("/api/contact", async (req, res) => {
+  try {
+    const { name, email, message } = req.body || {};
+    await transporter.sendMail({
+      from: email,
+      to: process.env.CONTACT_TO || "parkerjeanneallen@gmail.com",
+      subject: `New message from ${name} (ouro)`,
+      text: `You got a new message from ${name} (${email}):\n\n${message}`,
+    });
+    res.json({ message: "Message sent successfully!" });
+  } catch (e) {
+    console.error("[contact] error:", e);
+    res.status(500).json({ message: "Error sending message" });
+  }
+});
+
+// -------------------------------------------------------------
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on http://0.0.0.0:${PORT}`);
+  console.log(`server running on http://0.0.0.0:${PORT}`);
 });

@@ -1,125 +1,81 @@
-import { useState } from "react";
-import { TextInput, FileInput, Button, Stack, Title } from "@mantine/core";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import Header from "../Header";
-import Footer from "../Footer";
+import { Text, Button } from "@mantine/core";
+import "../../App.css";
 
-import { API } from '../../api/config';
+type Mix = {
+  id: number;
+  title: string;
+  artist: string;
+  audio: string;
+  isSelected?: boolean;
+  isLatest: boolean;
+};
 
-export default function MixForm() {
-  let navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [artist, setArtist] = useState("");
-  const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
+interface Props {
+  mix: Mix;
+  onClick: () => void;            // toggle select
+  deleted: boolean;               // (unused visually here, but kept for API)
+  onDelete: () => void;
+  onToggleLatest: () => void;
+}
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("artist", artist);
-
-      if (!audioFile) {
-        alert("No audio file selected");
-        return;
-      }
-      formData.append("audio", audioFile);
-
-      if (imageFile) {
-        formData.append("image", imageFile);
-      }
-
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/elements/mixes/`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      console.log("Response:", res);
-      alert("Mix uploaded!");
-      setTitle("");
-      setArtist("");
-      setAudioFile(null);
-      setImageFile(null);
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Upload failed");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const MixCardSelect = ({ mix, onClick, onDelete, onToggleLatest }: Props) => {
   return (
-    <>
-      <Header />
-      <div className="form-header-container">
-        <div className="form-header">
-          <Button
-            className="back-button"
-            variant="outline"
-            onClick={() => navigate(-1)}
-          >
-            Back
-          </Button>
-          <Title className="admin-title">Add Mix</Title>
-        </div>
+    <div className="select-card" onClick={onClick}>
+      <Text className="select-item-header">Title:</Text>
+      <Text className="select-item-footer">{mix.title}</Text>
 
-        <div
-          className="form-element-container"
+      <Text className="select-item-header">Artist:</Text>
+      <Text className="select-item-footer">{mix.artist}</Text>
+
+      <Text className="select-item-header">Audio Clip:</Text>
+      {mix.audio ? (
+        <audio className="select-item-footer" src={mix.audio} controls />
+      ) : (
+        <Text className="select-item-footer">No audio available</Text>
+      )}
+
+      <div className="select-buttons">
+        <Button
+          className="select-button"
           style={{
-            maxWidth: 600,
-            margin: "0 auto",
-            padding: "2rem",
-            zIndex: "2",
-            position: "relative",
+            backgroundColor: mix.isSelected ? "green" : undefined,
+            color: mix.isSelected ? "white" : undefined,
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick();
           }}
         >
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <Stack>
-              <TextInput
-                className="form-element"
-                label="Title"
-                value={title}
-                onChange={(e) => setTitle(e.currentTarget.value)}
-                required
-              />
-              <TextInput
-                className="form-element"
-                label="Artist"
-                value={artist}
-                onChange={(e) => setArtist(e.currentTarget.value)}
-                required
-              />
-              <FileInput
-                className="form-element"
-                label="Audio File"
-                placeholder="click to upload"
-                value={audioFile}
-                onChange={setAudioFile}
-                accept="audio/*"
-                required
-              />
-              <FileInput
-                className="form-element"
-                placeholder="click to upload"
-                label="Cover Image (optional)"
-                value={imageFile}
-                onChange={setImageFile}
-                accept="image/*"
-              />
-              <Button className="submit-button" type="submit" loading={loading}>
-                Add
-              </Button>
-            </Stack>
-          </form>
-        </div>
+          {mix.isSelected ? "Deselect" : "Select"}
+        </Button>
+
+        <Button
+          className="select-button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleLatest();
+          }}
+          style={{
+            backgroundColor: mix.isLatest ? "rgb(221, 135, 212)" : undefined,
+          }}
+        >
+          {mix.isLatest ? "Undo Latest" : "Is Latest"}
+        </Button>
+
+        <Button
+          className="delete-button"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (window.confirm("Are you sure you want to permanently delete this mix?")) {
+              onDelete();
+            }
+          }}
+        >
+          Delete
+        </Button>
       </div>
-      <Footer />
-    </>
+    </div>
   );
-}
+};
+
+export default MixCardSelect;

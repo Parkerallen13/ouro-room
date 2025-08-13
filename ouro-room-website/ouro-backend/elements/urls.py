@@ -11,6 +11,7 @@ from .views import (
 from .views import show_secret_key
 
 router = DefaultRouter()
+router.register(r'events', EventViewSet, basename='event')
 router.register(r'djs', DJViewSet, basename='dj')
 
 urlpatterns = [
@@ -22,4 +23,5 @@ urlpatterns = [
     path('gallery/<int:pk>/', GalleryImgRetrieveUpdateDestroyView.as_view(), name='gallery-detail'),
     path('mixes/<int:pk>/', MixRetrieveUpdateDestroyView.as_view(), name='mix-detail'),
     path('api/mixes/from-json/', MixesFromJsonView.as_view(), name='mixes-from-json'),
+    path('api/', include(router.urls)),
 ]

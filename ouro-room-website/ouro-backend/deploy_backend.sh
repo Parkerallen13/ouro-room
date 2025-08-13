@@ -1,22 +1,53 @@
 #!/bin/bash
+set -euo pipefail
 
-# Configuration
+# ==== EDIT THESE ====
 EC2_USER=ec2-user
 EC2_IP=3.134.207.90
-LOCAL_BACKEND_DIR=ouro-backend
-REMOTE_BACKEND_DIR=/home/ec2-user/ouro-backend
+SSH_KEY="$HOME/Downloads/ouro.pem"   # <-- path to your .pem
+REMOTE_DIR=/home/ec2-user/ouro-backend
+VENV_DIR=/home/ec2-user/venv-ourob   # or comment out if not using a venv
+SERVICE_NAME=gunicorn                # your systemd unit name
+# ====================
 
-echo "🔄 Uploading backend files to EC2..."
-scp -r $LOCAL_BACKEND_DIR $EC2_USER@$EC2_IP:/home/ec2-user/
+# use the key for rsync/ssh
+RSYNC_SSH="ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no"
 
-echo "💻 Connecting to EC2 and restarting backend..."
-ssh $EC2_USER@$EC2_IP << EOF
-  cd $REMOTE_BACKEND_DIR
-  echo "✅ Pull complete. Restarting backend..."
-  sudo systemctl restart gunicorn
-  echo "🚀 Backend restarted."
-EOF
+echo "🔄 Syncing backend to EC2 (${EC2_IP}) ..."
+rsync -avz --delete -e "$RSYNC_SSH" \
+  --exclude '.git' \
+  --exclude 'node_modules' \
+  --exclude 'venv' \
+  --exclude 'media' \
+  ./ "${EC2_USER}@${EC2_IP}:${REMOTE_DIR}/"
 
-echo "✅ Deployment complete!"
+echo "💻 Running remote update steps..."
+ssh -i "${SSH_KEY}" ${EC2_USER}@${EC2_IP} bash -lc "
+  set -e
+  cd ${REMOTE_DIR}
+
+  if [ -d '${VENV_DIR}' ]; then
+    source ${VENV_DIR}/bin/activate
+  fi
+
+  echo '📦 pip install ...'
+  pip3 install -r requirements.txt
+
+  echo '🗃️  migrate ...'
+  python3 manage.py migrate --noinput
+
+  # echo '🧹 collectstatic ...'
+  # python3 manage.py collectstatic --noinput
+
+  echo '🚀 restart ${SERVICE_NAME} ...'
+  sudo systemctl restart ${SERVICE_NAME}
+  sleep 2
+  sudo systemctl is-active ${SERVICE_NAME} || (sudo systemctl status ${SERVICE_NAME} --no-pager; exit 1)
+
+  echo '📋 recent logs:'
+  sudo journalctl -u ${SERVICE_NAME} -n 50 --no-pager
+"
+
+echo "✅ Backend deployed."
 
 # ./deploy_backend.sh

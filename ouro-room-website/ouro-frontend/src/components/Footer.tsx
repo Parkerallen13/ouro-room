@@ -24,7 +24,7 @@ export default function Footer() {
 
         <div className="footer-social-icons footer-item">
           <a
-            href="https://instagram.com/ourocollective"
+            href="https://instagram.com/ouro.collective"
             target="_blank"
             rel="noopener noreferrer"
             className="footer-social-icons"
@@ -32,14 +32,14 @@ export default function Footer() {
             <IconBrandInstagram size={32} />
           </a>
 
-          <a
+          {/* <a
             href="https://x.com/ourocollective"
             target="_blank"
             rel="noopener noreferrer"
             className="footer-social-icons"
           >
             <IconBrandX size={32} />
-          </a>
+          </a> */}
         </div>
         <div className="footer-item" style={{ display: "flex", gap: "8px" }}>
           <Button
@@ -50,7 +50,7 @@ export default function Footer() {
             <span>ADMIN</span>
           </Button>
 
-          <Button
+          {/* <Button
             variant="transparent"
             onClick={() => navigate("/admin-home")}
             style={{
@@ -63,7 +63,7 @@ export default function Footer() {
             }}
           >
             <IconHome size={18} color="gray" />
-          </Button>
+          </Button> */}
         </div>
       </div>
     </>

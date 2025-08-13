@@ -1,5 +1,5 @@
 import { MantineProvider } from "@mantine/core";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import OpeningPage from "./pages/OpeningPage";
 import Home from "./pages/Home";
@@ -50,6 +50,8 @@ function App() {
       <MantineProvider>
         <Router basename="/">
           <Routes>
+            <Route path="*" element={<div style={{color:"#fff", padding:20}}>Route not found</div>} />
+            <Route path="/" element={<Navigate to="/opening" replace />} />
             <Route path="/opening" element={<OpeningPage />} />
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<About />} />

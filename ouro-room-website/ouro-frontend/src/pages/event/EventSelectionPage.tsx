@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import EventCardSelect from "../../components/event/EventCardSelect";
 import EventCardSelect2 from "../../components/event/EventCardSelect2.0";
 import { Button, Title } from "@mantine/core";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import axios from "axios";
+import { API } from "../../api/config";
 
 type Event = {
   id: number;
   title: string;
-  image: string;
+  image: string | null;
   date: string;
   artists: { name: string; time: string }[];
   location: string;
@@ -18,104 +18,85 @@ type Event = {
   rsvp_link: string;
   isSelected: boolean;
   isUpcoming: boolean;
-  isLatest: boolean;
+  isLatest?: boolean;
 };
-
-import { API } from '../../api/config';
 
 export default function EventSelectionPage() {
   const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedEventIds, setSelectedEventIds] = useState<Set<number>>(
-    new Set()
-  );
 
-  const onToggleSelection = (id: number) => {
-  const targetEvent = events.find((event) => event.id === id);
-  if (targetEvent) {
-    const newIsSelected = !targetEvent.isSelected;
-
-    // Send update to backend
-    axios.patch(`${API}/api/elements/events/${id}/`, {
-      isSelected: newIsSelected,
+  // ----- single-API helpers -----
+  const patchEvent = (id: number, body: Partial<Event>) => {
+    const url = `${API}/api/elements/events/${id}/`;
+    console.log("[PATCH]", url, body);
+    return axios.patch(url, body, {
+      headers: { "Content-Type": "application/json" },
     });
+  };
 
-    // Update the local event state
-    setEvents((prevEvents) =>
-      prevEvents.map((event) =>
-        event.id === id ? { ...event, isSelected: newIsSelected } : event
-      )
-    );
+  const deleteEvent = (id: number) => {
+    const url = `${API}/api/elements/events/${id}/`;
+    console.log("[DELETE]", url);
+    return axios.delete(url);
+  };
 
-    // 🔥 Update the selection state here too!
-    setSelectedEventIds((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
-    });
-  }
-};
+  // ----- toggles -----
+  const onToggleSelection = async (id: number) => {
+    const target = events.find((e) => e.id === id);
+    if (!target) return;
+    const next = !target.isSelected;
 
-  const onToggleUpcoming = (id: number) => {
-    const targetEvent = events.find((event) => event.id === id);
-    if (targetEvent) {
-      const newIsUpcoming = !targetEvent.isUpcoming;
-
-      // Send the correct new value to the backend
-      axios.patch(`${API}/api/elements/events/${id}/`, {
-        isUpcoming: newIsUpcoming,
-      });
-
-      // THEN update local state
-      setEvents((prevEvents) =>
-        prevEvents.map((event) =>
-          event.id === id ? { ...event, isUpcoming: newIsUpcoming } : event
-        )
+    try {
+      await patchEvent(id, { isSelected: next });
+      setEvents((prev) =>
+        prev.map((e) => (e.id === id ? { ...e, isSelected: next } : e))
       );
+    } catch (err) {
+      console.error("Failed isSelected", err);
+    }
+  };
+
+  const onToggleUpcoming = async (id: number) => {
+    const target = events.find((e) => e.id === id);
+    if (!target) return;
+    const next = !target.isUpcoming;
+
+    try {
+      await patchEvent(id, { isUpcoming: next });
+      setEvents((prev) =>
+        prev.map((e) => (e.id === id ? { ...e, isUpcoming: next } : e))
+      );
+    } catch (err) {
+      console.error("Failed isUpcoming", err);
     }
   };
 
   const handleDelete = async (id: number) => {
     try {
-      const res = await fetch(
-        `${API}/api/elements/events/${id}/`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (res.ok) {
-        setEvents((prevEvents) => prevEvents.filter((e) => e.id !== id));
-      } else {
-        console.error("Failed to delete event");
-      }
+      await deleteEvent(id);
+      setEvents((prev) => prev.filter((e) => e.id !== id));
     } catch (err) {
-      console.error("Error deleting event:", err);
+      console.error("Failed delete", err);
     }
   };
 
+  // ----- initial load -----
   useEffect(() => {
-    console.log("event list mounted, fetching Events...");
-    fetch(`${API}/api/elements/events/`)
+    const url = `${API}/api/elements/events/`;
+    console.log("[GET]", url);
+    fetch(url)
       .then((res) => {
-        console.log("Fetch response:", res);
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })
-      .then((data) => {
-        setEvents(data); // Use the raw data assuming it already includes `artists` array
+      .then((data: Event[]) => {
+        setEvents(data);
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Fetch error:", err);
+        console.error(err);
         setError(err.message);
         setLoading(false);
       });
@@ -137,7 +118,6 @@ export default function EventSelectionPage() {
   return (
     <>
       <Header />
-
       <div className="select-container">
         <div className="form-header">
           <Button
@@ -148,9 +128,10 @@ export default function EventSelectionPage() {
             Back
           </Button>
           <Title className="select-header">
-            Choose <strong style={{ fontWeight: "600" }}>Events</strong>
+            Choose <strong style={{ fontWeight: 600 }}>Events</strong>
           </Title>
         </div>
+
         <div className="select-cards-layout">
           {events.length === 0 ? (
             <p>No events available.</p>
@@ -159,7 +140,6 @@ export default function EventSelectionPage() {
               <EventCardSelect2
                 key={event.id}
                 event={event}
-                onClick={() => onToggleSelection(event.id)}
                 deleted={false}
                 onDelete={() => handleDelete(event.id)}
                 onToggleUpcoming={() => onToggleUpcoming(event.id)}

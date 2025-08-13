@@ -1,152 +1,116 @@
+// src/pages/selection/MixSelectionPage.tsx
 import { useEffect, useState } from "react";
-import MixCardSelect from "../../components/mix/MixCardSelect";
-import { Button, Text, Title } from "@mantine/core";
+import axios from "axios";
+import { Button, Title } from "@mantine/core";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import MixCardSelect from "../../components/mix/MixCardSelect";
+import { API } from "../../api/config";
 
-interface Mix {
+type Mix = {
   id: number;
   title: string;
   artist: string;
-  audio: string;
-  description?: string;
-  image?: string;
-  isSelected: boolean;
+  audio: string;        // absolute or relative URL from API
+  image?: string | null;
+  isSelected?: boolean; // not used here but allowed
   isLatest: boolean;
-}
-
-import { API } from '../../api/config';
-
+};
 
 export default function MixSelectionPage() {
   const navigate = useNavigate();
   const [mixes, setMixes] = useState<Mix[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [deletedMixIds, setDeletedMixIds] = useState<Set<number>>(new Set());
+  const [error, setError]     = useState<string | null>(null);
 
-  const onToggleSelection = async (id: number) => {
-  const targetMix = mixes.find((mix) => mix.id === id);
-  if (!targetMix) return;
+  // normalize any relative URLs coming from the API
+  const normalizeUrl = (u?: string | null) =>
+    typeof u === "string" && u.length > 0 && !u.startsWith("http") ? `${API}${u}` : (u ?? "");
 
-  const newIsSelected = !targetMix.isSelected;
+  // ---- API helpers (single env) ----
+  const patchOne  = (id: number, body: any) => axios.patch(`${API}/api/elements/mixes/${id}/`, body);
+  const deleteOne = (id: number)           => axios.delete(`${API}/api/elements/mixes/${id}/`);
 
-  try {
-    const res = await axios.patch(`${API}/api/elements/mixes/${id}/`, {
-      isSelected: newIsSelected,
-    });
+  // ---- actions ----
+  const onToggleLatest = async (id: number) => {
+    const target = mixes.find(m => m.id === id);
+    if (!target) return;
+    const next = !target.isLatest;
 
-    if (res.status === 200 || res.status === 204) {
-      setMixes((prevMixes) =>
-        prevMixes.map((mix) =>
-          mix.id === id ? { ...mix, isSelected: newIsSelected } : mix
-        )
-      );
-    }
-  } catch (err) {
-    console.error("Failed to update isSelected:", err);
-  }
-};
+    // optimistic UI
+    setMixes(prev => prev.map(m => (m.id === id ? { ...m, isLatest: next } : m)));
 
-const onToggleLatest = async (id: number) => {
-  const targetMix = mixes.find((mix) => mix.id === id);
-  if (!targetMix) return;
-
-  const newIsLatest = !targetMix.isLatest;
-
-  try {
-    const res = await axios.patch(`${API}/api/elements/mixes/${id}/`, {
-      isLatest: newIsLatest,
-    });
-
-    if (res.status === 200 || res.status === 204) {
-      setMixes((prevMixes) =>
-        prevMixes.map((mix) =>
-          mix.id === id ? { ...mix, isLatest: newIsLatest } : mix
-        )
-      );
-    }
-  } catch (err) {
-    console.error("Failed to update isLatest:", err);
-  }
-};
-
-const handleDelete = async (id: number) => {
-  try {
-    const res = await fetch(`${API}/api/elements/mixes/${id}/`, {
-      method: "DELETE",
-    });
-
-    if (res.ok) {
-      await fetchMixes(); // Refreshes the list
-    } else {
-      console.error("Failed to delete mix");
-    }
-  } catch (err) {
-    console.error("Error deleting mix:", err);
-  }
-};
-
-  const fetchMixes = async () => {
     try {
-      const res = await fetch(`${API}/api/elements/mixes/`);
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-      const data = await res.json();
-      setMixes(data);
-      setLoading(false);
-    } catch (err: any) {
-      console.error("Fetch error:", err);
-      setError(err.message);
-      setLoading(false);
+      await patchOne(id, { isLatest: next });
+    } catch (e) {
+      console.error("Failed isLatest", e);
+      // revert
+      setMixes(prev => prev.map(m => (m.id === id ? { ...m, isLatest: !next } : m)));
     }
   };
 
+  const handleDelete = async (id: number) => {
+    const snapshot = mixes;
+    setMixes(prev => prev.filter(m => m.id !== id));
+    try {
+      await deleteOne(id);
+    } catch (e) {
+      console.error("Failed delete", e);
+      setMixes(snapshot); // revert on error
+    }
+  };
+
+  // ---- load data ----
   useEffect(() => {
-    console.log("mix list mounted, fetching mixes...");
-    fetchMixes();
+    (async () => {
+      try {
+        const res = await axios.get(`${API}/api/elements/mixes/`);
+        const data: Mix[] = res.data.map((m: any) => ({
+          id: m.id,
+          title: m.title,
+          artist: m.artist,
+          audio: normalizeUrl(m.audio),
+          image: normalizeUrl(m.image),
+          isSelected: m.isSelected ?? false,
+          isLatest: m.isLatest ?? false,
+        }));
+        setMixes(data);
+      } catch (err: any) {
+        console.error(err);
+        setError(`Failed to load mixes (${err?.response?.status ?? "network"})`);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
-  if (loading)
-    return (
-      <p style={{ position: "relative", zIndex: 9, color: "white" }}>
-        Loading mixes...
-      </p>
-    );
-  if (error)
-    return (
-      <p style={{ position: "relative", zIndex: 9, color: "white" }}>
-        Error: {error}
-      </p>
-    );
+  if (loading) return <p style={{ position: "relative", zIndex: 9, color: "white" }}>Loading mixes...</p>;
+  if (error)   return <p style={{ position: "relative", zIndex: 9, color: "white" }}>Error: {error}</p>;
 
   return (
     <>
       <Header />
       <div className="select-container">
         <div className="form-header">
-          <Button
-            className="back-button"
-            variant="outline"
-            onClick={() => navigate(-1)}
-          >
+          <Button className="back-button" variant="outline" onClick={() => navigate(-1)}>
             Back
           </Button>
           <Title className="select-header">
-            Choose <strong style={{ fontWeight: "600" }}>Mixes</strong>
+            Choose <strong style={{ fontWeight: 600 }}>Mixes</strong>
           </Title>
         </div>
+
         <div className="select-cards-layout">
           {mixes.length === 0 ? (
             <p>No mixes available.</p>
           ) : (
-            mixes.map((mix) => (
+            mixes.map(mix => (
               <MixCardSelect
                 key={mix.id}
                 mix={mix}
-                onClick={() => onToggleSelection(mix.id)}
-                deleted={deletedMixIds.has(mix.id)}
+                onClick={() => { /* no isSelected toggle here; only isLatest */ }}
+                deleted={false}
                 onDelete={() => handleDelete(mix.id)}
                 onToggleLatest={() => onToggleLatest(mix.id)}
               />

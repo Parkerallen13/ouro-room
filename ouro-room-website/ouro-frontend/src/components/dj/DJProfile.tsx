@@ -6,6 +6,8 @@ import axios from "axios";
 import StarField from "../StarBackground";
 import { useNavigate } from "react-router-dom";
 
+import { API_PROD, API_LOCAL, API } from "../../api/config";
+
 type DJ = {
   id: number;
   image: string;
@@ -21,7 +23,7 @@ export default function DJProfile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8002/api/elements/djs/${id}/`)
+      .get(`${API}/api/elements/djs/${id}/`)
       .then((res) => setDJ(res.data))
       .catch((err) => console.error("Failed to load DJ", err));
   }, [id]);
@@ -46,12 +48,8 @@ export default function DJProfile() {
       </Button>
       <Container
         className="event-profile-container"
-        style={{
-          position: "relative",
-          zIndex: 10,
-        }}
+        style={{ position: "relative", zIndex: 10 }}
       >
-        {/* Left box: DJ Image */}
         <div className="event-profile-item-box" style={{ flex: 1 }}>
           <Image
             className="profile-img event-profile-item"
@@ -60,8 +58,6 @@ export default function DJProfile() {
             style={{ maxWidth: "100%", borderRadius: 8, margin: "5vw" }}
           />
         </div>
-
-        {/* Right box: DJ info */}
         <div className="event-profile-item-box">
           <Text className="event-profile-header-text event-profile-item">
             {dj.artist}

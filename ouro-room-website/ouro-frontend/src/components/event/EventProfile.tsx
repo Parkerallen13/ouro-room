@@ -7,6 +7,8 @@ import StarField from "../StarBackground";
 import { useNavigate } from "react-router-dom";
 import fallbackImage from "../../assets/record.png"; // use your imported image here
 
+import { API, API_PROD, API_LOCAL } from "../../api/config";
+
 type Event = {
   id: number;
   title: string;
@@ -26,7 +28,7 @@ export default function EventProfile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8002/api/elements/events/${id}/`)
+      .get(`${API}/api/elements/events/${id}/`)
       .then((res) => setEvent(res.data))
       .catch((err) => console.error("Failed to load event", err));
   }, [id]);

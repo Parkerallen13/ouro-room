@@ -5,9 +5,11 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import "../App.css";
 
-import EventCard from "../components/event/EventCard";
 import MixCard from "../components/mix/MixCard";
 import DJCard from "../components/dj/DJCard";
+
+import { API_PROD } from "../api/config";
+const API = API_PROD; // always read from prod
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -39,15 +41,13 @@ type Event = {
   image: string | null;
   title: string;
   date: string;
-  artists: { name: string; time: string }[]; // ✅ this replaces 'artist'
+  artists: { name: string; time: string }[];
   location: string;
   description: string;
   rsvp_link: string;
   isSelected: boolean;
   isUpcoming: boolean;
 };
-
-import { API } from '../api/config';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -96,33 +96,34 @@ export default function Home() {
       >
         Collective Rhythm. Infinite Sound
       </Text>
+
       <div className="home-container">
-      <div className="page-section">
-        <Text
-          className="page-section-header"
-          style={{ position: "relative", zIndex: 3 }}
-        >
-          Latest Mixes
-        </Text>
-        <div className="latest-mix-section">
-          {loading && <Text>Loading...</Text>}
-          {error && <Text>{error}</Text>}
-          {!loading &&
-            !error &&
-            mixes
-              .filter((mix) => mix.isLatest)
-              .map((mix) => (
-                <MixCard
-                  key={mix.id}
-                  mix={mix}
-                  artist={""}
-                  title={""}
-                  audioSrc={""}
-                />
-              ))}
+        <div className="page-section">
+          <Text
+            className="page-section-header"
+            style={{ position: "relative", zIndex: 3 }}
+          >
+            Latest Mixes
+          </Text>
+          <div className="latest-mix-section">
+            {loading && <Text>Loading...</Text>}
+            {error && <Text>{error}</Text>}
+            {!loading &&
+              !error &&
+              mixes
+                .filter((mix) => mix.isLatest)
+                .map((mix) => (
+                  <MixCard
+                    key={mix.id}
+                    mix={mix}
+                    artist={""}
+                    title={""}
+                    audioSrc={""}
+                  />
+                ))}
+          </div>
         </div>
-      </div>
-      <div>
+
         <div className="page-section">
           <Text
             className="page-section-header"
@@ -155,7 +156,6 @@ export default function Home() {
               <DJCard key={dj.id} dj={dj} />
             ))}
         </div>
-      </div>
       </div>
 
       <Footer />

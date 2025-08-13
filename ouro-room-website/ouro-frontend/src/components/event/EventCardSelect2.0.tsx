@@ -11,7 +11,7 @@ type Event = {
   description: string;
   rsvp_link: string;
   isSelected: boolean;
-  isUpcoming: boolean; // <-- Add this line
+  isUpcoming: boolean;
 };
 
 type Props = {
@@ -31,16 +31,16 @@ const EventCardSelect2 = ({
   onToggleUpcoming,
   onToggleSelection,
 }: Props) => {
-  console.log("event.artists:", event.artists);
-  console.log("event prop:", event);
+  const posterSrc = event.image || "/assets/record.png"; // graceful fallback
+
   return (
     <>
       <div className="event-select-card">
         <div>
           <div className="select-row">
             <img
-              src={event.image}
-              alt="Event Poster"
+              src={posterSrc}
+              alt={`${event.title} poster`}
               style={{ width: "200px", margin: "3vw" }}
               className="select-item"
             />
@@ -49,10 +49,9 @@ const EventCardSelect2 = ({
         <div>
           <div className="select-row">
             <Text className="select-item-header">Title:</Text>
-            <Text className="select-item-footer select-item">
-              {event.title}
-            </Text>
+            <Text className="select-item-footer select-item">{event.title}</Text>
           </div>
+
           <div className="select-row">
             <Text className="select-item-header select-item">Date:</Text>
             <Text className="select-item-footer select-item">
@@ -63,9 +62,9 @@ const EventCardSelect2 = ({
               })}
             </Text>
           </div>
+
           <div className="flex flex-col space-y-1">
             <Text className="select-item-header select-item">Artists:</Text>
-
             {event.artists?.length > 0 ? (
               event.artists.map((artist, index) => (
                 <Text key={index} className="text-gray-700">
@@ -76,52 +75,52 @@ const EventCardSelect2 = ({
               <Text className="text-gray-500 italic">No artists listed</Text>
             )}
           </div>
+
           <div className="select-row">
             <Text className="select-item-header">Location:</Text>
-            <Text className="select-item-footer select-item">
-              {event.location}
-            </Text>
+            <Text className="select-item-footer select-item">{event.location}</Text>
           </div>
+
           <div className="rsvp-container"></div>
 
           <div>
-           <Button
-  onClick={(e) => {
-    e.stopPropagation();
-    onToggleSelection();
-  }}
-  style={{
-    backgroundColor: event.isSelected ? "rgb(223, 177, 240)" : undefined,
-  }}
-  className="select-button select-item"
->
-  {event.isSelected ? "Deselect" : "Select"}
-</Button>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleSelection();
+              }}
+              style={{
+                backgroundColor: event.isSelected ? "rgb(223, 177, 240)" : undefined,
+              }}
+              className="select-button select-item"
+            >
+              {event.isSelected ? "Deselect" : "Select"}
+            </Button>
+
             <Button
               className="select-button select-item"
-              onClick={onToggleUpcoming}
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleUpcoming();
+              }}
               style={{
-                backgroundColor: event.isUpcoming
-                  ? "rgb(223, 177, 240)"
-                  : undefined,
+                backgroundColor: event.isUpcoming ? "rgb(223, 177, 240)" : undefined,
               }}
             >
               {event.isUpcoming ? "Undo Upcoming" : "Mark as Upcoming"}
             </Button>
+
             <Button
               className="delete-button"
-              style={{}}
               onClick={(e) => {
+                e.stopPropagation(); // <-- move this BEFORE confirm
                 if (
-                  window.confirm(
-                    "Are you sure you want to permanently delete this event?"
-                  )
-                )
-                  e.stopPropagation();
-                onDelete();
+                  window.confirm("Are you sure you want to permanently delete this event?")
+                ) {
+                  onDelete();
+                }
               }}
             >
-              {" "}
               Delete
             </Button>
           </div>

@@ -7,11 +7,17 @@ from .models import DJ
 
 
 class EventSerializer(serializers.ModelSerializer):
-    isSelected = serializers.BooleanField()
+    # make these not required
+    description = serializers.CharField(required=False, allow_blank=True)
+    isSelected  = serializers.BooleanField(required=False, default=False)
+    artists     = serializers.JSONField(required=False, default=list)
 
     class Meta:
         model = Event
-        fields = ['id', 'title', 'date', 'artists', 'image', 'location', 'description', 'rsvp_link', 'isSelected', 'isDelete', 'isUpcoming']
+        fields = [
+            'id', 'title', 'date', 'artists', 'image', 'location',
+            'description', 'rsvp_link', 'isSelected', 'isDelete', 'isUpcoming'
+        ]
 
 class DJSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Text, Title } from "@mantine/core";
+import { Button, Title } from "@mantine/core";
 import DJCardSelect from "../../components/dj/DJCardSelect";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
 
-import { API } from '../../api/config';;
+
+
+import { API_PROD, API_LOCAL } from '../../api/config';
+const API = window.location.hostname === "localhost" ? API_LOCAL : API_PROD;
 
 
 type DJ = {
@@ -24,115 +27,78 @@ export default function DJSelectionPage() {
   const [djs, setDJs] = useState<DJ[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedDJIds, setSelectedDJIds] = useState<Set<number>>(new Set());
-  const [deletedDJIds, setDeletedDJIds] = useState<Set<number>>(new Set());
 
   const onToggleSelection = async (djId: number) => {
-    setDJs((prevDjs) =>
-      prevDjs.map((dj) =>
-        dj.id === djId ? { ...dj, isSelected: !dj.isSelected } : dj
-      )
-    );
-
+    setDJs(prev => prev.map(dj => dj.id === djId ? { ...dj, isSelected: !dj.isSelected } : dj));
     try {
-      const dj = djs.find((dj) => dj.id === djId);
+      const dj = djs.find(d => d.id === djId);
       await axios.patch(`${API}/api/elements/djs/${djId}/`, {
         isSelected: !dj?.isSelected,
       });
-    } catch (error) {
-      console.error("Failed to toggle selection:", error);
+    } catch (err) {
+      console.error("Failed to toggle selection:", err);
     }
   };
 
   const handleDelete = async (id: number) => {
+    const prev = djs;
+    setDJs(p => p.filter(dj => dj.id !== id));
     try {
-      const res = await fetch(`${API}/api/elements/djs/${id}/`, {
-        method: "DELETE",
-      });
-
-      if (res.ok) {
-        setDJs((prevDJs) => prevDJs.filter((dj) => dj.id !== id));
-      } else {
-        console.error("Failed to delete event");
-      }
+      const res = await fetch(`${API}/api/elements/djs/${id}/`, { method: "DELETE" });
+      if (!res.ok) setDJs(prev);
     } catch (err) {
-      console.error("Error deleting event:", err);
+      console.error("Error deleting dj:", err);
+      setDJs(prev);
     }
   };
 
   const toggleSpotlight = async (djId: number) => {
-    setDJs((prevDjs) =>
-      prevDjs.map((dj) =>
-        dj.id === djId ? { ...dj, isSpotlight: !dj.isSpotlight } : dj
-      )
-    );
-
+    setDJs(prev => prev.map(dj => dj.id === djId ? { ...dj, isSpotlight: !dj.isSpotlight } : dj));
     try {
-      const dj = djs.find((dj) => dj.id === djId);
+      const dj = djs.find(d => d.id === djId);
       await axios.patch(`${API}/api/elements/djs/${djId}/`, {
         isSpotlight: !dj?.isSpotlight,
       });
-    } catch (error) {
-      console.error("Failed to toggle spotlight:", error);
+    } catch (err) {
+      console.error("Failed to toggle spotlight:", err);
     }
   };
 
   useEffect(() => {
-    console.log("event list mounted, fetching DJs...");
     fetch(`${API}/api/elements/djs/`)
-      .then((res) => {
-        console.log("Fetch response:", res);
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })
-      .then((data) => {
-        console.log("DJ data received:", data);
-        setDJs(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Fetch error:", err);
-        setError(err.message);
-        setLoading(false);
-      });
+      .then(data => setDJs(data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) return <p>Loading DJs...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <>
       <Header />
-
       <div className="select-container">
         <div className="form-header">
-          <Button
-            className="back-button"
-            variant="outline"
-            onClick={() => navigate(-1)}
-          >
-            Back
-          </Button>
-          <Title className="select-header">
-            Choose <strong style={{ fontWeight: "600" }}>DJs</strong>
-          </Title>
+          <Button variant="outline" onClick={() => navigate(-1)}>Back</Button>
+          <Title className="select-header">Choose <strong>DJs</strong></Title>
         </div>
         <div className="select-cards-layout">
-          {djs.length === 0 ? (
-            <p>No djs available.</p>
-          ) : (
-            djs.map((dj) => (
-              <DJCardSelect
-                key={dj.id}
-                dj={dj}
-                selected={dj.isSelected ?? false}
-                onClick={() => onToggleSelection(dj.id)}
-                spotlight={dj.isSpotlight ?? false}
-                onSetSpotlight={() => toggleSpotlight(dj.id)}
-                onDelete={() => handleDelete(dj.id)}
-                deleted={false}
-              />
-            ))
-          )}
+          {djs.map(dj => (
+            <DJCardSelect
+              key={dj.id}
+              dj={dj}
+              selected={!!dj.isSelected}
+              spotlight={!!dj.isSpotlight}
+              onClick={() => onToggleSelection(dj.id)}
+              onSetSpotlight={() => toggleSpotlight(dj.id)}
+              onDelete={() => handleDelete(dj.id)}
+              deleted={false}
+            />
+          ))}
         </div>
       </div>
       <Footer />

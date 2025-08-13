@@ -15,7 +15,8 @@ interface DJ {
   isSpotlight: boolean;
 }
 
-import { API } from '../../api/config';
+import { API_PROD } from '../../api/config';
+const API = API_PROD;
 
 export default function DJs() {
   const [djs, setDJs] = useState<DJ[]>([]);
@@ -26,20 +27,18 @@ export default function DJs() {
     const fetchSelectedDJs = async () => {
       try {
         const res = await axios.get(`${API}/api/elements/djs/`);
-        console.log("Raw response:", res.data);
-
         const allDJs = res.data.map(
           (m: any): DJ => ({
             id: m.id,
             artist: m.artist,
             description: m.description,
-            socialMedia: m.socialmedia,
-            image: m.image,
+            socialMedia: m.socialMedia ?? m.socialMedia ?? "",
+            // make relative URLs work if needed
+            image: typeof m.image === "string" && !m.image.startsWith("http") ? `${API}${m.image}` : m.image,
             isSelected: m.isSelected ?? false,
-            isSpotlight: m.isSpotlight,
+            isSpotlight: m.isSpotlight ?? false,
           })
         );
-
         setDJs(allDJs);
       } catch (err) {
         console.error("Error fetching djs:", err);
@@ -54,10 +53,7 @@ export default function DJs() {
   return (
     <>
       <Header />
-      <Text
-        className="page-section-header"
-        style={{ position: "relative", zIndex: 3 }}
-      >
+      <Text className="page-section-header" style={{ position: "relative", zIndex: 3 }}>
         DJs
       </Text>
 
@@ -65,11 +61,8 @@ export default function DJs() {
         {loading && <Text>Loading...</Text>}
         {error && <Text>{error}</Text>}
 
-        {!loading &&
-          !error &&
-          djs
-            .filter((dj) => dj.isSelected)
-            .map((dj) => <DJCard key={dj.id} dj={dj} />)}
+        {!loading && !error &&
+          djs.filter((dj) => dj.isSelected).map((dj) => <DJCard key={dj.id} dj={dj} />)}
       </div>
 
       <Footer />
