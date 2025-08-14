@@ -74,12 +74,12 @@ export default function Events() {
   return (
     <>
       <Header />
-      <Image
+      {/* <Image
         className="home-logo"
         src={Logo}
         onClick={() => navigate("/")}
         style={{ position: "relative", zIndex: 4, cursor: "pointer" }}
-      />
+      /> */}
       <Text
         className="page-intro-text"
         style={{ position: "relative", zIndex: 1 }}

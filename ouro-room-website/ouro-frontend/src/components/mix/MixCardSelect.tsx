@@ -1,3 +1,4 @@
+// src/components/mix/MixCardSelect.tsx
 import { Text, Button } from "@mantine/core";
 import "../../App.css";
 
@@ -12,7 +13,7 @@ type Mix = {
 
 interface Props {
   mix: Mix;
-  onClick: () => void;
+  onToggleSelected: () => void; // <-- renamed
   deleted: boolean;
   onDelete: () => void;
   onToggleLatest: () => void;
@@ -20,7 +21,7 @@ interface Props {
 
 const MixCardSelect = ({
   mix,
-  onClick,
+  onToggleSelected,
   onDelete,
   onToggleLatest,
 }: Props) => {
@@ -28,14 +29,17 @@ const MixCardSelect = ({
     <div className="select-card">
       <Text className="select-item-header">Title:</Text>
       <Text className="select-item-footer">{mix.title}</Text>
+
       <Text className="select-item-header">Artist:</Text>
       <Text className="select-item-footer">{mix.artist}</Text>
+
       <Text className="select-item-header">Audio Clip:</Text>
       {mix.audio ? (
         <audio className="select-item-footer" src={mix.audio} controls />
       ) : (
         <Text className="select-item-footer">No audio available</Text>
       )}
+
       <div className="select-buttons">
         <Button
           className="select-button"
@@ -45,30 +49,32 @@ const MixCardSelect = ({
           }}
           onClick={(e) => {
             e.stopPropagation();
-            onClick();
+            onToggleSelected(); // <-- toggle select
           }}
         >
           {mix.isSelected ? "Deselect" : "Select"}
         </Button>
+
         <Button
           className="select-button"
-          onClick={onToggleLatest}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleLatest();
+          }}
           style={{
             backgroundColor: mix.isLatest ? "rgb(221, 135, 212)" : undefined,
           }}
         >
           {mix.isLatest ? "Undo Latest" : "Is Latest"}
         </Button>
+
         <Button
           className="delete-button"
           onClick={(e) => {
-            if (
-              window.confirm(
-                "Are you sure you want to permanently delete this mix?"
-              )
-            )
-              e.stopPropagation();
-            onDelete();
+            e.stopPropagation();
+            if (window.confirm("Are you sure you want to permanently delete this mix?")) {
+              onDelete();
+            }
           }}
         >
           Delete

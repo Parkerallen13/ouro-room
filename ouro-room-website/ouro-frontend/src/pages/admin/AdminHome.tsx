@@ -29,12 +29,11 @@ export default function AdminHome() {
           <Text className="header-text">Admin Home</Text>
         </div>
 
-        <Text style={{ fontSize: "1.5vw" }}>Upload Content</Text>
+        <Text className="admin-header">Upload Content</Text>
         <AdminUploadButtons />
-        <Text style={{ fontSize: "1.5vw" }}>Choose Content</Text>
+        <Text className="admin-header">Choose Content</Text>
         <AdminChooseButtons />
       </div>
-      {/* </div> */}
       <Footer />
     </>
   );

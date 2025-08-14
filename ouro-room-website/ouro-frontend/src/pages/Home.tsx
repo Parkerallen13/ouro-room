@@ -84,12 +84,12 @@ export default function Home() {
   return (
     <>
       <Header />
-      <Image
+      {/* <Image
         className="home-logo"
         src={Logo}
         onClick={() => navigate("/")}
         style={{ position: "relative", zIndex: 4 }}
-      />
+      /> */}
       <Text
         className="page-intro-text"
         style={{ position: "relative", zIndex: 1 }}

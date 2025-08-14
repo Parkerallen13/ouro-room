@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { IconPlayerPlay, IconPlayerPause } from "@tabler/icons-react";
-import { Button, Container, Text } from "@mantine/core";
+import { Button, Text } from "@mantine/core";
 import "../../App.css";
 import Record from "../../assets/ouro-record.png";
 
@@ -17,37 +17,80 @@ interface MixCardProps {
   artist: string;
   title: string;
   audioSrc: string;
-  isSelected?: boolean; // optional if you want to keep this for future use
+  isSelected?: boolean;
 }
+
+/** Keep track of the one audio that's allowed to play globally */
+let currentlyPlaying: HTMLAudioElement | null = null;
 
 export default function MixCard({ mix }: MixCardProps) {
   const { artist, title, audio, image } = mix;
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const playExclusive = useCallback(async () => {
+    const el = audioRef.current;
+    if (!el) return;
+
+    // Pause any other audio that might be playing
+    if (currentlyPlaying && currentlyPlaying !== el) {
+      try {
+        currentlyPlaying.pause();
+        currentlyPlaying.currentTime = 0; // optional: rewind the previous track
+      } catch {}
+    }
+
+    currentlyPlaying = el;
+
+    try {
+      el.currentTime = 0; // optional: always start from beginning
+      await el.play();
+    } catch (e) {
+      // Autoplay policies or other issues
+      console.warn("Audio play failed:", e);
+    }
+  }, []);
+
   const toggleAudio = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.currentTime = 0;
-        audioRef.current.play();
-      }
+    const el = audioRef.current;
+    if (!el) return;
+
+    if (isPlaying) {
+      el.pause();
+    } else {
+      void playExclusive();
     }
   };
 
-  const handleEnded = () => setIsPlaying(false);
+  const handlePause = () => {
+    setIsPlaying(false);
+    // If this was the tracked player, clear it
+    if (currentlyPlaying === audioRef.current) {
+      currentlyPlaying = null;
+    }
+  };
+
+  const handlePlay = () => {
+    setIsPlaying(true);
+  };
+
+  const handleEnded = () => {
+    setIsPlaying(false);
+    if (currentlyPlaying === audioRef.current) {
+      currentlyPlaying = null;
+    }
+  };
 
   return (
     <div className="mix-container">
       <div className="mix-card" style={{ position: "relative", zIndex: 10 }}>
-        <Text className="header-text">{artist}</Text>
+        <Text className="mix-header-text">{artist}</Text>
         <Text className="body-text">{title}</Text>
 
         <div className="mix-img">
           <img
             src={image || Record}
-            alt={title + " cover"}
+            alt={`${title} cover`}
             className="record-placeholder-img"
           />
         </div>
@@ -57,7 +100,7 @@ export default function MixCard({ mix }: MixCardProps) {
             <div className={`audio-light ${isPlaying ? "flashing" : ""}`} />
             <Text className="body-text">Audio Clip</Text>
             <Button
-            className="audio-play-button"
+              className="play-button"
               variant="light"
               color="gray"
               onClick={toggleAudio}
@@ -68,7 +111,6 @@ export default function MixCard({ mix }: MixCardProps) {
                   borderColor: "white",
                   padding: 7,
                   minWidth: 40,
-                 
                 },
               }}
             >
@@ -82,10 +124,10 @@ export default function MixCard({ mix }: MixCardProps) {
 
           <audio
             ref={audioRef}
-            src={audio} // fixed here
+            src={audio}
             preload="auto"
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
+            onPlay={handlePlay}
+            onPause={handlePause}
             onEnded={handleEnded}
           />
         </div>

@@ -16,30 +16,61 @@ export default function PageButtons() {
 
   return (
     <>
-    {/* <Link to="/add-car">Add a Car</Link> */}
-      <Image className="logo" src={Logo} onClick={() => navigate("/")}></Image>
-      <Button className="header-button header-text" onClick={() => navigate("/home")}>
+      {/* <Link to="/add-car">Add a Car</Link> */}
+      <div className="logo-container">
+        <div>
+        <Image
+          className="logo"
+          src={Logo}
+          onClick={() => navigate("/")}
+        ></Image>
+        </div>
+        <div>
+      <Button
+        className="header-button header-text"
+        onClick={() => navigate("/home")}
+      >
         <span style={underlineStyle("/home")}>HOME</span>
       </Button>
-      <Button className="header-button  header-text" onClick={() => navigate("/events")}>
+      <Button
+        className="header-button  header-text"
+        onClick={() => navigate("/events")}
+      >
         <span style={underlineStyle("/events")}>EVENTS</span>
       </Button>
-      <Button className="header-button  header-text" onClick={() => navigate("/djs")}>
+      <Button
+        className="header-button  header-text"
+        onClick={() => navigate("/djs")}
+      >
         <span style={underlineStyle("/djs")}>DJs</span>
       </Button>
-      <Button className="header-button  header-text" onClick={() => navigate("/mixes")}>
+      <Button
+        className="header-button  header-text"
+        onClick={() => navigate("/mixes")}
+      >
         <span style={underlineStyle("/mixes")}>MIXES</span>
       </Button>
-      <Button className="header-button  header-text" onClick={() => navigate("/about")}>
+      <Button
+        className="header-button  header-text"
+        onClick={() => navigate("/about")}
+      >
         <span style={underlineStyle("/about")}>ABOUT</span>
       </Button>
-      <Button className="header-button  header-text" onClick={() => navigate("/gallery")}>
+      <Button
+        className="header-button  header-text"
+        onClick={() => navigate("/gallery")}
+      >
         <span style={underlineStyle("/gallery")}>GALLERY</span>
       </Button>
-      <Button className="header-button  header-text" onClick={() => navigate("/contact")}>
+      <Button
+        className="header-button  header-text"
+        onClick={() => navigate("/contact")}
+      >
         <span style={underlineStyle("/contact")}>CONTACT</span>
       </Button>
-      
+      </div>
+      </div>
+
     </>
   );
 }

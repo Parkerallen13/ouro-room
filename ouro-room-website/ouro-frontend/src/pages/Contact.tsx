@@ -3,12 +3,15 @@ import { Text } from "@mantine/core";
 import Header from "../components/Header";
 import "../App.css";
 import Footer from "../components/Footer";
-import { IconBrandFacebook, IconBrandInstagram, IconBrandX } from "@tabler/icons-react";
+import {
+  IconBrandFacebook,
+  IconBrandInstagram,
+  IconBrandX,
+} from "@tabler/icons-react";
 import { API } from "../api/config";
 
-
 export default function Contact() {
-   const [nameValue, setNameValue] = useState("");
+  const [nameValue, setNameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [messageValue, setMessageValue] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -19,11 +22,19 @@ export default function Contact() {
       const res = await fetch(`${API}/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: nameValue, email: emailValue, message: messageValue }),
+        body: JSON.stringify({
+          name: nameValue,
+          email: emailValue,
+          message: messageValue,
+        }),
       });
       const result = await res.json();
       alert(result.message);
-      if (res.ok) { setNameValue(""); setEmailValue(""); setMessageValue(""); }
+      if (res.ok) {
+        setNameValue("");
+        setEmailValue("");
+        setMessageValue("");
+      }
     } catch {
       alert("Error sending message");
     }
@@ -48,23 +59,6 @@ export default function Contact() {
               >
                 <IconBrandInstagram size={32} />
               </a>
-
-              {/* <a
-                href="https://x.com/ourocollective"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-link"
-              >
-                <IconBrandX size={32} />
-              </a> */}
-              {/* <a
-                href="https://x.com/ourocollective"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-link"
-              >
-                <IconBrandFacebook size={32} />
-              </a> */}
             </div>
           </div>
           <h1 className="social-section">Call Us:</h1>

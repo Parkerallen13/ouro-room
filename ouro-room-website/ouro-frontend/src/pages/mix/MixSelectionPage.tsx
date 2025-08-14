@@ -14,7 +14,7 @@ type Mix = {
   artist: string;
   audio: string;        // absolute or relative URL from API
   image?: string | null;
-  isSelected?: boolean; // not used here but allowed
+  isSelected?: boolean;
   isLatest: boolean;
 };
 
@@ -26,11 +26,15 @@ export default function MixSelectionPage() {
 
   // normalize any relative URLs coming from the API
   const normalizeUrl = (u?: string | null) =>
-    typeof u === "string" && u.length > 0 && !u.startsWith("http") ? `${API}${u}` : (u ?? "");
+    typeof u === "string" && u.length > 0 && !u.startsWith("http")
+      ? `${API}${u}`
+      : (u ?? "");
 
   // ---- API helpers (single env) ----
-  const patchOne  = (id: number, body: any) => axios.patch(`${API}/api/elements/mixes/${id}/`, body);
-  const deleteOne = (id: number)           => axios.delete(`${API}/api/elements/mixes/${id}/`);
+  const patchOne  = (id: number, body: any) =>
+    axios.patch(`${API}/api/elements/mixes/${id}/`, body);
+  const deleteOne = (id: number) =>
+    axios.delete(`${API}/api/elements/mixes/${id}/`);
 
   // ---- actions ----
   const onToggleLatest = async (id: number) => {
@@ -47,6 +51,23 @@ export default function MixSelectionPage() {
       console.error("Failed isLatest", e);
       // revert
       setMixes(prev => prev.map(m => (m.id === id ? { ...m, isLatest: !next } : m)));
+    }
+  };
+
+  const onToggleSelected = async (id: number) => {
+    const target = mixes.find(m => m.id === id);
+    if (!target) return;
+    const next = !target.isSelected;
+
+    // optimistic UI
+    setMixes(prev => prev.map(m => (m.id === id ? { ...m, isSelected: next } : m)));
+
+    try {
+      await patchOne(id, { isSelected: next });
+    } catch (e) {
+      console.error("Failed isSelected", e);
+      // revert
+      setMixes(prev => prev.map(m => (m.id === id ? { ...m, isSelected: !next } : m)));
     }
   };
 
@@ -109,7 +130,7 @@ export default function MixSelectionPage() {
               <MixCardSelect
                 key={mix.id}
                 mix={mix}
-                onClick={() => { /* no isSelected toggle here; only isLatest */ }}
+                onToggleSelected={() => onToggleSelected(mix.id)}  // ⬅️ hook up select/deselect
                 deleted={false}
                 onDelete={() => handleDelete(mix.id)}
                 onToggleLatest={() => onToggleLatest(mix.id)}

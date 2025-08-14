@@ -116,7 +116,7 @@ export default function DJForm() {
                 onChange={(e) => setsocialMedia(e.currentTarget.value)}
               />
               <Button type="submit" loading={loading} className="submit-button">
-                Addddddd
+                Add
               </Button>
             </Stack>
           </form>

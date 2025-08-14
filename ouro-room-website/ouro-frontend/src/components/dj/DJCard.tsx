@@ -28,10 +28,8 @@ export default function DJCard({ dj }: DJCardProps) {
         <div>
           <img className="dj-img" src={image} alt="DJ Image" />
         </div>
-        <div>
+        <div className="dj-card-item-container">
           <Text className="header-text dj-card-item">{artist}</Text>
-          {/* <Text className="body-text dj-card-item">{description}</Text> */}
-          {/* <Text className="body-text dj-card-item">{socialMedia}</Text> */}
           <Button
             className="card-button dj-card-item"
             onClick={() => navigate(`/profile/${dj.id}`)}
