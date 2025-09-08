@@ -93,14 +93,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 import os
+from pathlib import Path
 
-import os
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# ✅ SQLite lives outside the repo now
+DB_PATH = os.getenv("DB_PATH", "/home/ec2-user/data/db.sqlite3")
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": DB_PATH,
     }
 }
 
@@ -160,6 +165,5 @@ CORS_ALLOWED_ORIGINS = [
 
 # settings.py
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # or os.path.join(BASE_DIR, 'media')
-
+MEDIA_ROOT = '/home/ec2-user/media'  # was os.path.join(BASE_DIR, 'media')
 
