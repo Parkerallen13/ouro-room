@@ -1,8 +1,6 @@
+// src/components/dj/DJCardSelect.tsx
 import { Text, Button } from "@mantine/core";
-import axios from "axios";
 import "../../App.css";
-
-import { API_PROD, API_LOCAL, API } from "../../api/config";
 
 type DJ = {
   id: number;
@@ -42,15 +40,7 @@ const DJCardSelect = ({ dj, selected, onClick, spotlight, onSetSpotlight, onDele
         <Button
           className="select-button"
           style={{ backgroundColor: dj.isSpotlight ? "rgb(223, 177, 240)" : undefined }}
-          onClick={async (e) => {
-            e.stopPropagation();
-            try {
-              await axios.patch(`${API}/api/elements/djs/${dj.id}/`, { isSpotlight: !spotlight });
-              onSetSpotlight();
-            } catch (err) {
-              console.error("Failed to update spotlight status:", err);
-            }
-          }}
+          onClick={(e) => { e.stopPropagation(); onSetSpotlight(); }}
         >
           {spotlight ? "Remove Spotlight" : "Set Spotlight"}
         </Button>

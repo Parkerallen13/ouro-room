@@ -10,6 +10,7 @@ import {
 } from "@tabler/icons-react";
 import { API } from "../api/config";
 
+
 export default function Contact() {
   const [nameValue, setNameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
@@ -63,7 +64,7 @@ export default function Contact() {
           </div>
           <h1 className="social-section">Call Us:</h1>
 
-          <Text>720-544-1510</Text>
+          <Text className="about-text social-section">720-544-1510</Text>
           <div>
             <button
               className="social-section button message-button"

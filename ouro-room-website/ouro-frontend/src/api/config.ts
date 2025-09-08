@@ -1,8 +1,6 @@
 // src/api/config.ts
-export const API_LOCAL = "http://localhost:8002";
-export const API_PROD  = "https://ouroroomcollective.com";
-
-export const API =
-  window.location.hostname.includes("ouroroomcollective.com")
-    ? "https://ouroroomcollective.com"
-    : "http://localhost:8002";
+const raw = import.meta.env.VITE_API as string | undefined;
+if (!raw) {
+  throw new Error("VITE_API is not set. Define it in your .env files.");
+}
+export const API = raw.replace(/\/+$/, ""); // strip trailing slash

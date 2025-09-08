@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { useLocation, useNavigate } from "react-router-dom";
 import GalleryCard from "../../components/gallery/GalleryCard";
-import { API_PROD as API } from "../../api/config";
+import { API } from "../../api/config";
 
 type ImageT = { id: number; image: string; isSelected: boolean };
 

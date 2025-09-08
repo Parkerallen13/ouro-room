@@ -8,18 +8,11 @@ import {
   Title,
 } from "@mantine/core";
 import "../../App.css";
-import axios from "axios";
 import Header from "../Header";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
-
-import { API_PROD, API_LOCAL, API } from "../../api/config";
-
-// one-time helpful logs
-console.log("[DJForm] hostname:", window.location.hostname);
-console.log("[DJForm] API_LOCAL:", API_LOCAL);
-console.log("[DJForm] API_PROD:", API_PROD);
-console.log("[DJForm] chosen API:", API);
+import axios from "axios";
+import { API } from "../../api/config";
 
 export default function DJForm() {
   const navigate = useNavigate();
@@ -48,6 +41,8 @@ export default function DJForm() {
       const res = await axios.post(`${API}/api/elements/djs/`, fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      alert("DJ Added!");
+      navigate(-1); // go back; the list page will refetch on focus
 
       console.log("[dj create] OK", res.status, res.data);
       alert("DJ Added!");

@@ -3,7 +3,6 @@ import { Button, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
-import { IconFileUpload, IconLayersIntersect } from "@tabler/icons-react";
 import AdminUploadButtons from "../../components/admin/AdminUploadButtons";
 import AdminChooseButtons from "../../components/admin/AdminChooseButtons";
 
@@ -28,11 +27,14 @@ export default function AdminHome() {
           </Button>
           <Text className="header-text">Admin Home</Text>
         </div>
-
-        <Text className="admin-header">Upload Content</Text>
-        <AdminUploadButtons />
-        <Text className="admin-header">Choose Content</Text>
-        <AdminChooseButtons />
+        <div className="admin-section">
+          <Text className="admin-header">Upload Content</Text>
+          <AdminUploadButtons />
+        </div>
+        <div className="admin-section">
+          <Text className="admin-header">Choose Content</Text>
+          <AdminChooseButtons />
+        </div>
       </div>
       <Footer />
     </>

@@ -8,8 +8,7 @@ import "../App.css";
 import MixCard from "../components/mix/MixCard";
 import DJCard from "../components/dj/DJCard";
 
-import { API_PROD } from "../api/config";
-const API = API_PROD; // always read from prod
+import { API } from "../api/config";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -105,6 +104,7 @@ export default function Home() {
           >
             Latest Mixes
           </Text>
+          <></>
           <div className="latest-mix-section">
             {loading && <Text>Loading...</Text>}
             {error && <Text>{error}</Text>}
@@ -149,12 +149,14 @@ export default function Home() {
           >
             DJ Spotlight
           </Text>
+          <div className="latest-mix-section">
           {djs.length === 0 && <Text>No DJs found.</Text>}
           {djs
             .filter((dj) => dj.isSpotlight)
             .map((dj) => (
               <DJCard key={dj.id} dj={dj} />
             ))}
+            </div>
         </div>
       </div>
 

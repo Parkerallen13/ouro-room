@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Button, Title } from "@mantine/core";
 import DJCardSelect from "../../components/dj/DJCardSelect";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
-
-
-
-import { API_PROD, API_LOCAL } from '../../api/config';
-const API = window.location.hostname === "localhost" ? API_LOCAL : API_PROD;
-
+import axios from "axios";
+import { API } from "../../api/config";
 
 type DJ = {
   id: number;
@@ -28,52 +23,71 @@ export default function DJSelectionPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const onToggleSelection = async (djId: number) => {
-    setDJs(prev => prev.map(dj => dj.id === djId ? { ...dj, isSelected: !dj.isSelected } : dj));
+  const load = async () => {
     try {
-      const dj = djs.find(d => d.id === djId);
-      await axios.patch(`${API}/api/elements/djs/${djId}/`, {
-        isSelected: !dj?.isSelected,
-      });
-    } catch (err) {
-      console.error("Failed to toggle selection:", err);
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    const prev = djs;
-    setDJs(p => p.filter(dj => dj.id !== id));
-    try {
-      const res = await fetch(`${API}/api/elements/djs/${id}/`, { method: "DELETE" });
-      if (!res.ok) setDJs(prev);
-    } catch (err) {
-      console.error("Error deleting dj:", err);
-      setDJs(prev);
-    }
-  };
-
-  const toggleSpotlight = async (djId: number) => {
-    setDJs(prev => prev.map(dj => dj.id === djId ? { ...dj, isSpotlight: !dj.isSpotlight } : dj));
-    try {
-      const dj = djs.find(d => d.id === djId);
-      await axios.patch(`${API}/api/elements/djs/${djId}/`, {
-        isSpotlight: !dj?.isSpotlight,
-      });
-    } catch (err) {
-      console.error("Failed to toggle spotlight:", err);
+      const res = await axios.get(`${API}/api/elements/djs/`);
+      const data: DJ[] = res.data.map((m: any) => ({
+        ...m,
+        image: typeof m.image === "string" && !m.image.startsWith("http")
+          ? `${API}${m.image}`
+          : (m.image ?? ""),
+      }));
+      setDJs(data);
+      setError(null);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetch(`${API}/api/elements/djs/`)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then(data => setDJs(data))
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false));
+    load();
+    const onFocus = () => load();
+    document.addEventListener("visibilitychange", onFocus);
+    const id = setInterval(load, 30_000);
+    return () => {
+      document.removeEventListener("visibilitychange", onFocus);
+      clearInterval(id);
+    };
   }, []);
+
+  const onToggleSelection = async (djId: number) => {
+    setDJs(prev => prev.map(d => d.id === djId ? { ...d, isSelected: !d.isSelected } : d));
+    try {
+      const cur = djs.find(d => d.id === djId);
+      await axios.patch(`${API}/api/elements/djs/${djId}/`, { isSelected: !cur?.isSelected });
+    } catch (err) {
+      console.error("Failed isSelected:", err);
+    } finally {
+      await load();
+    }
+  };
+
+  const toggleSpotlight = async (djId: number) => {
+    setDJs(prev => prev.map(d => d.id === djId ? { ...d, isSpotlight: !d.isSpotlight } : d));
+    try {
+      const cur = djs.find(d => d.id === djId);
+      await axios.patch(`${API}/api/elements/djs/${djId}/`, { isSpotlight: !cur?.isSpotlight });
+    } catch (err) {
+      console.error("Failed isSpotlight:", err);
+    } finally {
+      await load();
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    const snapshot = djs;
+    setDJs(p => p.filter(d => d.id !== id));
+    try {
+      await axios.delete(`${API}/api/elements/djs/${id}/`);
+    } catch (err) {
+      console.error("Error deleting dj:", err);
+      setDJs(snapshot);
+    } finally {
+      await load();
+    }
+  };
 
   if (loading) return <p>Loading DJs...</p>;
   if (error) return <p>Error: {error}</p>;

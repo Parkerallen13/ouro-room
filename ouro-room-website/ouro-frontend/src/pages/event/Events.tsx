@@ -8,8 +8,7 @@ import "../../App.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { API_PROD } from '../../api/config';
-const API = API_PROD; // read from prod so prod data shows locally too
+import { API } from "../../api/config";
 
 type Event = {
   id: number;
@@ -36,30 +35,33 @@ export default function Events() {
         console.log("Using API URL:", API);
         console.log("Raw response:", res.data);
 
-        const allEvents = res.data.map(
-          (m: any): Event => {
-            // normalize image to absolute URL or fallback
-            const rel = m.imagePath ?? m.image ?? null;
-            const image =
-              typeof rel === "string"
-                ? (rel.startsWith("http") ? rel : `${API}${rel}`)
-                : "/assets/record.png";
+        const allEvents = res.data.map((m: any): Event => {
+          // normalize image to absolute URL or fallback
+          const rel = m.imagePath ?? m.image ?? null;
+          const image =
+            typeof rel === "string"
+              ? rel.startsWith("http")
+                ? rel
+                : `${API}${rel}`
+              : "/assets/record.png";
 
-            return {
-              id: m.id,
-              image,
-              title: m.title,
-              date: m.date,
-              artists: Array.isArray(m.artists) && m.artists.length
+          return {
+            id: m.id,
+            image,
+            title: m.title,
+            date: m.date,
+            artists:
+              Array.isArray(m.artists) && m.artists.length
                 ? m.artists
-                : (m.artist && m.time) ? [{ name: m.artist, time: m.time }] : [],
-              location: m.location,
-              description: m.description,
-              rsvp_link: m.rsvp_link ?? m.rsvpLink,
-              isSelected: m.isSelected ?? false,
-            };
-          }
-        );
+                : m.artist && m.time
+                ? [{ name: m.artist, time: m.time }]
+                : [],
+            location: m.location,
+            description: m.description,
+            rsvp_link: m.rsvp_link ?? m.rsvpLink,
+            isSelected: m.isSelected ?? false,
+          };
+        });
         setEvents(allEvents);
       } catch (err) {
         console.error("Error fetching events:", err);

@@ -8,8 +8,7 @@ import "../../App.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { API_PROD } from '../../api/config';
-const API = API_PROD;
+import { API } from '../../api/config';
 
 type Event = {
   id: number;

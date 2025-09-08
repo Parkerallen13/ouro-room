@@ -7,7 +7,10 @@ import StarField from "../StarBackground";
 import { useNavigate } from "react-router-dom";
 import fallbackImage from "../../assets/record.png"; // use your imported image here
 
-import { API, API_PROD, API_LOCAL } from "../../api/config";
+import {API} from "../../api/config";
+
+
+
 
 type Event = {
   id: number;
@@ -97,15 +100,35 @@ export default function EventProfile() {
               Featuring:
             </Text>
 
-            {event.artists.map(({ name, time }, idx) => (
-              <Text
-                key={idx}
-                className="event-profile-body-text event-profile-item"
-                style={{ textAlign: "center" }}
-              >
-                {name} - {time}
-              </Text>
-            ))}
+            {event.artists.map(({ name, time }, idx) => {
+  let formattedTime = time;
+
+  try {
+    // Parse string like "21:00" into a Date on today's date
+    const [hours, minutes] = time.split(":").map(Number);
+    const d = new Date();
+    d.setHours(hours, minutes, 0);
+
+    formattedTime = d.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  } catch (e) {
+    // fall back to original if parsing fails
+    console.warn("Could not parse time:", time);
+  }
+
+  return (
+    <Text
+      key={idx}
+      className="event-profile-body-text event-profile-item"
+      style={{ textAlign: "center" }}
+    >
+      {name} – {formattedTime}
+    </Text>
+  );
+})}
 
             <Text
               style={{ marginTop: "2vw", marginBottom: "2vw" }}
@@ -137,7 +160,7 @@ export default function EventProfile() {
               className="card-button event-profile-item"
               onClick={() => window.open(event.rsvp_link, "_blank")}
             >
-              RSVP
+              GET TICKETS
             </Button>
           </div>
         </div>

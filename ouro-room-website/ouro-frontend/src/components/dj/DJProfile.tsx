@@ -2,11 +2,16 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Text, Container, Image, Loader, Button } from "@mantine/core";
-import axios from "axios";
 import StarField from "../StarBackground";
 import { useNavigate } from "react-router-dom";
 
-import { API_PROD, API_LOCAL, API } from "../../api/config";
+import axios from "axios";
+import { API } from "../../api/config";
+
+export const http = axios.create({
+  baseURL: API,
+  headers: { "Cache-Control": "no-cache" },
+});
 
 type DJ = {
   id: number;
@@ -22,9 +27,18 @@ export default function DJProfile() {
   const [dj, setDJ] = useState<DJ | null>(null);
 
   useEffect(() => {
-    axios
-      .get(`${API}/api/elements/djs/${id}/`)
-      .then((res) => setDJ(res.data))
+    http
+      .get(`/api/elements/djs/${id}/`)
+      .then((res) => {
+        const d = res.data;
+        setDJ({
+          ...d,
+          image:
+            typeof d.image === "string" && !d.image.startsWith("http")
+              ? `${API}${d.image}`
+              : d.image ?? "",
+        });
+      })
       .catch((err) => console.error("Failed to load DJ", err));
   }, [id]);
 

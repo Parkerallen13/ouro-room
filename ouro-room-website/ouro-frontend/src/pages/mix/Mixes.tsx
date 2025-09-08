@@ -5,8 +5,7 @@ import MixCard from "../../components/mix/MixCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../../App.css";
-import { API_PROD } from '../../api/config';
-const API = API_PROD;
+import { API } from '../../api/config';
 
 // 👇 rename to avoid name clash with MixCard's internal type
 interface UIMix {

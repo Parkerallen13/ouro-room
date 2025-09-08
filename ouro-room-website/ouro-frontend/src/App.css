@@ -7,6 +7,11 @@ body {
   overflow-x: hidden;
 }
 
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
 html,
 body,
 #root {
@@ -53,7 +58,8 @@ img,
 }
 
 .home-container {
-  margin-bottom: 5vh;
+  margin-bottom: 6vh;
+  justify-content: center;
 }
 
 .logo {
@@ -177,6 +183,16 @@ img,
   cursor: pointer;
 }
 
+.admin-header {
+    font-size: 2vw;
+    align-items: center;
+    text-align: center;
+}
+
+.admin-section {
+  margin: 1vw;
+}
+
 .admin-button {
   color: black;
   border: 2px solid white !important;
@@ -184,9 +200,9 @@ img,
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: 1vw !important;
-  font-size: 4vw;
-  margin-left: 1vw;
-  margin-right: 1vw;
+  font-size: 1.5vw;
+  margin-left: 2vw;
+  margin-right: 2vw;
   font-weight: 600;
 }
 
@@ -195,7 +211,7 @@ img,
   border: 2px solid white !important;
   cursor: pointer;
   border-radius: 1vw !important;
-  font-size: 2vw !important;
+  font-size: 1vw !important;
   background-color: rgb(26, 79, 95);
 
   position: relative;
@@ -279,9 +295,8 @@ img,
   border: 2px solid white !important;
   cursor: pointer;
   border-radius: 1vw !important;
-  font-size: 2vw !important;
+  font-size: 1vw !important;
   background-color: rgb(113, 191, 215);
-
   position: relative;
   width: max-content;
 }
@@ -360,6 +375,10 @@ img,
   color: white;
 }
 
+.message-button {
+  font-size: 1.2vw !important;
+}
+
 .active-link {
   border-bottom: 0.3vw solid white;
 }
@@ -382,10 +401,9 @@ img,
   transform: translateX(-50%);
   opacity: 0;
   animation: slideInCenter 1s forwards ease-out;
-  font-family: "Outfit", sans-serif;
+  font-family: "Source Code Pro", monospace;
   font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
+  font-weight: 500;
 }
 
 /* Section Layouts */
@@ -433,8 +451,6 @@ img,
   border: 2px solid white;
 }
 
-
-
 .page-section-header {
   font-size: clamp(1.5vw, 2.8vw, 3.2vw) !important;
   font-weight: bold;
@@ -463,14 +479,6 @@ img,
   cursor: pointer;
 }
 
-/* Event + Mix Layouts */
-.event-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
 /* Next Event Card Styling */
 .event-container {
   display: flex;
@@ -480,7 +488,10 @@ img,
   box-sizing: border-box;
   flex-wrap: wrap;
   overflow-y: scroll;
-  justify-content: space-evenly;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  justify-content: center;
+  margin-bottom: 11vh;
 }
 
 .event-item-section {
@@ -639,6 +650,17 @@ img,
   font-size: 1.5vw;
 }
 
+.about-text {
+  font-family: "Source Code Pro", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  color: white;
+  text-align: left;
+  margin: 0 !important;
+  font-size: 1.2vw;
+}
+
 .body-text-black {
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
@@ -764,7 +786,8 @@ img,
   margin-top: 5vh;
   min-height: 45vh;
   display: flex;
-  margin-bottom: 20vh;
+  flex-direction: column;
+  align-items: center;
 }
 
 .select-header {
@@ -806,16 +829,16 @@ img,
 .footer-container {
   display: flex;
   flex-direction: row;
-  background-color: #171f26;
+  background-color: rgb(23, 31, 38, 0.4);
   padding-top: 3vh;
   padding-bottom: 2vh;
   align-items: center;
   justify-content: space-around;
-  position: fixed;   /* ✅ pin it */
-  bottom: 0;         /* ✅ stick to bottom */
+  position: fixed; /* ✅ pin it */
+  bottom: 0; /* ✅ stick to bottom */
   left: 0;
   width: 100%;
-  z-index: 100;      /* make sure it sits above content */
+  z-index: 100; /* make sure it sits above content */
 }
 
 .footer-item {
@@ -881,6 +904,7 @@ img,
   margin: 2vw;
   justify-content: space-evenly;
   align-items: center;
+  margin-bottom: 11vh;
 }
 
 .gallery-card {
@@ -900,7 +924,7 @@ img,
   flex-direction: column;
   height: max-content;
   justify-content: space-evenly;
-  margin-bottom: 12vh;
+  margin-bottom: 11vh;
 }
 
 .admin-login-container {
@@ -946,11 +970,15 @@ img,
   margin: 2vw;
 }
 
+.button.social-section {
+  font-size: 2vw;
+  margin: 2vw;
+}
+
 .social-icons {
-  width: 5vw;
+  width: 8vw;
   display: flex;
   justify-content: center;
-  margin-bottom: 2vh;
 }
 
 .footer-social-icons {
@@ -965,11 +993,12 @@ img,
   transition: transform 0.3s ease, color 0.3s ease;
   padding-left: 1vw;
   padding-right: 1vw;
+  height: 4vh;
 }
 
 .social-link:hover {
-  color: #339af0; /* or any hover color you like */
-  transform: scale(1.1);
+  color: #f08833; /* or any hover color you like */
+  transform: scale(1.5);
 }
 
 @media (max-width: 768px) {
@@ -1046,7 +1075,7 @@ img,
   border: 2px solid white !important;
   cursor: pointer;
   border-radius: 1vw !important;
-  font-size: 1.5vw !important;
+  font-size: 1.1vw !important;
   background-color: transparent;
   position: relative;
   width: fit-content !important;
@@ -1060,10 +1089,14 @@ img,
   justify-content: space-evenly;
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 11vh;
 }
 
 .dj-card {
-  text-align: left;
+  /* text-align: left; */
+  font-family: "Source Code Pro", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
   background-color: #171f26;
   border: 2px solid white;
   border-radius: 1vw;
@@ -1074,19 +1107,19 @@ img,
   width: 38vw;
   min-height: 17vw;
   max-height: 17vw;
-  padding: 2vw;
+  padding: 3vw;
   margin: 2vw;
   gap: 2vw; /* Adds spacing between items inside the card */
   overflow: hidden; /* Prevent content from overflowing */
 }
 
 .dj-card-item-container {
-  align-items: center;
+  align-items: left;
 }
 
 .dj-card-item {
   margin: 2vw;
-  align-items: center;
+  align-items: left;
 }
 
 .dj-img {
@@ -1140,6 +1173,7 @@ img,
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  margin-bottom: 11vh;
 }
 
 .mix-card {
@@ -1256,7 +1290,18 @@ img,
   font-size: 1vw;
 }
 
-@media (max-width: 390px) {
+@media (max-width: 430px) {
+
+  .about-text {
+  font-family: "Source Code Pro", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  color: white;
+  text-align: left;
+  margin: 0 !important;
+  font-size: 3vw;
+}
   .header {
     display: flex;
     flex-direction: row;
@@ -1283,9 +1328,9 @@ img,
   }
 
   .logo-container {
-  display: flex;
-  flex-direction: column;
-}
+    display: flex;
+    flex-direction: column;
+  }
 
   .logo-overlay {
     width: 50vw;
@@ -1301,17 +1346,16 @@ img,
     z-index: 9;
   }
 
-  .form-element label{
+  .form-element label {
     font-size: 4vw;
   }
 
-.form-element.m_46b77525 {
-  margin: 7vw;
-}
+  .form-element.m_46b77525 {
+    margin: 7vw;
+  }
 
-.mantine-Input-wrapper {
-}
-  
+  .mantine-Input-wrapper {
+  }
 
   .form-header-container {
     display: flex;
@@ -1345,11 +1389,13 @@ img,
 
   .header-button {
     font-size: 2vw !important;
+
   }
 
   .mix-container {
-  justify-content: space-evenly;
-}
+    justify-content: space-evenly;
+    margin-bottom: 2vh;
+  }
 
   .play-button {
     width: 1vw;
@@ -1373,6 +1419,7 @@ img,
     position: relative;
     width: max-content;
     margin-right: 2vw;
+    
   }
 
   .select-button {
@@ -1459,8 +1506,8 @@ img,
   }
 
   .form-element button {
-  font-size: 3vw; /* upload button text size, if shown */
-}
+    font-size: 3vw; /* upload button text size, if shown */
+  }
 
   .submit-button:hover {
     box-shadow: 0 0 2vw 0.5vw rgb(255, 255, 255);
@@ -1479,7 +1526,7 @@ img,
     position: relative;
   }
 
-  .mantine-focus-auto.mantine-active.button {
+  .mantine-focus-auto.mantine-active. {
     color: white;
     border: 2px solid white !important;
     padding: 0.5em 1.5em;
@@ -1507,7 +1554,7 @@ img,
 
   .tabler-icon-player-play {
     width: 3.5vw;
-    padding: .25vw;
+    padding: 0.25vw;
   }
 
   .mantine-Button-inner {
@@ -1515,7 +1562,8 @@ img,
     padding: 0 !important;
   }
 
-  .mantine-Button-root {}
+  .mantine-Button-root {
+  }
 
   .play-button {
     margin: 0;
@@ -1553,6 +1601,11 @@ img,
     cursor: pointer;
     color: white;
   }
+
+  .message-button {
+  font-size: 1.2vw !important;
+  margin: 4vw !important;
+}
 
   .active-link {
     border-bottom: 0.3vw solid white;
@@ -1685,7 +1738,9 @@ img,
     max-width: 30vw;
   }
 
- 
+  .dj-container {
+  margin-bottom: 2vh;
+}
 
   .dj-spotlight-card-item {
     display: flex;
@@ -1819,9 +1874,8 @@ img,
   }
 
   .footer-container {
-    height: 1vh;    
+    height: 1vh;
   }
-
 
   .footer-button {
     margin: 0 !important;
@@ -1965,10 +2019,10 @@ img,
 
   .social-section {
     font-size: 4vw;
-    margin: 2vw;
+    margin: 4vw;
   }
 
-   .button.social-section {
+  .button.social-section {
     font-size: 3vw !important;
     margin: 2vw;
   }
@@ -1977,14 +2031,14 @@ img,
     width: 5vw;
     display: flex;
     justify-content: center;
-    margin-bottom: 2vh;
+    /* margin-bottom: 2vh; */
   }
 
   .footer-social-icons {
     display: flex;
     color: grey !important;
     width: 3vw;
-    margin: 0;
+    margin: 2vw;
   }
 
   .social-link {
@@ -2021,39 +2075,46 @@ img,
   }
 
   .about-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 80vh;
-  margin-left: 20vw;
-  margin-right: 20vw;
-}
-
-  .dj-card {
-    justify-content: space-evenly;
-    width: 70vw;
-    min-height: 17vw;
-    max-height: 17vw;
-    padding: 1.5vw;
-    margin: 2.5vw;
-    gap: 2vw; /* Adds spacing between items inside the card */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 80vh;
+    margin-left: 20vw;
+    margin-right: 20vw;
   }
+
+ .dj-card {
+  /* text-align: left; */
+  font-family: "Source Code Pro", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  background-color: #171f26;
+  border: 2px solid white;
+  border-radius: 1vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly; /* Ensures proper spacing */
+  gap: 2vw; /* Adds spacing between items inside the card */
+  overflow: hidden; /* Prevent content from overflowing */
+  padding: 5vw;
+  width: 50vw;
+}
 
   .dj-card-item {
     justify-content: center;
     padding-top: 1vw;
     align-items: center;
-    text-align: left;
+    text-align: center;
     font-size: 2.5vw;
     width: 30vw;
   }
 
-
   .dj-card-item-container {
-  align-items: center;
-}
+    align-items: center;
+  }
 
   .dj-img {
     width: 12vw;
@@ -2088,6 +2149,7 @@ img,
 
   .event-profile-container {
     height: 100vh;
+    display: column;
   }
 
   .event-profile-header-text {
@@ -2119,4 +2181,19 @@ img,
   .logo {
     width: clamp(40px, 20vw, 100px);
   }
+
+  .click-text {
+  position: absolute;
+  top: 100%; /* vertically center */
+  left: 50%; /* horizontally center */
+  transform: translate(-50%, -50%); /* center exactly */
+  color: white;
+  font-weight: 700;
+  font-size: 3vw;
+  user-select: none;
+  pointer-events: none;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.7); /* optional: make text pop */
+  white-space: nowrap;
+  z-index: 10;
+}
 }

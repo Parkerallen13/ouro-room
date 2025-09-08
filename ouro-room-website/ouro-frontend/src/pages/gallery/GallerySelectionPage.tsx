@@ -1,4 +1,3 @@
-// src/pages/selection/GallerySelectionPage.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import EventCardSelect2 from "../../components/gallery/GalleryCardSelect";
@@ -10,7 +9,7 @@ import { API } from "../../api/config";
 
 interface GalleryImage {
   id: number;
-  image: string;       // absolute URL returned by backend
+  image: string;
   isSelected: boolean;
 }
 
@@ -20,65 +19,54 @@ export default function GallerySelectionPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState<string | null>(null);
 
-  // --- helpers that write to ONE backend (API) ---
-  const patchOne = (id: number, body: any) =>
+  const patchOne  = (id: number, body: any) =>
     axios.patch(`${API}/api/elements/gallery/${id}/`, body);
 
   const deleteOne = (id: number) =>
     axios.delete(`${API}/api/elements/gallery/${id}/`);
 
-  const onToggleSelection = async (id: number) => {
-    const target = images.find(i => i.id === id);
-    if (!target) return;
-
-    // optimistic update
-    const next = !target.isSelected;
-    setImages(prev => prev.map(i => i.id === id ? { ...i, isSelected: next } : i));
-
+  const load = async () => {
     try {
-      await patchOne(id, { isSelected: next });
-    } catch (e) {
-      console.error("toggle gallery failed", e);
-      // revert on error
-      setImages(prev => prev.map(i => i.id === id ? { ...i, isSelected: !next } : i));
-      alert("Failed to update image selection.");
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    // optimistic remove
-    const snapshot = images;
-    setImages(prev => prev.filter(i => i.id !== id));
-
-    try {
-      await deleteOne(id);
-    } catch (e) {
-      console.error("delete gallery failed", e);
-      setImages(snapshot); // revert on error
-      alert("Failed to delete image.");
+      const { data } = await axios.get<GalleryImage[]>(`${API}/api/elements/gallery/`);
+      setImages(data);
+      setError(null);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "Failed to load images");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`${API}/api/elements/gallery/`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        setImages(data);
-      } catch (err: any) {
-        console.error(err);
-        setError(err.message || "Failed to load images");
-      } finally {
-        setLoading(false);
-      }
-    })();
+    load();
+    const onFocus = () => load();
+    document.addEventListener("visibilitychange", onFocus);
+    const id = setInterval(load, 30000);
+    return () => { document.removeEventListener("visibilitychange", onFocus); clearInterval(id); };
   }, []);
 
-  if (loading)
-    return <p style={{ position: "relative", zIndex: 9, color: "white" }}>Loading images...</p>;
-  if (error)
-    return <p style={{ position: "relative", zIndex: 9, color: "white" }}>Error: {error}</p>;
+  const onToggleSelection = async (id: number) => {
+    const target = images.find(i => i.id === id);
+    if (!target) return;
+
+    const next = !target.isSelected;
+    setImages(prev => prev.map(i => i.id === id ? { ...i, isSelected: next } : i));
+    try { await patchOne(id, { isSelected: next }); }
+    catch (e) { console.error("toggle gallery failed", e); setImages(prev => prev.map(i => i.id === id ? { ...i, isSelected: !next } : i)); }
+    finally { await load(); }
+  };
+
+  const handleDelete = async (id: number) => {
+    const snapshot = images;
+    setImages(prev => prev.filter(i => i.id !== id));
+    try { await deleteOne(id); }
+    catch (e) { console.error("delete gallery failed", e); setImages(snapshot); }
+    finally { await load(); }
+  };
+
+  if (loading) return <p style={{ position: "relative", zIndex: 9, color: "white" }}>Loading images...</p>;
+  if (error)   return <p style={{ position: "relative", zIndex: 9, color: "white" }}>Error: {error}</p>;
 
   return (
     <>

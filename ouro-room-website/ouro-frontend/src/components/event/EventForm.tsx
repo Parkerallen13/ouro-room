@@ -6,7 +6,8 @@ import Header from "../Header";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 
-import { API_PROD, API_LOCAL, API } from "../../api/config";
+import {API} from "../../api/config";
+
 
 export default function EventForm() {
   const navigate = useNavigate();

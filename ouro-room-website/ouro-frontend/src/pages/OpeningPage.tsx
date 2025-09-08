@@ -23,8 +23,9 @@ export default function OpeningPage() {
             className="logo-overlay"
             onClick={() => navigate("/home")}
           />
-        </div>
         <Text className="click-text">Click Anywhere</Text>
+
+        </div>
       </div>
     </>
   );

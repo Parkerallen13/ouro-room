@@ -16,7 +16,7 @@ type Event = {
 
 type Props = {
   event: Event;
-  onClick: () => void;
+  onClick?: () => void;
   deleted: boolean;
   onDelete: () => void;
   onToggleUpcoming: () => void;
