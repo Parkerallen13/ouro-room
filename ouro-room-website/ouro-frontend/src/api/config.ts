@@ -1,6 +1,8 @@
-// src/api/config.ts
 const raw = import.meta.env.VITE_API as string | undefined;
-if (!raw) {
-  throw new Error("VITE_API is not set. Define it in your .env files.");
+
+function normalize(base: string)
+{
+  return base.replace(/\/+$/, "");
 }
-export const API = raw.replace(/\/+$/, ""); // strip trailing slash
+
+export const API = raw && raw.trim().length > 0 ? normalize(raw): "";

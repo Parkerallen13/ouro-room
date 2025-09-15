@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import EventCardSelect2 from "../../components/gallery/GalleryCardSelect";
+import EventCardSelect2 from "../../components/event/EventCardSelect2"
 import { Button, Title } from "@mantine/core";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";

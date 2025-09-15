@@ -105,8 +105,7 @@ DB_PATH = os.getenv("DB_PATH", "/home/ec2-user/data/db.sqlite3")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": DB_PATH,
-    }
+        "NAME": BASE_DIR / "data" / "db.sqlite3",    }
 }
 
 # Password validation

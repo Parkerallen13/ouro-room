@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import EventCardSelect2 from "../../components/event/EventCardSelect2.0";
+import EventCardSelect2 from "../../components/event/EventCardSelect2";
 import { Button, Title } from "@mantine/core";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";

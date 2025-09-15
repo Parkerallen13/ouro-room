@@ -13,6 +13,7 @@ services:
       - "80:5173"     # EC2 access on HTTP port
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - VITE_API=http://backend:8002
     command: npm run dev
 
   backend:
@@ -31,6 +32,7 @@ services:
       - DB_NAME=ourodb
       - DB_USER=ouro
       - DB_PASSWORD=password
+    command: bash -lc "python manage.py migrate && python manage.py runserver 0.0.0.0:8002"
 
   db:
     image: postgres:15
