@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# keys (DO NOT COMMIT)
+*.pem
+*.pem.pub
